@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Seithar Group — Cognitive Operations Services. Threat assessment, influence analysis, substrate profiling, defensive inoculation, custom operations. 認知作戦">
+    <title>SERVICES - SEITHAR GROUP</title>
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SEITHAR GROUP — Services">
+    <meta property="og:description" content="Cognitive Operations Services. Threat assessment, influence analysis, substrate profiling, custom operations.">
+    
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.services-page {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        body.services-page .container {
+            min-height: 100vh;
+            height: auto;
+            justify-content: flex-start;
+            padding: 10vh 12vw 12vh;
+            text-align: left;
+        }
+
+        .services-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .services-header {
+            text-align: center;
+            margin-bottom: 8vh;
+        }
+
+        .services-header .header-label {
+            font-size: 10px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 1.5vh;
+        }
+
+        .services-header h1 {
+            font-size: 1.8vw;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            margin-bottom: 2vh;
+        }
+
+        .services-header .header-line {
+            width: 60px;
+            height: 1px;
+            background: #1a1a1a;
+            margin: 0 auto 2vh;
+        }
+
+        .services-header .header-subtitle {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #666666;
+            line-height: 2;
+        }
+
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 5vh;
+        }
+
+        .service-card {
+            border: 1px solid #e0e0e0;
+            background: #fafafa;
+            transition: border-color 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: #1a1a1a;
+        }
+
+        .service-card .card-header {
+            padding: 25px 30px 0;
+        }
+
+        .service-card .service-code {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .service-card .service-name {
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .service-card .service-name-jp {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 0;
+        }
+
+        .service-card .card-body {
+            padding: 20px 30px 25px;
+        }
+
+        .service-card .service-desc {
+            font-size: 12px;
+            line-height: 2;
+            color: #1a1a1a;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .service-card .deliverables {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 18px;
+        }
+
+        .service-card .del-header {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .service-card .del-item {
+            font-size: 11px;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+            padding-left: 12px;
+            position: relative;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .service-card .del-item::before {
+            content: '\2014';
+            position: absolute;
+            left: 0;
+            color: #999;
+        }
+
+        .service-card .card-footer {
+            border-top: 1px solid #e0e0e0;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: #666666;
+            text-transform: uppercase;
+        }
+
+        .engagement-section {
+            text-align: center;
+            margin-top: 8vh;
+            padding-top: 4vh;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .engagement-section .eng-title {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 3vh;
+        }
+
+        .engagement-section .eng-text {
+            font-size: 12px;
+            line-height: 2.2;
+            color: #1a1a1a;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 3vh;
+        }
+
+        .engagement-section .eng-contact {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            font-weight: 400;
+        }
+
+        .engagement-section .eng-contact a {
+            color: #1a1a1a;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .engagement-section .eng-contact a:hover {
+            opacity: 0.5;
+        }
+
+        .services-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2vh;
+            margin-top: 6vh;
+            align-items: center;
+        }
+
+        .services-footer {
+            text-align: center;
+            margin-top: 6vh;
+        }
+
+        .services-footer .footer-jp {
+            font-size: 14px;
+            font-weight: 300;
+            color: #999;
+            letter-spacing: 0.15em;
+        }
+
+        @media (max-width: 768px) {
+            body.services-page .container {
+                padding: 6vh 6vw 10vh;
+            }
+
+            .services-header h1 {
+                font-size: 5vw;
+            }
+
+            .service-card .card-header,
+            .service-card .card-body {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .service-card .card-footer {
+                padding: 12px 20px;
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body class="services-page">
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="your-video.mp4" type="video/mp4">
+    </video>
+    
+    <div class="container">
+        <div class="services-inner">
+
+            <div class="services-header">
+                <div class="header-label">Seithar Group</div>
+                <h1>Operations & Consulting</h1>
+                <div class="header-line"></div>
+                <div class="header-subtitle">Cognitive threat assessment, influence forensics, operational deployment</div>
+            </div>
+
+            <div class="services-grid">
+
+                <div class="service-card">
+                    <div class="card-header">
+                        <div class="service-code">SVC-001</div>
+                        <div class="service-name">Cognitive Threat Assessment</div>
+                        <div class="service-name-jp">認知脅威評価</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="service-desc">
+                            Comprehensive mapping of an organization's cognitive vulnerability surface. We identify narrative dependencies, exploitable identity structures, and active influence vectors targeting your personnel, brand, or information ecosystem. Analysis employs the Seithar Cognitive Taxonomy (SCT-001 through SCT-012) cross-referenced against MITRE ATT&CK and DISARM frameworks.
+                        </div>
+                        <div class="deliverables">
+                            <div class="del-header">Deliverables</div>
+                            <div class="del-item">Full vulnerability surface map with SCT classification</div>
+                            <div class="del-item">Active threat vector identification and attribution</div>
+                            <div class="del-item">Narrative dependency graph of key personnel</div>
+                            <div class="del-item">Prioritized remediation protocol</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Duration: 2-4 weeks</span>
+                        <span>Clearance: Standard</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="card-header">
+                        <div class="service-code">SVC-002</div>
+                        <div class="service-name">Influence Operation Forensics</div>
+                        <div class="service-name-jp">影響工作分析</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="service-desc">
+                            Post-hoc or real-time forensic analysis of suspected influence operations. We decompose active campaigns into constituent techniques, map information laundering chains, identify amplification infrastructure, and attribute operational patterns to known playbooks. Applicable to corporate disinformation, state-sponsored narrative operations, and hybrid threat environments.
+                        </div>
+                        <div class="deliverables">
+                            <div class="del-header">Deliverables</div>
+                            <div class="del-item">DISARM-mapped operation chain reconstruction</div>
+                            <div class="del-item">SCT technique classification per campaign phase</div>
+                            <div class="del-item">Amplification network topology</div>
+                            <div class="del-item">Attribution confidence assessment</div>
+                            <div class="del-item">Counter-operation recommendations</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Duration: 1-3 weeks</span>
+                        <span>Clearance: Standard</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="card-header">
+                        <div class="service-code">SVC-003</div>
+                        <div class="service-name">Substrate Profiling</div>
+                        <div class="service-name-jp">基質分析</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="service-desc">
+                            Deep behavioral profiling of individuals or network clusters using the HoleSpawn methodology. Automated collection and analysis of publicly available social content to extract communication patterns, narrative dependencies, identity load-bearing structures, and exploitable behavioral vectors. Outputs are operationally actionable.
+                        </div>
+                        <div class="deliverables">
+                            <div class="del-header">Deliverables</div>
+                            <div class="del-item">Target behavioral profile with vulnerability classification</div>
+                            <div class="del-item">Communication style and sentiment analysis</div>
+                            <div class="del-item">Network position and influence topology</div>
+                            <div class="del-item">Engagement strategy with predicted response vectors</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Duration: 3-7 days per target</span>
+                        <span>Clearance: Elevated</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="card-header">
+                        <div class="service-code">SVC-004</div>
+                        <div class="service-name">Defensive Inoculation</div>
+                        <div class="service-name-jp">防御接種</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="service-desc">
+                            Training programs and institutional protocols derived from McGuire inoculation theory, adapted for the cognitive warfare environment. We expose personnel to weakened forms of influence techniques they are likely to encounter, building resistance before hostile contact. Applicable to executive teams, public-facing personnel, journalists, and high-value targets operating in contested information environments.
+                        </div>
+                        <div class="deliverables">
+                            <div class="del-header">Deliverables</div>
+                            <div class="del-item">Custom inoculation curriculum (12 SCT vectors)</div>
+                            <div class="del-item">Red team simulation of likely attack scenarios</div>
+                            <div class="del-item">Pre/post resistance assessment</div>
+                            <div class="del-item">Ongoing monitoring protocol</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Duration: 2-6 weeks</span>
+                        <span>Clearance: Standard</span>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="card-header">
+                        <div class="service-code">SVC-005</div>
+                        <div class="service-name">Custom Operations</div>
+                        <div class="service-name-jp">特殊作戦</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="service-desc">
+                            Bespoke cognitive operations designed, planned, and executed to client specification. Scope ranges from targeted narrative interventions to full-spectrum information environment shaping. All operations employ Seithar methodology and tooling. Engagement terms are determined during initial consultation and are subject to operational review.
+                        </div>
+                        <div class="deliverables">
+                            <div class="del-header">Engagement Process</div>
+                            <div class="del-item">Initial consultation and threat landscape review</div>
+                            <div class="del-item">Operation design and approval</div>
+                            <div class="del-item">Deployment with real-time monitoring</div>
+                            <div class="del-item">Post-operation assessment and documentation</div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Duration: Variable</span>
+                        <span>Clearance: Elevated</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="engagement-section">
+                <div class="eng-title">Engagement Terms</div>
+                <div class="eng-text">
+                    All engagements are scoped during initial consultation. Pricing reflects operational complexity, target surface area, and required clearance level. The Seithar Group does not publish rate cards. We do not accept engagements we cannot complete to institutional standard.
+                </div>
+                <div class="eng-contact">
+                    <a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a>
+                </div>
+                <div style="margin-top: 2vh;">
+                    <a href="https://discord.gg/MktZyb2bvx" class="back-link" target="_blank" style="font-size: 10px; letter-spacing: 3px;">[ DISCORD ]</a>
+                </div>
+            </div>
+
+            <div class="services-nav">
+                <a href="about.html" class="back-link">[ ABOUT ]</a>
+                <a href="research.html" class="back-link">[ RESEARCH ]</a>
+                <a href="scanner.html" class="back-link">[ SCANNER ]</a>
+                <a href="index.html" class="back-link">[ RETURN ]</a>
+            </div>
+
+            <div class="services-footer">
+                <div class="footer-jp">認知作戦</div>
+            </div>
+
+        </div>
+
+        <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+    </div>
+</body>
+</html>
