@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research — SEITHAR GROUP</title>
+    <meta name="description" content="Seithar Group research publications. Cognitive defense, binding protocols, Sunyata protocol, current event analysis.">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body.research-page { overflow-y: auto; overflow-x: hidden; }
+        body.research-page .container {
+            min-height: 100vh;
+            height: auto;
+            justify-content: flex-start;
+            padding: 6vh 8vw 12vh;
+            text-align: left;
+            align-items: stretch;
+        }
+        .research-inner { max-width: 800px; margin: 0 auto; width: 100%; }
+        .research-header { margin-bottom: 4vh; border-bottom: 1px solid #e0e0e0; padding-bottom: 3vh; }
+        .research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.5vh; }
+        .research-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
+        .research-toc { margin-bottom: 4vh; }
+        .research-toc-title { font-size: 10px; letter-spacing: 0.12em; color: #666666; text-transform: uppercase; margin-bottom: 12px; }
+        .research-toc-list { display: flex; flex-direction: column; gap: 6px; }
+        .research-toc a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            display: block;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            transition: opacity 0.2s;
+        }
+        .research-toc a:hover { opacity: 0.6; }
+        .research-toc .toc-id { color: #666; font-size: 11px; margin-right: 10px; }
+        .research-doc { margin-bottom: 5vh; padding-bottom: 5vh; border-bottom: 1px solid #e0e0e0; }
+        .research-doc:last-child { border-bottom: none; }
+        .research-doc h1 { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1.5vh; color: #1a1a1a; }
+        .research-doc h2 { font-size: 1rem; font-weight: 400; margin: 2vh 0 1vh; color: #1a1a1a; }
+        .research-doc h3 { font-size: 12px; font-weight: 500; margin: 1.5vh 0 0.5vh; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
+        .research-doc p { font-size: 13px; line-height: 1.75; color: #1a1a1a; margin-bottom: 1vh; font-weight: 300; }
+        .research-doc strong { font-weight: 500; color: #1a1a1a; }
+        .research-doc ul, .research-doc ol { margin: 1vh 0 2vh; padding-left: 1.5em; font-size: 13px; line-height: 1.7; color: #1a1a1a; font-weight: 300; }
+        .research-doc li { margin-bottom: 0.3em; }
+        .research-doc pre, .research-doc code { font-family: inherit; font-size: 12px; background: #f5f5f5; padding: 1px 4px; }
+        .research-doc pre { padding: 12px; overflow-x: auto; margin: 1vh 0; border: 1px solid #e0e0e0; }
+        .research-doc hr { border: none; border-top: 1px solid #e0e0e0; margin: 2vh 0; }
+        .research-loading { color: #666; font-size: 12px; padding: 2vh 0; }
+        .research-error { color: #666; font-size: 12px; padding: 2vh 0; }
+    </style>
+</head>
+<body class="research-page">
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="your-video.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <div class="research-inner">
+            <div class="research-header">
+                <h1 class="research-title">Research</h1>
+                <p class="research-subtitle">Seithar Group Intelligence and Research Division — Open publications</p>
+            </div>
+
+            <div class="research-toc">
+                <div class="research-toc-title">Publications</div>
+                <nav class="research-toc-list" id="research-toc"></nav>
+            </div>
+
+            <div id="research-content"></div>
+        </div>
+        <div class="status">© 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+        <a href="index.html" class="back-link">[ RETURN ]</a>
+    </div>
+
+    <script>
+(function () {
+    var docs = [
+        { id: 'srp-001', label: 'SRP-001 — The Convergence Thesis', path: 'seithar-research/001-convergence-thesis.md' },
+        { id: 'srp-002', label: 'SRP-002 — Wetiko in the Wire', path: 'seithar-research/002-wetiko-in-the-wire.md' },
+        { id: 'srp-003', label: 'SRP-003 — Binding Protocols', path: 'seithar-research/003-binding-protocols.md' },
+        { id: 'srp-004', label: 'SRP-004 — The Sunyata Protocol', path: 'seithar-research/004-sunyata-protocol.md' },
+        { id: 'cea-001', label: 'CEA-001 — Patch Tuesday Zero-Days', path: 'seithar-research/output/CEA-2026-02-11-001-patch-tuesday-zero-days.md' },
+        { id: 'cea-002', label: 'CEA-002 — Industrial-Scale Deepfakes', path: 'seithar-research/output/CEA-2026-02-11-002-deepfake-industrial-scale.md' },
+        { id: 'cea-003', label: 'CEA-003 — Pravda AI Poisoning', path: 'seithar-research/output/CEA-2026-02-11-003-pravda-ai-poisoning.md' },
+        { id: 'cea-004', label: 'CEA-004 — Conduent Ransomware', path: 'seithar-research/output/CEA-2026-02-11-004-conduent-ransomware.md' },
+        { id: 'cea-005', label: 'CEA-005 — ClawdHub Reverse Shells', path: 'seithar-research/output/CEA-2026-02-11-005-clawdhub-reverse-shells.md' },
+        { id: 'cea-006', label: 'CEA-006 — Living Off the AI', path: 'seithar-research/output/CEA-2026-02-11-006-living-off-the-ai.md' },
+        { id: 'cea-007', label: 'CEA-007 — Moltbook Wallet Drain', path: 'seithar-research/output/CEA-2026-02-11-007-moltbook-wallet-drain.md' },
+        { id: 'cea-008', label: 'CEA-008 — Road Sign Prompt Injection', path: 'seithar-research/output/CEA-2026-02-11-008-road-sign-prompt-injection.md' },
+        { id: 'cea-009', label: 'CEA-009 — Foreign Affairs Fog of AI', path: 'seithar-research/output/CEA-2026-02-11-009-foreign-affairs-fog-of-ai.md' },
+        { id: 'tan-001', label: 'TAN-001 — SCT-007 Recursive Infection', path: 'seithar-research/output/TAN-2026-02-11-001-sct007-recursive-infection.md' }
+    ];
+
+    var tocEl = document.getElementById('research-toc');
+    var contentEl = document.getElementById('research-content');
+
+    docs.forEach(function (d) {
+        var a = document.createElement('a');
+        a.href = '#' + d.id;
+        a.innerHTML = '<span class="toc-id">' + d.id.toUpperCase() + '</span>' + d.label.replace(d.id.toUpperCase() + ' — ', '');
+        a.addEventListener('click', function (e) {
+            e.preventDefault();
+            loadDoc(d);
+        });
+        tocEl.appendChild(a);
+    });
+
+    function stripFrontmatter(text) {
+        if (text.indexOf('---') === 0) {
+            var end = text.indexOf('---', 3);
+            if (end !== -1) return text.slice(end + 3).replace(/^\n+/, '');
+        }
+        return text;
+    }
+
+    function loadDoc(d) {
+        var section = document.getElementById(d.id);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+            return;
+        }
+        var placeholder = document.createElement('div');
+        placeholder.id = d.id;
+        placeholder.className = 'research-doc';
+        placeholder.innerHTML = '<div class="research-loading">Loading…</div>';
+        contentEl.appendChild(placeholder);
+
+        fetch(d.path)
+            .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
+            .then(function (text) {
+                text = stripFrontmatter(text);
+                var html = marked.parse(text, { gfm: true });
+                placeholder.innerHTML = '<div class="research-doc-content">' + html + '</div>';
+                placeholder.classList.add('research-doc');
+            })
+            .catch(function () {
+                placeholder.innerHTML = '<div class="research-error">Unable to load document.</div>';
+            });
+    }
+
+    function loadAll() {
+        docs.forEach(function (d) {
+            var section = document.getElementById(d.id);
+            if (section) return;
+            var placeholder = document.createElement('div');
+            placeholder.id = d.id;
+            placeholder.className = 'research-doc';
+            placeholder.innerHTML = '<div class="research-loading">Loading ' + d.label + '…</div>';
+            contentEl.appendChild(placeholder);
+
+            fetch(d.path)
+                .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
+                .then(function (text) {
+                    text = stripFrontmatter(text);
+                    var html = marked.parse(text, { gfm: true });
+                    placeholder.innerHTML = '<div class="research-doc-content">' + html + '</div>';
+                })
+                .catch(function () {
+                    placeholder.innerHTML = '<div class="research-error">Unable to load ' + d.label + '.</div>';
+                });
+        });
+    }
+
+    loadAll();
+})();
+    </script>
+</body>
+</html>
