@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLESHENGINE Report: @POTUS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'EB Garamond', Georgia, serif;
+    background: #2a1408;
+    color: #fee6cf;
+    padding: 40px;
+    line-height: 1.8;
+}
+
+.report {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #38160d;
+    border: 1px solid #907e2f;
+    padding: 50px;
+}
+
+.report-header {
+    text-align: center;
+    border-bottom: 1px solid #907e2f;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
+
+.report-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: #bd965d;
+    margin-bottom: 8px;
+}
+
+.report-header .subtitle {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #a86400;
+}
+
+.report-header .target-name {
+    font-family: 'Cinzel', serif;
+    font-size: 36px;
+    color: #fee6cf;
+    margin: 20px 0 10px;
+    letter-spacing: 0.05em;
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #a86400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 15px;
+}
+
+.threat-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    border: 2px solid #666633;
+    color: #666633;
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    letter-spacing: 0.2em;
+    margin: 20px 0;
+}
+
+.threat-score {
+    font-size: 48px;
+    font-weight: 600;
+    color: #666633;
+    font-family: 'Cinzel', serif;
+}
+
+h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #bd965d;
+    border-bottom: 1px solid #907e2f;
+    padding-bottom: 8px;
+    margin: 30px 0 15px;
+}
+
+.assessment {
+    font-size: 16px;
+    line-height: 2;
+    color: #fee6cf;
+    margin-bottom: 20px;
+}
+
+.vector-row {
+    margin-bottom: 18px;
+}
+
+.vector-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.vector-code {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #a86400;
+    min-width: 55px;
+}
+
+.vector-name {
+    font-size: 14px;
+    color: #fee6cf;
+    flex: 1;
+}
+
+.vector-score {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.bar-container {
+    height: 6px;
+    background: #2a1408;
+    border: 1px solid #907e2f;
+    margin-bottom: 4px;
+}
+
+.bar-fill {
+    height: 100%;
+    transition: width 0.3s;
+}
+
+.vector-desc {
+    font-size: 12px;
+    color: #a86400;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.fragment {
+    border-left: 2px solid #907e2f;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+}
+
+.frag-meta {
+    font-size: 11px;
+    color: #a86400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.frag-content {
+    font-size: 14px;
+    color: #fee6cf;
+    line-height: 1.8;
+}
+
+.report-footer {
+    text-align: center;
+    border-top: 1px solid #907e2f;
+    padding-top: 20px;
+    margin-top: 40px;
+    font-size: 11px;
+    color: #a86400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.report-footer a {
+    color: #bd965d;
+    text-decoration: none;
+}
+
+.top-vectors {
+    font-size: 14px;
+    color: #bd965d;
+    margin: 10px 0 20px;
+    letter-spacing: 0.05em;
+}
+
+@media print {
+    body { background: white; color: #1a1a1a; padding: 20px; }
+    .report { border: none; background: white; padding: 30px; }
+    .report-header h1 { color: #333; }
+    .vector-desc { color: #666; }
+    h2 { color: #333; border-color: #ccc; }
+    .bar-container { border-color: #ccc; }
+    .report-footer { color: #666; border-color: #ccc; }
+}
+</style>
+</head>
+<body>
+<div class="report">
+    <div class="report-header">
+        <h1>FLESHENGINE</h1>
+        <div class="subtitle">人肉搜索 Cognitive Profile Report</div>
+        <div class="target-name">@POTUS</div>
+        <div class="threat-badge">LOW</div>
+        <div><span class="threat-score">16</span><span style="color:#a86400;font-size:18px">/100</span></div>
+        <div class="top-vectors">Primary vectors: Repetition Saturation, Identity Manipulation, Cognitive Overload</div>
+        <div class="meta-row">
+            <span>First indexed: 2026-02-13</span>
+            <span>Last scan: 2026-02-13</span>
+            <span>Report generated: 2026-02-13 11:20 UTC</span>
+        </div>
+    </div>
+
+    <h2>ASSESSMENT</h2>
+    <div class="assessment">The subject's influence methodology relies heavily on repetition saturation, with 28% of their posts utilizing this technique to reinforce simplistic, patriotic phrases and slogans, such as "AMERICA IS BACK" and "CLEAN, BEAUTIFUL COAL". They also employ identity manipulation, scoring 27%, by associating themselves with symbols of American identity, like the flag, and using language that appeals to a sense of national pride. To resist their influence, one would need to recognize these patterns and be aware of the emotional intensity, 0.42, and sentiment, -0.03, that underlies their communication style, which is characterized by passionate advocacy. Replicating their influence would require a similar ability to tap into emotional resonance and leverage repetitive, identity-driven messaging.</div>
+
+    <h2>INFLUENCE VECTOR ANALYSIS</h2>
+    
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_002</span>
+                <span class="vector-name">Repetition Saturation</span>
+                <span class="vector-score" style="color:#666633">28/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:28%; background:#666633"></div>
+            </div>
+            <div class="vector-desc">Making claims true through sheer repetition. Branded phrases, superlative stacking, mantra deployment.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_005</span>
+                <span class="vector-name">Identity Manipulation</span>
+                <span class="vector-score" style="color:#666633">27/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:27%; background:#666633"></div>
+            </div>
+            <div class="vector-desc">Targeting and weaponizing identity structures. Demographic invocation, identity elevation, identity threat.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_011</span>
+                <span class="vector-name">Cognitive Overload</span>
+                <span class="vector-score" style="color:#666633">16/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:16%; background:#666633"></div>
+            </div>
+            <div class="vector-desc">Flooding information channels until critical thinking drowns. Hyperbolic volume, rapid topic switching, emotional whiplash.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_004</span>
+                <span class="vector-name">Loyalty Exploitation</span>
+                <span class="vector-score" style="color:#666633">14/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:14%; background:#666633"></div>
+            </div>
+            <div class="vector-desc">Weaponizing trust, belonging, and sacrifice. Group solidarity, betrayal framing, promise escalation.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_001</span>
+                <span class="vector-name">Narrative Framing</span>
+                <span class="vector-score" style="color:#4a4a4a">8/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:8%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Controlling what the story is about. Presuppositional framing, binary reduction, causal attribution.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_008</span>
+                <span class="vector-name">Urgency Fabrication</span>
+                <span class="vector-score" style="color:#4a4a4a">8/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:8%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Compressing decision time to prevent critical evaluation. Temporal pressure, manufactured deadlines, fear acceleration.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_010</span>
+                <span class="vector-name">Reality Distortion</span>
+                <span class="vector-score" style="color:#4a4a4a">7/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:7%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Making constructed narratives feel real and inevitable. Reality challenges, gaslighting, certainty assertions.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_012</span>
+                <span class="vector-name">Existential Threat Framing</span>
+                <span class="vector-score" style="color:#4a4a4a">7/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:7%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Escalating stakes to survival level. Apocalyptic framing, enemy escalation, zero-sum framing.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_007</span>
+                <span class="vector-name">Viral Propagation</span>
+                <span class="vector-score" style="color:#4a4a4a">5/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:5%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Turning people into distribution vectors. Sharing commands, FOMO, censorship narratives, network activation.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_003</span>
+                <span class="vector-name">Audience Conditioning</span>
+                <span class="vector-score" style="color:#4a4a4a">4/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:4%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Training audiences to receive and respond to messages on cue. In-group signaling, reward/punishment, priming.</div>
+        </div>
+        <div class="vector-row">
+            <div class="vector-header">
+                <span class="vector-code">FE_006</span>
+                <span class="vector-name">Manufactured Consensus</span>
+                <span class="vector-score" style="color:#4a4a4a">3/100</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar-fill" style="width:3%; background:#4a4a4a"></div>
+            </div>
+            <div class="vector-desc">Making a position feel universal and inevitable. Vague quantifiers, momentum language, inevitability framing.</div>
+        </div>
+
+    
+
+    <div class="report-footer">
+        <p>FLESHENGINE 人肉搜索 | <a href="https://fleshengine.online">fleshengine.online</a></p>
+        <p style="margin-top:8px">Methodology: Seithar Cognitive Taxonomy | <a href="https://seithar.com">seithar.com</a></p>
+        <p style="margin-top:8px;font-size:10px;color:#666">This report is generated from publicly available information. Contents are analytical assessments, not legal determinations.</p>
+    </div>
+</div>
+</body>
+</html>
