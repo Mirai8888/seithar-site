@@ -13,43 +13,70 @@
             min-height: 100vh;
             height: auto;
             justify-content: flex-start;
-            padding: 6vh 8vw 12vh;
+            padding: 5vh 6vw 12vh;
             text-align: left;
             align-items: stretch;
         }
-        .research-inner { max-width: 800px; margin: 0 auto; width: 100%; }
-        .research-header { margin-bottom: 4vh; border-bottom: 1px solid #e0e0e0; padding-bottom: 3vh; }
-        .research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.5vh; }
+        .research-inner { max-width: 820px; margin: 0 auto; width: 100%; }
+        /* White card backdrop: separates content from video for legibility */
+        .research-card {
+            background: #ffffff;
+            border-radius: 2px;
+            box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2.5rem 3rem;
+            margin-bottom: 2rem;
+        }
+        .research-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; }
+        .research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.35rem; }
         .research-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
-        .research-toc { margin-bottom: 4vh; }
-        .research-toc-title { font-size: 10px; letter-spacing: 0.12em; color: #666666; text-transform: uppercase; margin-bottom: 12px; }
-        .research-toc-list { display: flex; flex-direction: column; gap: 6px; }
+        /* TOC: grouped and scannable */
+        .research-toc { margin-bottom: 2rem; }
+        .research-toc-title { font-size: 10px; letter-spacing: 0.12em; color: #666666; text-transform: uppercase; margin-bottom: 1rem; }
+        .research-toc-section { margin-bottom: 1.25rem; }
+        .research-toc-section:last-child { margin-bottom: 0; }
+        .research-toc-section-title { font-size: 10px; letter-spacing: 0.1em; color: #999; text-transform: uppercase; margin-bottom: 0.5rem; padding-left: 2px; }
+        .research-toc-list { display: flex; flex-direction: column; gap: 0; }
+        .research-toc-list .toc-item { border-bottom: 1px solid #f0f0f0; }
+        .research-toc-list .toc-item:last-child { border-bottom: none; }
         .research-toc a {
             color: #1a1a1a;
             text-decoration: none;
             font-size: 13px;
             letter-spacing: 0.02em;
-            display: block;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-            transition: opacity 0.2s;
+            display: flex;
+            align-items: baseline;
+            padding: 0.5rem 0;
+            transition: background 0.15s, color 0.15s;
         }
-        .research-toc a:hover { opacity: 0.6; }
-        .research-toc .toc-id { color: #666; font-size: 11px; margin-right: 10px; }
-        .research-doc { margin-bottom: 5vh; padding-bottom: 5vh; border-bottom: 1px solid #e0e0e0; }
-        .research-doc:last-child { border-bottom: none; }
-        .research-doc h1 { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1.5vh; color: #1a1a1a; }
-        .research-doc h2 { font-size: 1rem; font-weight: 400; margin: 2vh 0 1vh; color: #1a1a1a; }
-        .research-doc h3 { font-size: 12px; font-weight: 500; margin: 1.5vh 0 0.5vh; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
-        .research-doc p { font-size: 13px; line-height: 1.75; color: #1a1a1a; margin-bottom: 1vh; font-weight: 300; }
+        .research-toc a:hover { background: #f8f8f8; color: #000; }
+        .research-toc .toc-id { color: #888; font-size: 11px; min-width: 5em; flex-shrink: 0; }
+        /* Document blocks: clear separation, nav hint */
+        .research-content-wrap { margin-top: 0.5rem; }
+        .research-doc {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 1px solid #e8e8e8;
+            scroll-margin-top: 1rem;
+        }
+        .research-doc:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .research-doc-nav { font-size: 11px; margin-bottom: 1rem; }
+        .research-doc-nav a { color: #666; text-decoration: none; letter-spacing: 0.05em; }
+        .research-doc-nav a:hover { color: #1a1a1a; }
+        .research-doc h1 { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1rem; color: #1a1a1a; padding-top: 0.25rem; }
+        .research-doc h2 { font-size: 1rem; font-weight: 400; margin: 1.5rem 0 0.5rem; color: #1a1a1a; }
+        .research-doc h3 { font-size: 12px; font-weight: 500; margin: 1.25rem 0 0.35rem; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
+        .research-doc p { font-size: 14px; line-height: 1.8; color: #1a1a1a; margin-bottom: 1rem; font-weight: 300; }
         .research-doc strong { font-weight: 500; color: #1a1a1a; }
-        .research-doc ul, .research-doc ol { margin: 1vh 0 2vh; padding-left: 1.5em; font-size: 13px; line-height: 1.7; color: #1a1a1a; font-weight: 300; }
-        .research-doc li { margin-bottom: 0.3em; }
+        .research-doc ul, .research-doc ol { margin: 1rem 0 1.5rem; padding-left: 1.5em; font-size: 14px; line-height: 1.75; color: #1a1a1a; font-weight: 300; }
+        .research-doc li { margin-bottom: 0.4em; }
         .research-doc pre, .research-doc code { font-family: inherit; font-size: 12px; background: #f5f5f5; padding: 1px 4px; }
-        .research-doc pre { padding: 12px; overflow-x: auto; margin: 1vh 0; border: 1px solid #e0e0e0; }
-        .research-doc hr { border: none; border-top: 1px solid #e0e0e0; margin: 2vh 0; }
-        .research-loading { color: #666; font-size: 12px; padding: 2vh 0; }
-        .research-error { color: #666; font-size: 12px; padding: 2vh 0; }
+        .research-doc pre { padding: 12px; overflow-x: auto; margin: 1rem 0; border: 1px solid #e0e0e0; }
+        .research-doc hr { border: none; border-top: 1px solid #e8e8e8; margin: 1.5rem 0; }
+        .research-loading { color: #666; font-size: 12px; padding: 1.5rem 0; }
+        .research-error { color: #666; font-size: 12px; padding: 1.5rem 0; }
+        @media (max-width: 768px) {
+            .research-card { padding: 1.5rem 1.25rem 2rem; }
+        }
     </style>
 </head>
 <body class="research-page">
@@ -59,17 +86,30 @@
 
     <div class="container">
         <div class="research-inner">
-            <div class="research-header">
-                <h1 class="research-title">Research</h1>
-                <p class="research-subtitle">Seithar Group Intelligence and Research Division — Open publications</p>
-            </div>
+            <div class="research-card">
+                <div class="research-header">
+                    <h1 class="research-title">Research</h1>
+                    <p class="research-subtitle">Seithar Group Intelligence and Research Division — Open publications</p>
+                </div>
 
-            <div class="research-toc">
-                <div class="research-toc-title">Publications</div>
-                <nav class="research-toc-list" id="research-toc"></nav>
-            </div>
+                <div class="research-toc">
+                    <div class="research-toc-title">Publications</div>
+                    <div class="research-toc-section" id="toc-srp">
+                        <div class="research-toc-section-title">Strategic Research Papers</div>
+                        <nav class="research-toc-list" id="research-toc-srp"></nav>
+                    </div>
+                    <div class="research-toc-section" id="toc-cea">
+                        <div class="research-toc-section-title">Current Event Analysis</div>
+                        <nav class="research-toc-list" id="research-toc-cea"></nav>
+                    </div>
+                    <div class="research-toc-section" id="toc-tan">
+                        <div class="research-toc-section-title">Threat Analysis Notes</div>
+                        <nav class="research-toc-list" id="research-toc-tan"></nav>
+                    </div>
+                </div>
 
-            <div id="research-content"></div>
+                <div class="research-content-wrap" id="research-content"></div>
+            </div>
         </div>
         <div class="status">© 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
         <a href="index.html" class="back-link">[ RETURN ]</a>
@@ -97,18 +137,28 @@
         { id: 'cea-012', label: 'CEA-012 — Weaponized AI Smart City Siege', path: 'seithar-research/output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md' }
     ];
 
-    var tocEl = document.getElementById('research-toc');
+    var tocSrp = document.getElementById('research-toc-srp');
+    var tocCea = document.getElementById('research-toc-cea');
+    var tocTan = document.getElementById('research-toc-tan');
     var contentEl = document.getElementById('research-content');
 
+    function getTocList(id) {
+        if (id.indexOf('srp-') === 0) return tocSrp;
+        if (id.indexOf('tan-') === 0) return tocTan;
+        return tocCea;
+    }
+
     docs.forEach(function (d) {
+        var list = getTocList(d.id);
         var a = document.createElement('a');
         a.href = '#' + d.id;
+        a.className = 'toc-item';
         a.innerHTML = '<span class="toc-id">' + d.id.toUpperCase() + '</span>' + d.label.replace(d.id.toUpperCase() + ' — ', '');
         a.addEventListener('click', function (e) {
             e.preventDefault();
             loadDoc(d);
         });
-        tocEl.appendChild(a);
+        list.appendChild(a);
     });
 
     function stripFrontmatter(text) {
@@ -119,10 +169,15 @@
         return text;
     }
 
+    function backToTop() {
+        var card = document.querySelector('.research-card');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function loadDoc(d) {
         var section = document.getElementById(d.id);
         if (section) {
-            section.scrollIntoView({ behavior: 'smooth' });
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
         }
         var placeholder = document.createElement('div');
@@ -136,8 +191,10 @@
             .then(function (text) {
                 text = stripFrontmatter(text);
                 var html = marked.parse(text, { gfm: true });
-                placeholder.innerHTML = '<div class="research-doc-content">' + html + '</div>';
-                placeholder.classList.add('research-doc');
+                var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>↑ Back to list</a></div>';
+                placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
+                var backLink = placeholder.querySelector('[data-back]');
+                if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
             })
             .catch(function () {
                 placeholder.innerHTML = '<div class="research-error">Unable to load document.</div>';
@@ -159,7 +216,10 @@
                 .then(function (text) {
                     text = stripFrontmatter(text);
                     var html = marked.parse(text, { gfm: true });
-                    placeholder.innerHTML = '<div class="research-doc-content">' + html + '</div>';
+                    var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>↑ Back to list</a></div>';
+                    placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
+                    var backLink = placeholder.querySelector('[data-back]');
+                    if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
                 })
                 .catch(function () {
                     placeholder.innerHTML = '<div class="research-error">Unable to load ' + d.label + '.</div>';
