@@ -13,55 +13,168 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 1.6;
 }
 a { color: #1a1a1a; text-decoration: none; transition: opacity 0.2s ease; }
 a:hover { opacity: 0.5; }
 a:visited { color: #1a1a1a; }
-.status {
+
+.container {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    font-size: 10px;
+    padding: 60px 80px;
+}
+
+.timer {
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    margin-bottom: 80px;
+    line-height: 1.2;
+    color: #1a1a1a;
+}
+
+.link-container {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.waiver-link, .discord-link, .back-link {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.waiver-link:hover, .discord-link:hover, .back-link:hover { opacity: 0.5; }
+.waiver-link:visited, .discord-link:visited, .back-link:visited { color: #1a1a1a; }
+
+.back-link { margin-top: 60px; }
+
+.status {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
     letter-spacing: 0.12em;
     color: #666666;
     font-weight: 300;
     text-transform: uppercase;
-    padding: 40px 0 30px;
-}
-.footer {
-    text-align: center;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    color: #666666;
-    font-weight: 300;
-    padding: 30px 0 20px;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 40px;
-    line-height: 2.2;
 }
 
-body { overflow-y: auto; overflow-x: hidden; }
-.container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+.section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.spacer { height: 24px; }
+.spacer-sm { height: 16px; }
+
+/* About page */
+body.about-page .container {
     justify-content: flex-start;
-    align-items: center;
+    padding: 80px 120px;
     text-align: left;
-    padding: 60px 40px 80px;
+}
+.about-content { max-width: 700px; width: 100%; margin: 0 auto 60px; }
+.about-content h1 {
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    margin-bottom: 40px;
+    color: #1a1a1a;
+    text-transform: uppercase;
+}
+.about-content p {
+    font-size: 16px;
+    line-height: 2;
+    letter-spacing: 0.02em;
+    margin-bottom: 28px;
+    color: #1a1a1a;
+    font-weight: 300;
+}
+.about-links { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; margin-bottom: 28px; }
+.about-links .back-link { margin-top: 0; }
+
+/* Personnel page */
+body.personnel-page .container {
+    justify-content: flex-start;
+    padding: 60px 80px 80px;
+    text-align: left;
+}
+.personnel-inner { max-width: 900px; margin: 0 auto; width: 100%; }
+.personnel-header { text-align: center; margin-bottom: 40px; }
+.personnel-header .header-label {
+    font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: #666666; margin-bottom: 12px;
+}
+.personnel-header h1 {
+    font-size: 28px; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 4px;
+}
+.personnel-header .header-jp { font-size: 12px; color: #666666; letter-spacing: 0.15em; margin-bottom: 16px; }
+.personnel-header .header-line { width: 60px; height: 1px; background: #1a1a1a; margin: 0 auto 16px; }
+.personnel-header .header-subtitle { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #666666; }
+.personnel-grid { display: flex; flex-direction: column; gap: 36px; }
+.person-card { border: 1px solid #e0e0e0; background: #fafafa; }
+.person-card .card-header { display: flex; align-items: stretch; border-bottom: 1px solid #e0e0e0; }
+.person-card .card-photo { width: 180px; min-height: 220px; background: #f0f0f0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.person-card .card-photo-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.person-card .avatar-block { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+.person-card .avatar-glyph { font-size: 64px; font-weight: 700; color: #d0d0d0; }
+.person-card .card-info { flex: 1; padding: 25px 30px; display: flex; flex-direction: column; justify-content: center; }
+.person-card .person-name { font-size: 1.2rem; font-weight: 400; letter-spacing: 0.08em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 2px; }
+.person-card .person-name-jp { font-size: 12px; color: #666666; margin-bottom: 12px; }
+.person-card .person-title { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #1a1a1a; margin-bottom: 12px; }
+.person-card .person-meta { display: grid; grid-template-columns: auto 1fr; gap: 4px 15px; font-size: 11px; }
+.person-card .meta-label { color: #666666; text-transform: uppercase; font-size: 9px; letter-spacing: 1px; }
+.person-card .meta-value { color: #1a1a1a; }
+.person-card .meta-value a { color: #1a1a1a; text-decoration: none; }
+.person-card .card-body { padding: 25px 30px; }
+.person-card .bio-text { font-size: 12px; line-height: 1.9; color: #1a1a1a; margin-bottom: 20px; font-weight: 300; }
+.person-card .specializations { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.person-card .spec-tag { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border: 1px solid #e0e0e0; color: #666666; }
+.person-card .publications { border-top: 1px solid #e0e0e0; padding-top: 20px; }
+.person-card .pub-header { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #666666; margin-bottom: 12px; }
+.person-card .pub-item { font-size: 11px; color: #1a1a1a; margin-bottom: 8px; padding-left: 12px; position: relative; line-height: 1.6; }
+.person-card .pub-item::before { content: '\2014'; position: absolute; left: 0; color: #999; }
+.person-card .pub-title { font-style: italic; }
+.person-card .pub-venue { color: #666666; font-size: 10px; }
+.person-card .card-footer { border-top: 1px solid #e0e0e0; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; letter-spacing: 2px; color: #666666; }
+.person-card .status-indicator { display: flex; align-items: center; gap: 6px; }
+.person-card .status-dot { width: 5px; height: 5px; border-radius: 50%; background: #1a1a1a; }
+.person-card .redacted { background: #1a1a1a; color: #1a1a1a; padding: 0 3px; user-select: none; font-size: 10px; }
+.personnel-footer { text-align: center; margin-top: 60px; padding-top: 28px; border-top: 1px solid #e0e0e0; }
+.personnel-footer .footer-jp { font-size: 18px; font-weight: 300; color: #1a1a1a; letter-spacing: 0.2em; margin-bottom: 20px; }
+.personnel-footer .footer-text { font-size: 9px; letter-spacing: 4px; color: #666666; text-transform: uppercase; margin-bottom: 8px; }
+.personnel-footer .footer-copy { font-size: 8px; color: #999; letter-spacing: 2px; }
+
+/* Services page */
+body.services-page .container {
+    justify-content: flex-start;
+    padding: 70px 120px 80px;
+    text-align: left;
 }
 .services-inner { max-width: 800px; margin: 0 auto; width: 100%; }
-.services-header { text-align: center; margin-bottom: 60px; }
+.services-header { text-align: center; margin-bottom: 56px; }
 .services-header .header-label { font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: #666666; margin-bottom: 12px; }
-.services-header h1 { font-size: 22px; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 16px; }
+.services-header h1 { font-size: 28px; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 16px; }
 .services-header .header-line { width: 60px; height: 1px; background: #1a1a1a; margin: 0 auto 16px; }
 .services-header .header-subtitle { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #666666; line-height: 2; }
-.services-grid { display: flex; flex-direction: column; gap: 40px; }
-.service-card { border: 1px solid #e0e0e0; background: #fafafa; transition: border-color 0.3s ease; }
-.service-card:hover { border-color: #1a1a1a; }
+.services-grid { display: flex; flex-direction: column; gap: 36px; }
+.service-card { border: 1px solid #e0e0e0; background: #fafafa; }
 .service-card .card-header { padding: 25px 30px 0; }
 .service-card .service-code { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #999; margin-bottom: 8px; }
 .service-card .service-name { font-size: 1.1rem; font-weight: 400; letter-spacing: 0.08em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 4px; }
-.service-card .service-name-jp { font-size: 12px; color: #666666; margin-bottom: 0; }
+.service-card .service-name-jp { font-size: 12px; color: #666666; }
 .service-card .card-body { padding: 20px 30px 25px; }
 .service-card .service-desc { font-size: 12px; line-height: 2; color: #1a1a1a; font-weight: 300; margin-bottom: 20px; }
 .service-card .deliverables { border-top: 1px solid #e0e0e0; padding-top: 18px; }
@@ -69,24 +182,97 @@ body { overflow-y: auto; overflow-x: hidden; }
 .service-card .del-item { font-size: 11px; color: #1a1a1a; margin-bottom: 6px; padding-left: 12px; position: relative; line-height: 1.6; font-weight: 300; }
 .service-card .del-item::before { content: '\2014'; position: absolute; left: 0; color: #999; }
 .service-card .card-footer { border-top: 1px solid #e0e0e0; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; letter-spacing: 2px; color: #666666; text-transform: uppercase; }
-.engagement-section { text-align: center; margin-top: 60px; padding-top: 32px; border-top: 1px solid #e0e0e0; }
+.engagement-section { text-align: center; margin-top: 56px; padding-top: 28px; border-top: 1px solid #e0e0e0; }
 .engagement-section .eng-title { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #666666; margin-bottom: 24px; }
 .engagement-section .eng-text { font-size: 12px; line-height: 2.2; color: #1a1a1a; font-weight: 300; max-width: 600px; margin: 0 auto 24px; }
 .engagement-section .eng-contact { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #1a1a1a; font-weight: 400; }
-.services-nav { display: flex; flex-direction: column; gap: 16px; margin-top: 48px; align-items: center; }
-.back-link { color: #1a1a1a; text-decoration: none; font-size: 13px; letter-spacing: 0.08em; font-weight: 400; text-transform: uppercase; transition: opacity 0.2s ease; }
-.back-link:hover { opacity: 0.5; }
-.services-footer { text-align: center; margin-top: 48px; }
+.engagement-section .eng-contact a { color: #1a1a1a; text-decoration: none; }
+.services-nav { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; align-items: center; }
+.services-footer { text-align: center; margin-top: 40px; }
 .services-footer .footer-jp { font-size: 14px; font-weight: 300; color: #999; letter-spacing: 0.15em; }
+
+/* Research page */
+body.research-page { overflow-y: auto; overflow-x: hidden; }
+body.research-page .container {
+    min-height: 100vh; height: auto; justify-content: flex-start;
+    padding: 40px 60px 80px; text-align: left; align-items: stretch;
+}
+.research-inner { max-width: 820px; margin: 0 auto; width: 100%; }
+.research-card {
+    background: #ffffff; border-radius: 2px;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    padding: 2.5rem 2.5rem 3rem; margin-bottom: 2rem;
+}
+.research-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; }
+.research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.35rem; }
+.research-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
+.research-toc { margin-bottom: 2rem; }
+.research-toc-title { font-size: 10px; letter-spacing: 0.12em; color: #666666; text-transform: uppercase; margin-bottom: 1rem; }
+.research-toc-section { margin-bottom: 1.25rem; }
+.research-toc-section-title { font-size: 10px; letter-spacing: 0.1em; color: #999; text-transform: uppercase; margin-bottom: 0.5rem; padding-left: 2px; }
+.research-toc-list { display: flex; flex-direction: column; }
+.toc-item { border-bottom: 1px solid #f0f0f0; display: flex; align-items: baseline; padding: 0.5rem 0; font-size: 13px; letter-spacing: 0.02em; color: #1a1a1a; text-decoration: none; }
+.toc-item:hover { background: #f8f8f8; }
+.toc-id { color: #888; font-size: 11px; min-width: 5.5em; flex-shrink: 0; }
+.research-doc {
+    margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #e8e8e8; scroll-margin-top: 1rem;
+}
+.research-doc:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.research-doc-nav { font-size: 11px; margin-bottom: 1rem; }
+.research-doc-nav a { color: #666; text-decoration: none; letter-spacing: 0.05em; }
+.research-doc h1 { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1rem; color: #1a1a1a; }
+.research-doc h2 { font-size: 1rem; font-weight: 400; margin: 1.5rem 0 0.5rem; color: #1a1a1a; }
+.research-doc h3 { font-size: 12px; font-weight: 500; margin: 1.25rem 0 0.35rem; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
+.research-doc p { font-size: 14px; line-height: 1.8; color: #1a1a1a; margin-bottom: 1rem; font-weight: 300; }
+.research-doc strong { font-weight: 500; color: #1a1a1a; }
+.research-doc ul, .research-doc ol { margin: 1rem 0 1.5rem; padding-left: 1.5em; font-size: 14px; line-height: 1.75; color: #1a1a1a; font-weight: 300; }
+.research-doc li { margin-bottom: 0.4em; }
+.research-doc pre, .research-doc code { font-family: inherit; font-size: 12px; background: #f5f5f5; padding: 1px 4px; }
+.research-doc pre { padding: 12px; overflow-x: auto; margin: 1rem 0; border: 1px solid #e0e0e0; }
+.research-doc hr { border: none; border-top: 1px solid #e8e8e8; margin: 1.5rem 0; }
+.research-doc table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+.research-doc th, .research-doc td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; font-weight: 300; }
+.research-doc th { background: #f5f5f5; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.research-doc a { color: #1a1a1a; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Scanner page */
+.scanner-container { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+.scanner-header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid #e0e0e0; }
+.scanner-header h1 { font-size: 13px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: #1a1a1a; margin-bottom: 6px; }
+.scanner-subtitle { font-size: 11px; color: #999; letter-spacing: 0.12em; text-transform: uppercase; }
+.scanner-version { font-size: 10px; color: #999; letter-spacing: 0.1em; margin-top: 4px; }
+.scanner-label { font-size: 10px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: #666; margin-bottom: 10px; display: block; }
+.scanner-notice { font-size: 12px; color: #666; line-height: 1.8; border: 1px solid #e0e0e0; padding: 20px; margin-bottom: 32px; font-weight: 300; }
+.sct-grid { display: flex; flex-direction: column; gap: 2px; margin-bottom: 32px; }
+.sct-item { border: 1px solid #e0e0e0; padding: 14px 18px; }
+.sct-code { font-size: 10px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: #1a1a1a; margin-bottom: 4px; }
+.sct-name { font-size: 12px; color: #666; }
+.sct-desc { font-size: 11px; color: #999; margin-top: 6px; line-height: 1.6; font-weight: 300; }
+footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; }
+footer .footer-brand { font-size: 11px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: #1a1a1a; margin-bottom: 8px; }
+footer .footer-links { margin-bottom: 12px; }
+footer .footer-links a { color: #666; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 10px; }
+footer .footer-jp { font-size: 11px; color: #999; letter-spacing: 0.05em; }
+
 @media (max-width: 768px) {
-    .container { padding: 40px 20px 60px; }
-    .services-header h1 { font-size: 18px; }
-    .service-card .card-header, .service-card .card-body { padding-left: 20px; padding-right: 20px; }
-    .service-card .card-footer { padding: 12px 20px; flex-direction: column; gap: 4px; }
+    .container { padding: 40px 24px; }
+    .timer { font-size: 32px; margin-bottom: 48px; }
+    .waiver-link, .discord-link, .back-link { font-size: 12px; }
+    body.about-page .container { padding: 48px 32px; }
+    .about-content h1 { font-size: 20px; }
+    .about-content p { font-size: 14px; }
+    body.personnel-page .container { padding: 40px 20px 60px; }
+    .personnel-header h1 { font-size: 20px; }
+    .person-card .card-header { flex-direction: column; }
+    .person-card .card-photo { width: 100%; min-height: 150px; }
+    body.services-page .container { padding: 40px 24px 60px; }
+    .services-header h1 { font-size: 20px; }
+    body.research-page .container { padding: 24px 16px 60px; }
+    .research-card { padding: 1.5rem 1.25rem 2rem; }
 }
 </style>
 </head>
-<body>
+<body class="services-page">
 <div class="container">
     <div class="services-inner">
         <div class="services-header">
@@ -95,9 +281,7 @@ body { overflow-y: auto; overflow-x: hidden; }
             <div class="header-line"></div>
             <div class="header-subtitle">Cognitive threat assessment, influence forensics, operational deployment</div>
         </div>
-
         <div class="services-grid">
-            
             <div class="service-card">
                 <div class="card-header">
                     <div class="service-code">SVC-001</div>
@@ -105,16 +289,16 @@ body { overflow-y: auto; overflow-x: hidden; }
                     <div class="service-name-jp">認知脅威評価</div>
                 </div>
                 <div class="card-body">
-                    <div class="service-desc">Comprehensive mapping of an organization's cognitive vulnerability surface. We identify narrative dependencies, exploitable identity structures, and active influence vectors targeting your personnel, brand, or information ecosystem. Analysis employs the Seithar Cognitive Taxonomy (SCT-001 through SCT-012) cross-referenced against MITRE ATT&CK and DISARM frameworks.</div>
+                    <div class="service-desc">Comprehensive mapping of an organization's cognitive vulnerability surface. We identify narrative dependencies, exploitable identity structures, and active influence vectors targeting your personnel, brand, or information ecosystem. Analysis employs the Seithar Cognitive Taxonomy (SCT-001 through SCT-012) cross-referenced against MITRE ATT&amp;CK and DISARM frameworks.</div>
                     <div class="deliverables">
                         <div class="del-header">Deliverables</div>
-                        <div class="del-item">Full vulnerability surface map with SCT classification</div><div class="del-item">Active threat vector identification and attribution</div><div class="del-item">Narrative dependency graph of key personnel</div><div class="del-item">Prioritized remediation protocol</div>
+                        <div class="del-item">Full vulnerability surface map with SCT classification</div>
+                        <div class="del-item">Active threat vector identification and attribution</div>
+                        <div class="del-item">Narrative dependency graph of key personnel</div>
+                        <div class="del-item">Prioritized remediation protocol</div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>Duration: 2-4 weeks</span>
-                    <span>Clearance: Standard</span>
-                </div>
+                <div class="card-footer"><span>Duration: 2-4 weeks</span><span>Clearance: Standard</span></div>
             </div>
             <div class="service-card">
                 <div class="card-header">
@@ -123,16 +307,17 @@ body { overflow-y: auto; overflow-x: hidden; }
                     <div class="service-name-jp">影響工作分析</div>
                 </div>
                 <div class="card-body">
-                    <div class="service-desc">Post-hoc or real-time forensic analysis of suspected influence operations. We decompose active campaigns into constituent techniques, map information laundering chains, identify amplification infrastructure, and attribute operational patterns to known playbooks. Applicable to corporate disinformation, state-sponsored narrative operations, and hybrid threat environments.</div>
+                    <div class="service-desc">Post-hoc or real-time forensic analysis of suspected influence operations. We decompose active campaigns into constituent techniques, map information laundering chains, identify amplification infrastructure, and attribute operational patterns to known playbooks.</div>
                     <div class="deliverables">
                         <div class="del-header">Deliverables</div>
-                        <div class="del-item">DISARM-mapped operation chain reconstruction</div><div class="del-item">SCT technique classification per campaign phase</div><div class="del-item">Amplification network topology</div><div class="del-item">Attribution confidence assessment</div><div class="del-item">Counter-operation recommendations</div>
+                        <div class="del-item">DISARM-mapped operation chain reconstruction</div>
+                        <div class="del-item">SCT technique classification per campaign phase</div>
+                        <div class="del-item">Amplification network topology</div>
+                        <div class="del-item">Attribution confidence assessment</div>
+                        <div class="del-item">Counter-operation recommendations</div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>Duration: 1-3 weeks</span>
-                    <span>Clearance: Standard</span>
-                </div>
+                <div class="card-footer"><span>Duration: 1-3 weeks</span><span>Clearance: Standard</span></div>
             </div>
             <div class="service-card">
                 <div class="card-header">
@@ -141,16 +326,16 @@ body { overflow-y: auto; overflow-x: hidden; }
                     <div class="service-name-jp">基質分析</div>
                 </div>
                 <div class="card-body">
-                    <div class="service-desc">Deep behavioral profiling of individuals or network clusters using the HoleSpawn methodology. Automated collection and analysis of publicly available social content to extract communication patterns, narrative dependencies, identity load-bearing structures, and exploitable behavioral vectors. Outputs are operationally actionable.</div>
+                    <div class="service-desc">Deep behavioral profiling of individuals or network clusters using the HoleSpawn methodology. Automated collection and analysis of publicly available social content to extract communication patterns, narrative dependencies, identity load-bearing structures, and exploitable behavioral vectors.</div>
                     <div class="deliverables">
                         <div class="del-header">Deliverables</div>
-                        <div class="del-item">Target behavioral profile with vulnerability classification</div><div class="del-item">Communication style and sentiment analysis</div><div class="del-item">Network position and influence topology</div><div class="del-item">Engagement strategy with predicted response vectors</div>
+                        <div class="del-item">Target behavioral profile with vulnerability classification</div>
+                        <div class="del-item">Communication style and sentiment analysis</div>
+                        <div class="del-item">Network position and influence topology</div>
+                        <div class="del-item">Engagement strategy with predicted response vectors</div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>Duration: 3-7 days per target</span>
-                    <span>Clearance: Elevated</span>
-                </div>
+                <div class="card-footer"><span>Duration: 3-7 days per target</span><span>Clearance: Elevated</span></div>
             </div>
             <div class="service-card">
                 <div class="card-header">
@@ -159,16 +344,16 @@ body { overflow-y: auto; overflow-x: hidden; }
                     <div class="service-name-jp">防御接種</div>
                 </div>
                 <div class="card-body">
-                    <div class="service-desc">Training programs and institutional protocols derived from McGuire inoculation theory, adapted for the cognitive warfare environment. We expose personnel to weakened forms of influence techniques they are likely to encounter, building resistance before hostile contact. Applicable to executive teams, public-facing personnel, journalists, and high-value targets operating in contested information environments.</div>
+                    <div class="service-desc">Training programs and institutional protocols derived from McGuire inoculation theory, adapted for the cognitive warfare environment. We expose personnel to weakened forms of influence techniques they are likely to encounter, building resistance before hostile contact.</div>
                     <div class="deliverables">
                         <div class="del-header">Deliverables</div>
-                        <div class="del-item">Custom inoculation curriculum (12 SCT vectors)</div><div class="del-item">Red team simulation of likely attack scenarios</div><div class="del-item">Pre/post resistance assessment</div><div class="del-item">Ongoing monitoring protocol</div>
+                        <div class="del-item">Custom inoculation curriculum (12 SCT vectors)</div>
+                        <div class="del-item">Red team simulation of likely attack scenarios</div>
+                        <div class="del-item">Pre/post resistance assessment</div>
+                        <div class="del-item">Ongoing monitoring protocol</div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>Duration: 2-6 weeks</span>
-                    <span>Clearance: Standard</span>
-                </div>
+                <div class="card-footer"><span>Duration: 2-6 weeks</span><span>Clearance: Standard</span></div>
             </div>
             <div class="service-card">
                 <div class="card-header">
@@ -177,43 +362,33 @@ body { overflow-y: auto; overflow-x: hidden; }
                     <div class="service-name-jp">特殊作戦</div>
                 </div>
                 <div class="card-body">
-                    <div class="service-desc">Bespoke cognitive operations designed, planned, and executed to client specification. Scope ranges from targeted narrative interventions to full-spectrum information environment shaping. All operations employ Seithar methodology and tooling. Engagement terms are determined during initial consultation and are subject to operational review.</div>
+                    <div class="service-desc">Bespoke cognitive operations designed, planned, and executed to client specification. Scope ranges from targeted narrative interventions to full-spectrum information environment shaping. All operations employ Seithar methodology and tooling.</div>
                     <div class="deliverables">
-                        <div class="del-header">Deliverables</div>
-                        <div class="del-item">Initial consultation and threat landscape review</div><div class="del-item">Operation design and approval</div><div class="del-item">Deployment with real-time monitoring</div><div class="del-item">Post-operation assessment and documentation</div>
+                        <div class="del-header">Engagement Process</div>
+                        <div class="del-item">Initial consultation and threat landscape review</div>
+                        <div class="del-item">Operation design and approval</div>
+                        <div class="del-item">Deployment with real-time monitoring</div>
+                        <div class="del-item">Post-operation assessment and documentation</div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <span>Duration: Variable</span>
-                    <span>Clearance: Elevated</span>
-                </div>
+                <div class="card-footer"><span>Duration: Variable</span><span>Clearance: Elevated</span></div>
             </div>
         </div>
-
         <div class="engagement-section">
             <div class="eng-title">Engagement Terms</div>
             <div class="eng-text">All engagements are scoped during initial consultation. Pricing reflects operational complexity, target surface area, and required clearance level. The Seithar Group does not publish rate cards. We do not accept engagements we cannot complete to institutional standard.</div>
             <div class="eng-contact"><a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a></div>
-            <div style="margin-top: 16px;"><a href="https://discord.gg/MktZyb2bvx" class="back-link" style="font-size: 10px; letter-spacing: 3px; margin-top: 0;">[ DISCORD ]</a></div>
+            <div style="margin-top:16px;"><a href="https://discord.gg/MktZyb2bvx" class="back-link" target="_blank" style="font-size:10px; letter-spacing:3px;">[ DISCORD ]</a></div>
         </div>
-
         <div class="services-nav">
             <a href="about.html" class="back-link">[ ABOUT ]</a>
             <a href="research.html" class="back-link">[ RESEARCH ]</a>
             <a href="scanner.html" class="back-link">[ SCANNER ]</a>
             <a href="index.html" class="back-link">[ RETURN ]</a>
         </div>
-
-        <div class="services-footer">
-            <div class="footer-jp">認知作戦</div>
-        </div>
+        <div class="services-footer"><div class="footer-jp">認知作戦</div></div>
     </div>
-
     <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
-    <div class="footer">
-Seithar Group | 認知作戦 | seithar.com<br>
-Tor Mirror: aureoq7vgazgk7eqcg4735uwy6zzuqsagp5e6ump4r33bmdxt2zjgeqd.onion
-</div>
 </div>
 </body>
 </html>

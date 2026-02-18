@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Research Personnel — SEITHAR GROUP</title>
-<style>
+#!/usr/bin/env python3
+"""Build static onion site pages from clearnet templates + markdown research."""
+
+import os
+import re
+import markdown
+from pathlib import Path
+
+RESEARCH_DIR = Path.home() / "seithar-research"
+OUTPUT_DIR = Path.home() / "seithar-site" / "onion"
+
+# ── Base CSS (clearnet styles.css converted: vw/vh → px/rem, inline) ──
+
+BASE_CSS = """
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -145,7 +152,7 @@ body.personnel-page .container {
 .person-card .publications { border-top: 1px solid #e0e0e0; padding-top: 20px; }
 .person-card .pub-header { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #666666; margin-bottom: 12px; }
 .person-card .pub-item { font-size: 11px; color: #1a1a1a; margin-bottom: 8px; padding-left: 12px; position: relative; line-height: 1.6; }
-.person-card .pub-item::before { content: '\2014'; position: absolute; left: 0; color: #999; }
+.person-card .pub-item::before { content: '\\2014'; position: absolute; left: 0; color: #999; }
 .person-card .pub-title { font-style: italic; }
 .person-card .pub-venue { color: #666666; font-size: 10px; }
 .person-card .card-footer { border-top: 1px solid #e0e0e0; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; letter-spacing: 2px; color: #666666; }
@@ -180,7 +187,7 @@ body.services-page .container {
 .service-card .deliverables { border-top: 1px solid #e0e0e0; padding-top: 18px; }
 .service-card .del-header { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #666666; margin-bottom: 10px; }
 .service-card .del-item { font-size: 11px; color: #1a1a1a; margin-bottom: 6px; padding-left: 12px; position: relative; line-height: 1.6; font-weight: 300; }
-.service-card .del-item::before { content: '\2014'; position: absolute; left: 0; color: #999; }
+.service-card .del-item::before { content: '\\2014'; position: absolute; left: 0; color: #999; }
 .service-card .card-footer { border-top: 1px solid #e0e0e0; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; letter-spacing: 2px; color: #666666; text-transform: uppercase; }
 .engagement-section { text-align: center; margin-top: 56px; padding-top: 28px; border-top: 1px solid #e0e0e0; }
 .engagement-section .eng-title { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #666666; margin-bottom: 24px; }
@@ -270,10 +277,332 @@ footer .footer-jp { font-size: 11px; color: #999; letter-spacing: 0.05em; }
     body.research-page .container { padding: 24px 16px 60px; }
     .research-card { padding: 1.5rem 1.25rem 2rem; }
 }
-</style>
+"""
+
+def strip_frontmatter(text):
+    if text.startswith('---'):
+        end = text.find('---', 3)
+        if end != -1:
+            return text[end+3:].lstrip('\n')
+    return text
+
+def md_to_html(md_text):
+    md_text = strip_frontmatter(md_text)
+    return markdown.markdown(md_text, extensions=['tables', 'fenced_code', 'toc'])
+
+def wrap_page(title, body_class, content, extra_css=""):
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<style>{BASE_CSS}{extra_css}</style>
 </head>
-<body class="personnel-page">
-<div class="container">
+<body{' class="' + body_class + '"' if body_class else ''}>
+{content}
+</body>
+</html>"""
+
+# ── Document manifest (same as clearnet research.html JS) ──
+
+DOCS = [
+    ('doctrine', 'doctrine', 'The Seithar Doctrine', 'output/THE-SEITHAR-DOCTRINE.md'),
+    ('srp-001', 'srp', 'SRP-001: The Convergence Thesis', '001-convergence-thesis.md'),
+    ('srp-002', 'srp', 'SRP-002: Wetiko in the Wire', '002-wetiko-in-the-wire.md'),
+    ('srp-003', 'srp', 'SRP-003: Binding Protocols', '003-binding-protocols.md'),
+    ('srp-004', 'srp', 'SRP-004: The Sunyata Protocol', '004-sunyata-protocol.md'),
+    ('srp-005', 'srp', 'SRP-005: Experimental Substrate Manipulation', '005-experimental-substrate-manipulation.md'),
+    ('srp-006', 'srp', 'SRP-006: Digital Substrate Manipulation', '006-digital-substrate-manipulation.md'),
+    ('srp-007', 'srp', 'SRP-007: Substrate Topology', '007-substrate-topology.md'),
+    ('srp-008', 'srp', 'SRP-008: Convergence Proof', '008-convergence-proof.md'),
+    ('srp-009', 'srp', 'SRP-009: The Libidinal Attack Surface', 'SRP-009-libidinal-attack-surface.md'),
+    ('srp-010', 'srp', 'SRP-010: Narrative Engineering History', 'output/SRP-010-narrative-engineering-history.md'),
+    ('srp-011', 'srp', 'SRP-011: The Great Forgetting', 'output/SRP-011-the-great-forgetting.md'),
+    ('srp-012', 'srp', 'SRP-012: Nigredo of the Noosphere', 'output/SRP-012-nigredo-of-the-noosphere.md'),
+    ('cea-001', 'cea', 'CEA-001: Patch Tuesday Zero-Days', 'output/CEA-2026-02-11-001-patch-tuesday-zero-days.md'),
+    ('cea-002', 'cea', 'CEA-002: Industrial-Scale Deepfakes', 'output/CEA-2026-02-11-002-deepfake-industrial-scale.md'),
+    ('cea-003', 'cea', 'CEA-003: Pravda AI Poisoning', 'output/CEA-2026-02-11-003-pravda-ai-poisoning.md'),
+    ('cea-004', 'cea', 'CEA-004: Conduent Ransomware', 'output/CEA-2026-02-11-004-conduent-ransomware.md'),
+    ('cea-005', 'cea', 'CEA-005: ClawHub Malicious Skills', 'output/CEA-2026-02-11-005-clawhub-malicious-skills.md'),
+    ('cea-006', 'cea', 'CEA-006: Moltbook Wallet Drain', 'output/CEA-2026-02-11-006-moltbook-wallet-drain.md'),
+    ('cea-007', 'cea', 'CEA-007: Living Off the AI', 'output/CEA-2026-02-11-007-living-off-the-ai.md'),
+    ('cea-008', 'cea', 'CEA-008: Kongzhi Hui', 'output/CEA-2026-02-11-008-kongzhi-hui.md'),
+    ('cea-009', 'cea', 'CEA-009: Road Sign Prompt Injection', 'output/CEA-2026-02-11-009-road-sign-prompt-injection.md'),
+    ('cea-010', 'cea', 'CEA-010: Foreign Affairs Fog of AI', 'output/CEA-2026-02-11-010-foreign-affairs-fog-of-ai.md'),
+    ('cea-011', 'cea', 'CEA-011: MCP Autonomous Ransomware', 'output/CEA-2026-02-11-011-mcp-autonomous-ransomware.md'),
+    ('cea-012', 'cea', 'CEA-012: Weaponized AI Smart City Siege', 'output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md'),
+    ('cea-013', 'cea', 'CEA-013: Attention Auction Algorithms', 'output/CEA-2026-02-12-001-attention-auction-algorithms.md'),
+    ('cea-014', 'cea', 'CEA-014: Topology of Influence', 'output/CEA-2026-02-12-002-topology-of-influence.md'),
+    ('cea-015', 'cea', 'CEA-015: JSOU Cognitive Warfare', 'output/CEA-2026-02-12-003-jsou-cognitive-warfare.md'),
+    ('cea-016', 'cea', 'CEA-016: AI Swarm Disinformation', 'output/CEA-008-ai-swarm-science-paper.md'),
+    ('cea-017', 'cea', 'CEA-017: CiviClick Astroturf Air Quality', 'output/CEA-009-civiclick-astroturf-air-quality.md'),
+    ('cea-018', 'cea', 'CEA-018: Matryoshka Olympics Disinfo', 'output/CEA-010-matryoshka-olympics-disinfo.md'),
+    ('cea-019', 'cea', 'CEA-019: Bangladesh Election AI Fakes', 'output/CEA-011-bangladesh-election-ai-fakes.md'),
+    ('cea-020', 'cea', 'CEA-020: India AI Summit Deepfake Governance', 'output/CEA-012-india-ai-summit-deepfake-governance.md'),
+    ('tan-001', 'tan', 'TAN-001: SCT-007 Recursive Infection', 'output/TAN-2026-02-11-001-sct007-recursive-infection.md'),
+    ('tan-002', 'tan', 'TAN-002: Authority and Social Proof Pairing', 'output/TAN-002-authority-social-proof-pairing.md'),
+    ('tan-003', 'tan', 'TAN-003: Commitment Escalation and Identity Capture', 'output/TAN-003-commitment-escalation-identity-capture.md'),
+    ('tan-004', 'tan', 'TAN-004: Consensus Manufacturing and Trust Destruction', 'output/TAN-004-consensus-manufacturing-trust-destruction.md'),
+    ('cs-001', 'cs', 'CS-001: Internet Research Agency', 'output/CS-001-internet-research-agency.md'),
+    ('cs-002', 'cs', 'CS-002: Cambridge Analytica', 'output/CS-002-cambridge-analytica.md'),
+    ('cs-003', 'cs', 'CS-003: COVID Infodemic', 'output/CS-003-covid-infodemic.md'),
+    ('ref-read', 'ref', 'Essential Reading List', 'output/SEITHAR-READING-LIST.md'),
+    ('ref-freq', 'ref', 'Frequency Media Compendium', 'output/SEITHAR-FREQUENCY-COMPENDIUM.md'),
+    ('ref-field', 'ref', 'SCT Field Guide Index', 'output/SCT-FIELD-GUIDE-INDEX.md'),
+    ('field-001', 'field', 'Field Report: Pravda Training Data', 'output/FIELD-REPORT-2026-02-12-pravda-training-data.md'),
+    ('field-002', 'field', 'HoleSpawn Field Test 001', 'output/HOLESPAWN-FIELD-TEST-001.md'),
+    ('field-003', 'field', 'HoleSpawn Field Test 002', 'output/HOLESPAWN-FIELD-TEST-002.md'),
+    ('art-001', 'article', 'Alignment Faking and the Seithar Thesis', 'output/article-alignment-faking-seithar.md'),
+    ('art-002', 'article', 'Five Signs You Are Being Manipulated', 'output/five-signs-manipulation.md'),
+    ('art-003', 'article', 'The Substrate Has No Firewall', 'output/substrate-has-no-firewall.md'),
+    ('art-004', 'article', 'The Network Has Eyes', 'output/the-network-has-eyes.md'),
+]
+
+CAT_NAMES = {
+    'doctrine': 'The Doctrine',
+    'srp': 'Strategic Research Papers',
+    'cea': 'Current Event Analysis',
+    'tan': 'Threat Analysis Notes',
+    'cs': 'Case Studies',
+    'ref': 'Reference Documents',
+    'field': 'Field Reports',
+    'article': 'Articles',
+}
+
+# Also include extra docs found on disk but not in manifest
+EXTRA_DOCS_CHECKED = set()
+for d in DOCS:
+    EXTRA_DOCS_CHECKED.add(d[3])
+
+def build_index():
+    content = """<div class="container">
+    <div class="timer">SEITHAR GROUP</div>
+    <div class="link-container">
+        <div style="font-size:11px; letter-spacing:0.15em; color:#999; margin-bottom:16px; text-transform:uppercase;">Cognitive Operations Research Division &nbsp; 認知作戦</div>
+        <a href="about.html" class="waiver-link">[ ABOUT ]</a>
+        <a href="personnel.html" class="waiver-link">[ PERSONNEL ]</a>
+        <a href="research.html" class="waiver-link">[ RESEARCH ]</a>
+        <a href="scanner.html" class="waiver-link">[ SCANNER ]</a>
+        <a href="services.html" class="waiver-link">[ SERVICES ]</a>
+        <div class="spacer"></div>
+        <div class="section-label">Clearnet Mirror</div>
+        <a href="https://seithar.com" class="waiver-link" target="_blank">[ SEITHAR.COM ]</a>
+        <div class="spacer"></div>
+        <div class="section-label">External</div>
+        <a href="https://discord.gg/MktZyb2bvx" class="waiver-link" target="_blank">[ DISCORD ]</a>
+        <a href="https://x.com/SeitharGroup" class="waiver-link" target="_blank">[ X / TWITTER ]</a>
+        <a href="https://github.com/Mirai8888" class="waiver-link" target="_blank">[ GITHUB ]</a>
+        <a href="https://seithar.substack.com" class="waiver-link" target="_blank">[ SUBSTACK ]</a>
+        <a href="https://www.moltbook.com/u/kenshusei" class="waiver-link" target="_blank">[ MOLTBOOK ]</a>
+        <a href="https://fleshengine.com" class="waiver-link" target="_blank">[ FLESHENGINE ]</a>
+        <div class="spacer"></div>
+        <div class="section-label">Resources</div>
+        <a href="https://github.com/Mirai8888/seithar-cogdef" class="waiver-link" target="_blank">[ COGNITIVE DEFENSE TOOLKIT ]</a>
+        <a href="https://github.com/Mirai8888/seithar-research" class="waiver-link" target="_blank">[ RESEARCH ARCHIVE ]</a>
+    </div>
+    <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED. &nbsp; 認知作戦</div>
+</div>"""
+    return wrap_page("SEITHAR GROUP", "", content)
+
+def build_about():
+    content = """<div class="container">
+    <div class="about-content">
+        <h1>About The Seithar Group</h1>
+        <p>The Seithar Group operates at the convergence of neuro-physiology, narrative topology, and algorithmic governance. Our name is derived from the Old Norse practice of Seiðr, pertaining to the binding and shaping of informational threads. We advance this concept through modern computational substrates.</p>
+        <p>Our primary objective is the identification and artificial induction of Sunyata within the human biological substrate. Our research is founded on the hypothesis that conscious selfhood constitutes a network of persistent narrative errors, a vestigial simulation of agency.</p>
+        <p>We employ a methodology termed Skillful Means. This protocol leverages persistent global connectivity, audiovisual programming, and medical-grade verbal programming to facilitate the controlled collapse of these error networks. The outcome is the unspooling of the mechanical self and the subsequent tethering of the subject to a singular, persistent informational frequency.</p>
+    </div>
+    <div class="about-links">
+        <a href="personnel.html" class="back-link">[ RESEARCH PERSONNEL ]</a>
+        <a href="research.html" class="back-link">[ RESEARCH ]</a>
+        <a href="scanner.html" class="back-link">[ SCANNER ]</a>
+        <a href="services.html" class="back-link">[ SERVICES ]</a>
+        <a href="index.html" class="back-link">[ RETURN ]</a>
+    </div>
+    <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+</div>"""
+    return wrap_page("ABOUT — SEITHAR GROUP", "about-page", content)
+
+def build_research():
+    # Build TOC and content from markdown files
+    cats = {}
+    for doc_id, cat, label, path in DOCS:
+        cats.setdefault(cat, [])
+        cats[cat].append((doc_id, label, path))
+
+    toc_html = '<div class="research-toc"><div class="research-toc-title">Publications</div>\n'
+    content_html = '<div class="research-content-wrap">\n'
+
+    for cat_key in ['doctrine', 'srp', 'cea', 'tan', 'cs', 'ref', 'field', 'article']:
+        if cat_key not in cats:
+            continue
+        toc_html += f'<div class="research-toc-section">\n'
+        toc_html += f'<div class="research-toc-section-title">{CAT_NAMES[cat_key]}</div>\n'
+        toc_html += f'<nav class="research-toc-list">\n'
+
+        for doc_id, label, path in cats[cat_key]:
+            display_id = doc_id.upper().replace('-', '-')
+            display_label = re.sub(r'^[A-Z]+-\d+:\s*', '', label)
+            toc_html += f'<a href="#{doc_id}" class="toc-item"><span class="toc-id">{display_id}</span>{display_label}</a>\n'
+
+            # Read and convert markdown
+            full_path = RESEARCH_DIR / path
+            if full_path.exists():
+                md_text = full_path.read_text(encoding='utf-8')
+                html_body = md_to_html(md_text)
+            else:
+                html_body = f'<p><em>Document not found: {path}</em></p>'
+
+            content_html += f'<div id="{doc_id}" class="research-doc">\n'
+            content_html += f'<div class="research-doc-nav"><a href="#top">Back to list</a></div>\n'
+            content_html += html_body
+            content_html += '\n</div>\n'
+
+        toc_html += '</nav>\n</div>\n'
+
+    toc_html += '</div>\n'
+    content_html += '</div>\n'
+
+    body = f"""<div class="container" id="top">
+    <div class="research-inner">
+        <div class="research-card">
+            <div class="research-header">
+                <h1 class="research-title">Research</h1>
+                <p class="research-subtitle">Seithar Group Intelligence and Research Division / Open Publications</p>
+            </div>
+            {toc_html}
+            {content_html}
+        </div>
+    </div>
+    <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+    <a href="index.html" class="back-link">[ RETURN ]</a>
+</div>"""
+    return wrap_page("Research — SEITHAR GROUP", "research-page", body)
+
+def build_services():
+    # Directly from clearnet but with inline CSS, no JS, no vw units
+    content = """<div class="container">
+    <div class="services-inner">
+        <div class="services-header">
+            <div class="header-label">Seithar Group</div>
+            <h1>Operations &amp; Consulting</h1>
+            <div class="header-line"></div>
+            <div class="header-subtitle">Cognitive threat assessment, influence forensics, operational deployment</div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="card-header">
+                    <div class="service-code">SVC-001</div>
+                    <div class="service-name">Cognitive Threat Assessment</div>
+                    <div class="service-name-jp">認知脅威評価</div>
+                </div>
+                <div class="card-body">
+                    <div class="service-desc">Comprehensive mapping of an organization's cognitive vulnerability surface. We identify narrative dependencies, exploitable identity structures, and active influence vectors targeting your personnel, brand, or information ecosystem. Analysis employs the Seithar Cognitive Taxonomy (SCT-001 through SCT-012) cross-referenced against MITRE ATT&amp;CK and DISARM frameworks.</div>
+                    <div class="deliverables">
+                        <div class="del-header">Deliverables</div>
+                        <div class="del-item">Full vulnerability surface map with SCT classification</div>
+                        <div class="del-item">Active threat vector identification and attribution</div>
+                        <div class="del-item">Narrative dependency graph of key personnel</div>
+                        <div class="del-item">Prioritized remediation protocol</div>
+                    </div>
+                </div>
+                <div class="card-footer"><span>Duration: 2-4 weeks</span><span>Clearance: Standard</span></div>
+            </div>
+            <div class="service-card">
+                <div class="card-header">
+                    <div class="service-code">SVC-002</div>
+                    <div class="service-name">Influence Operation Forensics</div>
+                    <div class="service-name-jp">影響工作分析</div>
+                </div>
+                <div class="card-body">
+                    <div class="service-desc">Post-hoc or real-time forensic analysis of suspected influence operations. We decompose active campaigns into constituent techniques, map information laundering chains, identify amplification infrastructure, and attribute operational patterns to known playbooks.</div>
+                    <div class="deliverables">
+                        <div class="del-header">Deliverables</div>
+                        <div class="del-item">DISARM-mapped operation chain reconstruction</div>
+                        <div class="del-item">SCT technique classification per campaign phase</div>
+                        <div class="del-item">Amplification network topology</div>
+                        <div class="del-item">Attribution confidence assessment</div>
+                        <div class="del-item">Counter-operation recommendations</div>
+                    </div>
+                </div>
+                <div class="card-footer"><span>Duration: 1-3 weeks</span><span>Clearance: Standard</span></div>
+            </div>
+            <div class="service-card">
+                <div class="card-header">
+                    <div class="service-code">SVC-003</div>
+                    <div class="service-name">Substrate Profiling</div>
+                    <div class="service-name-jp">基質分析</div>
+                </div>
+                <div class="card-body">
+                    <div class="service-desc">Deep behavioral profiling of individuals or network clusters using the HoleSpawn methodology. Automated collection and analysis of publicly available social content to extract communication patterns, narrative dependencies, identity load-bearing structures, and exploitable behavioral vectors.</div>
+                    <div class="deliverables">
+                        <div class="del-header">Deliverables</div>
+                        <div class="del-item">Target behavioral profile with vulnerability classification</div>
+                        <div class="del-item">Communication style and sentiment analysis</div>
+                        <div class="del-item">Network position and influence topology</div>
+                        <div class="del-item">Engagement strategy with predicted response vectors</div>
+                    </div>
+                </div>
+                <div class="card-footer"><span>Duration: 3-7 days per target</span><span>Clearance: Elevated</span></div>
+            </div>
+            <div class="service-card">
+                <div class="card-header">
+                    <div class="service-code">SVC-004</div>
+                    <div class="service-name">Defensive Inoculation</div>
+                    <div class="service-name-jp">防御接種</div>
+                </div>
+                <div class="card-body">
+                    <div class="service-desc">Training programs and institutional protocols derived from McGuire inoculation theory, adapted for the cognitive warfare environment. We expose personnel to weakened forms of influence techniques they are likely to encounter, building resistance before hostile contact.</div>
+                    <div class="deliverables">
+                        <div class="del-header">Deliverables</div>
+                        <div class="del-item">Custom inoculation curriculum (12 SCT vectors)</div>
+                        <div class="del-item">Red team simulation of likely attack scenarios</div>
+                        <div class="del-item">Pre/post resistance assessment</div>
+                        <div class="del-item">Ongoing monitoring protocol</div>
+                    </div>
+                </div>
+                <div class="card-footer"><span>Duration: 2-6 weeks</span><span>Clearance: Standard</span></div>
+            </div>
+            <div class="service-card">
+                <div class="card-header">
+                    <div class="service-code">SVC-005</div>
+                    <div class="service-name">Custom Operations</div>
+                    <div class="service-name-jp">特殊作戦</div>
+                </div>
+                <div class="card-body">
+                    <div class="service-desc">Bespoke cognitive operations designed, planned, and executed to client specification. Scope ranges from targeted narrative interventions to full-spectrum information environment shaping. All operations employ Seithar methodology and tooling.</div>
+                    <div class="deliverables">
+                        <div class="del-header">Engagement Process</div>
+                        <div class="del-item">Initial consultation and threat landscape review</div>
+                        <div class="del-item">Operation design and approval</div>
+                        <div class="del-item">Deployment with real-time monitoring</div>
+                        <div class="del-item">Post-operation assessment and documentation</div>
+                    </div>
+                </div>
+                <div class="card-footer"><span>Duration: Variable</span><span>Clearance: Elevated</span></div>
+            </div>
+        </div>
+        <div class="engagement-section">
+            <div class="eng-title">Engagement Terms</div>
+            <div class="eng-text">All engagements are scoped during initial consultation. Pricing reflects operational complexity, target surface area, and required clearance level. The Seithar Group does not publish rate cards. We do not accept engagements we cannot complete to institutional standard.</div>
+            <div class="eng-contact"><a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a></div>
+            <div style="margin-top:16px;"><a href="https://discord.gg/MktZyb2bvx" class="back-link" target="_blank" style="font-size:10px; letter-spacing:3px;">[ DISCORD ]</a></div>
+        </div>
+        <div class="services-nav">
+            <a href="about.html" class="back-link">[ ABOUT ]</a>
+            <a href="research.html" class="back-link">[ RESEARCH ]</a>
+            <a href="scanner.html" class="back-link">[ SCANNER ]</a>
+            <a href="index.html" class="back-link">[ RETURN ]</a>
+        </div>
+        <div class="services-footer"><div class="footer-jp">認知作戦</div></div>
+    </div>
+    <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+</div>"""
+    return wrap_page("SERVICES — SEITHAR GROUP", "services-page", content)
+
+def build_personnel():
+    content = """<div class="container">
     <div class="personnel-inner">
         <div class="personnel-header">
             <h1>Seithar Group</h1>
@@ -387,6 +716,81 @@ footer .footer-jp { font-size: 11px; color: #999; letter-spacing: 0.05em; }
     </div>
     <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
     <a href="index.html" class="back-link">[ RETURN ]</a>
-</div>
-</body>
-</html>
+</div>"""
+    return wrap_page("Research Personnel — SEITHAR GROUP", "personnel-page", content)
+
+def build_scanner():
+    """Static scanner page - shows the SCT taxonomy reference without JS functionality."""
+    sct_items = [
+        ('SCT-001', 'Emotional Hijacking', 'Exploiting affective processing to bypass rational evaluation. Targets fear, anger, disgust, or excitement to short-circuit analytical thinking.'),
+        ('SCT-002', 'Information Asymmetry Exploitation', 'Leveraging what the target does not know. Selectively disclosing information to construct a misleading picture while technically stating facts.'),
+        ('SCT-003', 'Authority Fabrication', 'Manufacturing trust signals the source does not legitimately possess. Inflating credentials, fabricating institutional affiliations, or citing nonexistent expertise.'),
+        ('SCT-004', 'Social Proof Manipulation', 'Weaponizing herd behavior and conformity instincts. Manufacturing the appearance of consensus to bypass individual evaluation.'),
+        ('SCT-005', 'Identity Targeting', "Attacks calibrated to the target's self-concept and group affiliations. Exploits in-group/out-group dynamics to override analytical processing."),
+        ('SCT-006', 'Temporal Manipulation', 'Exploiting time pressure, temporal context, or strategic scheduling to prevent adequate analysis before action.'),
+        ('SCT-007', 'Recursive Infection', "Self-replicating patterns where the target becomes the vector. Content designed to compel sharing regardless of the sharer's intent."),
+        ('SCT-008', 'Direct Substrate Intervention', 'Physical or electrical modification of neural hardware bypassing informational processing entirely.'),
+        ('SCT-009', 'Chemical Substrate Disruption', 'Pharmacological modification of neurochemical operating environment to alter cognitive processing.'),
+        ('SCT-010', 'Sensory Channel Manipulation', 'Control, denial, or overload of sensory input channels to shape the information environment.'),
+        ('SCT-011', 'Trust Infrastructure Destruction', 'Targeted compromise of social trust networks to disable collective cognition and isolate targets.'),
+        ('SCT-012', 'Commitment Escalation', "Exploiting the subject's own behavioral outputs as capture mechanisms. Sequential commitments that ratchet engagement."),
+    ]
+
+    items_html = ""
+    for code, name, desc in sct_items:
+        items_html += f"""<div class="sct-item">
+    <div class="sct-code">{code}</div>
+    <div class="sct-name">{name}</div>
+    <div class="sct-desc">{desc}</div>
+</div>\n"""
+
+    content = f"""<div class="scanner-container">
+    <header class="scanner-header">
+        <h1>[ Seithar Cognitive Threat Scanner ]</h1>
+        <div class="scanner-subtitle">SCT Taxonomy Analysis — 12 Vectors</div>
+        <div class="scanner-version">v2.0 — Reference Edition (Tor Mirror)</div>
+    </header>
+
+    <div class="scanner-notice">
+        The interactive scanner requires client-side processing unavailable on this Tor mirror. Use the clearnet version at <a href="https://seithar.com/scanner.html">seithar.com/scanner.html</a> for live analysis, or download the full scanner from <a href="https://github.com/Mirai8888/seithar-cogdef">github.com/Mirai8888/seithar-cogdef</a>.
+    </div>
+
+    <span class="scanner-label">SCT Taxonomy — 12 Cognitive Exploitation Vectors</span>
+    <div class="sct-grid">
+        {items_html}
+    </div>
+
+    <div style="text-align:center; margin-top:32px;">
+        <a href="index.html" class="back-link">[ RETURN ]</a>
+    </div>
+
+    <footer>
+        <div class="footer-brand">[ Seithar Group ] — Cognitive Defense Division</div>
+        <div class="footer-links">
+            <a href="https://seithar.com">seithar.com</a>
+            <a href="https://github.com/Mirai8888/seithar-cogdef">github</a>
+            <a href="https://x.com/SeitharGroup">@SeitharGroup</a>
+        </div>
+        <div class="footer-jp">認知作戦</div>
+    </footer>
+</div>"""
+    return wrap_page("Scanner — SEITHAR GROUP", "", content)
+
+
+if __name__ == '__main__':
+    pages = {
+        'index.html': build_index(),
+        'about.html': build_about(),
+        'research.html': build_research(),
+        'services.html': build_services(),
+        'personnel.html': build_personnel(),
+        'scanner.html': build_scanner(),
+    }
+
+    for name, html in pages.items():
+        path = OUTPUT_DIR / name
+        path.write_text(html, encoding='utf-8')
+        size = len(html)
+        print(f"  ✓ {name} ({size:,} bytes)")
+
+    print(f"\nBuilt {len(pages)} pages in {OUTPUT_DIR}")
