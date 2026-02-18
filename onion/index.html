@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEITHAR GROUP — SEITHAR GROUP</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: #0a0a0a;
+    color: #cccccc;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+}
+h1 { color: #ffffff; font-size: 18px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+h2 { color: #ffffff; font-size: 15px; font-weight: 400; letter-spacing: 0.1em; margin: 32px 0 12px; text-transform: uppercase; }
+h3 { color: #ffffff; font-size: 14px; font-weight: 400; letter-spacing: 0.08em; margin: 24px 0 8px; text-transform: uppercase; }
+h4, h5, h6 { color: #d4d4d4; font-size: 13px; font-weight: 400; margin: 20px 0 8px; }
+p { margin-bottom: 16px; font-size: 14px; }
+a { color: #888888; text-decoration: none; transition: color 0.2s; }
+a:hover { color: #ffffff; }
+hr { border: none; border-top: 1px solid #333333; margin: 32px 0; }
+ul, ol { margin: 0 0 16px 24px; font-size: 14px; }
+li { margin-bottom: 4px; }
+pre { background: #111111; border: 1px solid #333333; padding: 12px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.6; }
+code { background: #111111; padding: 1px 4px; font-size: 13px; font-family: 'Courier New', Courier, monospace; }
+pre code { background: none; padding: 0; }
+blockquote { border-left: 2px solid #333333; padding-left: 16px; color: #999999; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+th, td { border: 1px solid #333333; padding: 8px 12px; text-align: left; }
+th { background: #111111; color: #ffffff; font-weight: 400; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
+strong { color: #ffffff; font-weight: 700; }
+em { color: #d4d4d4; }
+img { max-width: 100%; }
+.header { text-align: center; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid #333333; }
+.header .subtitle { font-size: 11px; letter-spacing: 0.2em; color: #666666; text-transform: uppercase; margin-top: 4px; }
+.header .onion { font-size: 10px; letter-spacing: 0.05em; color: #555555; margin-top: 12px; word-break: break-all; }
+.nav { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 24px 0; }
+.nav a { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; }
+.footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid #333333; font-size: 11px; color: #555555; letter-spacing: 0.05em; line-height: 2; }
+.section-label { font-size: 10px; letter-spacing: 0.2em; color: #666666; text-transform: uppercase; margin: 32px 0 12px; }
+.toc { margin-bottom: 40px; }
+.toc a { display: block; padding: 4px 0; font-size: 13px; border-bottom: 1px solid #1a1a1a; }
+.toc a:hover { border-bottom-color: #333333; }
+.toc .toc-id { color: #555555; display: inline-block; min-width: 80px; font-size: 11px; }
+.doc-section { margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid #333333; scroll-margin-top: 20px; }
+.doc-section:last-child { border-bottom: none; }
+.back-top { font-size: 11px; letter-spacing: 0.1em; margin-bottom: 16px; display: block; }
+.card { border: 1px solid #333333; margin-bottom: 24px; padding: 20px; }
+.card .card-code { font-size: 10px; letter-spacing: 0.15em; color: #555555; text-transform: uppercase; margin-bottom: 4px; }
+.card .card-name { font-size: 14px; color: #ffffff; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.card .card-name-jp { font-size: 12px; color: #666666; margin-bottom: 12px; }
+.card .card-desc { font-size: 13px; line-height: 1.8; margin-bottom: 16px; }
+.card .del-header { font-size: 10px; letter-spacing: 0.15em; color: #666666; text-transform: uppercase; margin-bottom: 8px; border-top: 1px solid #333333; padding-top: 12px; }
+.card .del-item { font-size: 12px; padding-left: 16px; position: relative; margin-bottom: 4px; line-height: 1.6; }
+.card .del-item::before { content: '—'; position: absolute; left: 0; color: #555555; }
+.card .card-footer { border-top: 1px solid #333333; padding-top: 8px; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; color: #555555; text-transform: uppercase; display: flex; justify-content: space-between; }
+.person-card { border: 1px solid #333333; margin-bottom: 32px; padding: 24px; }
+.person-card .person-name { font-size: 15px; color: #ffffff; letter-spacing: 0.12em; text-transform: uppercase; }
+.person-card .person-name-jp { font-size: 13px; color: #666666; margin-bottom: 4px; }
+.person-card .person-title { font-size: 12px; color: #888888; letter-spacing: 0.05em; margin-bottom: 16px; }
+.person-card .meta-row { font-size: 12px; margin-bottom: 4px; }
+.person-card .meta-label { color: #555555; display: inline-block; min-width: 100px; }
+.person-card .meta-value { color: #cccccc; }
+.person-card .bio { margin-top: 16px; font-size: 13px; line-height: 1.8; }
+.person-card .spec-tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+.person-card .spec-tag { font-size: 10px; letter-spacing: 0.08em; border: 1px solid #333333; padding: 2px 8px; color: #888888; }
+.person-card .pub-section { margin-top: 20px; border-top: 1px solid #333333; padding-top: 12px; }
+.person-card .pub-header { font-size: 10px; letter-spacing: 0.15em; color: #666666; text-transform: uppercase; margin-bottom: 8px; }
+.person-card .pub-item { font-size: 12px; margin-bottom: 6px; line-height: 1.6; }
+.person-card .pub-title { color: #cccccc; }
+.person-card .pub-venue { color: #555555; }
+.redacted { background: #ffffff; color: #ffffff; padding: 0 4px; font-size: 12px; }
+.status-active { color: #cccccc; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 16px; }
+.status-dot { display: inline-block; width: 6px; height: 6px; background: #cccccc; border-radius: 50%; margin-right: 6px; }
+@media (max-width: 600px) {
+    .container { padding: 24px 14px 40px; }
+    h1 { font-size: 16px; }
+    .card .card-footer { flex-direction: column; gap: 4px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>SEITHAR GROUP</h1>
+<div class="subtitle">Cognitive Operations Research Division &nbsp; 認知作戦</div>
+<div class="onion">aureoq7vgazgk7eqcg4735uwy6zzuqsagp5e6ump4r33bmdxt2zjgeqd.onion</div>
+</div>
+
+<div class="nav">
+<a href="about.html">[ ABOUT ]</a>
+<a href="personnel.html">[ PERSONNEL ]</a>
+<a href="research.html">[ RESEARCH ]</a>
+<a href="scanner.html">[ SCANNER ]</a>
+<a href="services.html">[ SERVICES ]</a>
+</div>
+
+<div class="section-label">Tor Mirror</div>
+<div class="nav">
+<a href="http://aureoq7vgazgk7eqcg4735uwy6zzuqsagp5e6ump4r33bmdxt2zjgeqd.onion">[ .ONION ]</a>
+</div>
+
+<div class="section-label">External</div>
+<div class="nav">
+<a href="https://discord.gg/MktZyb2bvx">[ DISCORD ]</a>
+<a href="https://x.com/SeitharGroup">[ X / TWITTER ]</a>
+<a href="https://github.com/Mirai8888">[ GITHUB ]</a>
+<a href="https://seithar.substack.com">[ SUBSTACK ]</a>
+<a href="https://www.moltbook.com/u/kenshusei">[ MOLTBOOK ]</a>
+<a href="https://fleshengine.com">[ FLESHENGINE ]</a>
+</div>
+
+<div class="section-label">Resources</div>
+<div class="nav">
+<a href="research.html">[ LIBRARY ]</a>
+<a href="https://github.com/Mirai8888/seithar-cogdef">[ COGNITIVE DEFENSE TOOLKIT ]</a>
+<a href="https://github.com/Mirai8888/seithar-research">[ RESEARCH ARCHIVE ]</a>
+</div>
+
+<div style="text-align:center;margin-top:32px;font-size:11px;color:#555555;">© 2026 SEITHAR GROUP. ALL RIGHTS RESERVED. &nbsp; 認知作戦</div>
+<div class="footer">
+Seithar Group | 認知作戦 | seithar.com<br>
+Tor Mirror: aureoq7vgazgk7eqcg4735uwy6zzuqsagp5e6ump4r33bmdxt2zjgeqd.onion
+</div>
+</div>
+</body>
+</html>
