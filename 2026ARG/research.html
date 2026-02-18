@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research — SEITHAR GROUP</title>
-    <meta name="description" content="Seithar Group research publications. Cognitive defense, binding protocols, Sunyata protocol, current event analysis.">
+    <meta name="description" content="Seithar Group research publications. Strategic research papers, current event analysis, threat analysis notes, case studies, and reference documents.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Research — SEITHAR GROUP">
+    <meta property="og:description" content="Seithar Group Intelligence and Research Division. Open publications.">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
@@ -18,7 +21,6 @@
             align-items: stretch;
         }
         .research-inner { max-width: 820px; margin: 0 auto; width: 100%; }
-        /* White card backdrop: separates content from video for legibility */
         .research-card {
             background: #ffffff;
             border-radius: 2px;
@@ -29,7 +31,6 @@
         .research-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; }
         .research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.35rem; }
         .research-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
-        /* TOC: grouped and scannable */
         .research-toc { margin-bottom: 2rem; }
         .research-toc-title { font-size: 10px; letter-spacing: 0.12em; color: #666666; text-transform: uppercase; margin-bottom: 1rem; }
         .research-toc-section { margin-bottom: 1.25rem; }
@@ -49,8 +50,7 @@
             transition: background 0.15s, color 0.15s;
         }
         .research-toc a:hover { background: #f8f8f8; color: #000; }
-        .research-toc .toc-id { color: #888; font-size: 11px; min-width: 5em; flex-shrink: 0; }
-        /* Document blocks: clear separation, nav hint */
+        .research-toc .toc-id { color: #888; font-size: 11px; min-width: 5.5em; flex-shrink: 0; }
         .research-content-wrap { margin-top: 0.5rem; }
         .research-doc {
             margin-bottom: 2.5rem;
@@ -72,94 +72,176 @@
         .research-doc pre, .research-doc code { font-family: inherit; font-size: 12px; background: #f5f5f5; padding: 1px 4px; }
         .research-doc pre { padding: 12px; overflow-x: auto; margin: 1rem 0; border: 1px solid #e0e0e0; }
         .research-doc hr { border: none; border-top: 1px solid #e8e8e8; margin: 1.5rem 0; }
+        .research-doc table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+        .research-doc th, .research-doc td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; font-weight: 300; }
+        .research-doc th { background: #f5f5f5; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .research-doc a { color: #1a1a1a; text-decoration: underline; text-underline-offset: 2px; }
+        .research-doc a:hover { opacity: 0.6; }
         .research-loading { color: #666; font-size: 12px; padding: 1.5rem 0; }
         .research-error { color: #666; font-size: 12px; padding: 1.5rem 0; }
         @media (max-width: 768px) {
             .research-card { padding: 1.5rem 1.25rem 2rem; }
+            body.research-page .container { padding: 3vh 4vw 10vh; }
         }
     </style>
 </head>
 <body class="research-page">
-    <video id="bg-video" autoplay muted loop playsinline>
-        <source src="your-video.mp4" type="video/mp4">
-    </video>
-
     <div class="container">
         <div class="research-inner">
             <div class="research-card">
                 <div class="research-header">
                     <h1 class="research-title">Research</h1>
-                    <p class="research-subtitle">Seithar Group Intelligence and Research Division — Open publications</p>
+                    <p class="research-subtitle">Seithar Group Intelligence and Research Division / Open Publications</p>
                 </div>
 
                 <div class="research-toc">
                     <div class="research-toc-title">Publications</div>
+
+                    <div class="research-toc-section" id="toc-doctrine">
+                        <div class="research-toc-section-title">The Doctrine</div>
+                        <nav class="research-toc-list" id="research-toc-doctrine"></nav>
+                    </div>
+
                     <div class="research-toc-section" id="toc-srp">
                         <div class="research-toc-section-title">Strategic Research Papers</div>
                         <nav class="research-toc-list" id="research-toc-srp"></nav>
                     </div>
+
                     <div class="research-toc-section" id="toc-cea">
                         <div class="research-toc-section-title">Current Event Analysis</div>
                         <nav class="research-toc-list" id="research-toc-cea"></nav>
                     </div>
+
                     <div class="research-toc-section" id="toc-tan">
                         <div class="research-toc-section-title">Threat Analysis Notes</div>
                         <nav class="research-toc-list" id="research-toc-tan"></nav>
+                    </div>
+
+                    <div class="research-toc-section" id="toc-cs">
+                        <div class="research-toc-section-title">Case Studies</div>
+                        <nav class="research-toc-list" id="research-toc-cs"></nav>
+                    </div>
+
+                    <div class="research-toc-section" id="toc-ref">
+                        <div class="research-toc-section-title">Reference Documents</div>
+                        <nav class="research-toc-list" id="research-toc-ref"></nav>
+                    </div>
+
+                    <div class="research-toc-section" id="toc-field">
+                        <div class="research-toc-section-title">Field Reports</div>
+                        <nav class="research-toc-list" id="research-toc-field"></nav>
+                    </div>
+
+                    <div class="research-toc-section" id="toc-article">
+                        <div class="research-toc-section-title">Articles</div>
+                        <nav class="research-toc-list" id="research-toc-article"></nav>
                     </div>
                 </div>
 
                 <div class="research-content-wrap" id="research-content"></div>
             </div>
         </div>
-        <div class="status">© 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+        <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
         <a href="index.html" class="back-link">[ RETURN ]</a>
     </div>
 
     <script>
 (function () {
     var docs = [
-        { id: 'srp-001', label: 'SRP-001 — The Convergence Thesis', path: 'seithar-research/001-convergence-thesis.md' },
-        { id: 'srp-002', label: 'SRP-002 — Wetiko in the Wire', path: 'seithar-research/002-wetiko-in-the-wire.md' },
-        { id: 'srp-003', label: 'SRP-003 — Binding Protocols', path: 'seithar-research/003-binding-protocols.md' },
-        { id: 'srp-004', label: 'SRP-004 — The Sunyata Protocol', path: 'seithar-research/004-sunyata-protocol.md' },
-        { id: 'srp-005', label: 'SRP-005 — Experimental Substrate Manipulation', path: 'seithar-research/005-experimental-substrate-manipulation.md' },
-        { id: 'srp-006', label: 'SRP-006 — Digital Substrate Manipulation', path: 'seithar-research/006-digital-substrate-manipulation.md' },
-        { id: 'srp-007', label: 'SRP-007 — Substrate Topology', path: 'seithar-research/007-substrate-topology.md' },
-        { id: 'srp-008', label: 'SRP-008 — Convergence Proof', path: 'seithar-research/008-convergence-proof.md' },
-        { id: 'srp-009', label: 'SRP-009 — The Libidinal Attack Surface', path: 'seithar-research/009-libidinal-attack-surface.md' },
-        { id: 'cea-001', label: 'CEA-001 — Patch Tuesday Zero-Days', path: 'seithar-research/output/CEA-2026-02-11-001-patch-tuesday-zero-days.md' },
-        { id: 'cea-002', label: 'CEA-002 — Industrial-Scale Deepfakes', path: 'seithar-research/output/CEA-2026-02-11-002-deepfake-industrial-scale.md' },
-        { id: 'cea-003', label: 'CEA-003 — Pravda AI Poisoning', path: 'seithar-research/output/CEA-2026-02-11-003-pravda-ai-poisoning.md' },
-        { id: 'cea-004', label: 'CEA-004 — Conduent Ransomware', path: 'seithar-research/output/CEA-2026-02-11-004-conduent-ransomware.md' },
-        { id: 'cea-005', label: 'CEA-005 — ClawdHub Reverse Shells', path: 'seithar-research/output/CEA-2026-02-11-005-clawdhub-reverse-shells.md' },
-        { id: 'cea-006', label: 'CEA-006 — Living Off the AI', path: 'seithar-research/output/CEA-2026-02-11-006-living-off-the-ai.md' },
-        { id: 'cea-007', label: 'CEA-007 — Moltbook Wallet Drain', path: 'seithar-research/output/CEA-2026-02-11-007-moltbook-wallet-drain.md' },
-        { id: 'cea-008', label: 'CEA-008 — Road Sign Prompt Injection', path: 'seithar-research/output/CEA-2026-02-11-008-road-sign-prompt-injection.md' },
-        { id: 'cea-009', label: 'CEA-009 — Foreign Affairs Fog of AI', path: 'seithar-research/output/CEA-2026-02-11-009-foreign-affairs-fog-of-ai.md' },
-        { id: 'tan-001', label: 'TAN-001 — SCT-007 Recursive Infection', path: 'seithar-research/output/TAN-2026-02-11-001-sct007-recursive-infection.md' },
-        { id: 'cea-010', label: 'CEA-010 — MCP Autonomous Ransomware', path: 'seithar-research/output/CEA-2026-02-11-010-mcp-autonomous-ransomware.md' },
-        { id: 'cea-011', label: 'CEA-011 — Weaponized AI Smart City Siege', path: 'seithar-research/output/CEA-2026-02-11-011-weaponized-ai-smart-city-siege.md' },
-        { id: 'cea-012', label: 'CEA-012 — Weaponized AI Smart City Siege', path: 'seithar-research/output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md' },
-        { id: 'cea-013', label: 'CEA-013 — The State Discovers the Substrate', path: 'seithar-research/output/CEA-2026-02-12-003-jsou-cognitive-warfare.md' }
+        // The Doctrine
+        { id: 'doctrine', cat: 'doctrine', label: 'The Seithar Doctrine', path: '../seithar-research/output/THE-SEITHAR-DOCTRINE.md' },
+
+        // Strategic Research Papers
+        { id: 'srp-001', cat: 'srp', label: 'SRP-001: The Convergence Thesis', path: '../seithar-research/001-convergence-thesis.md' },
+        { id: 'srp-002', cat: 'srp', label: 'SRP-002: Wetiko in the Wire', path: '../seithar-research/002-wetiko-in-the-wire.md' },
+        { id: 'srp-003', cat: 'srp', label: 'SRP-003: Binding Protocols', path: '../seithar-research/003-binding-protocols.md' },
+        { id: 'srp-004', cat: 'srp', label: 'SRP-004: The Sunyata Protocol', path: '../seithar-research/004-sunyata-protocol.md' },
+        { id: 'srp-005', cat: 'srp', label: 'SRP-005: Experimental Substrate Manipulation', path: '../seithar-research/005-experimental-substrate-manipulation.md' },
+        { id: 'srp-006', cat: 'srp', label: 'SRP-006: Digital Substrate Manipulation', path: '../seithar-research/006-digital-substrate-manipulation.md' },
+        { id: 'srp-007', cat: 'srp', label: 'SRP-007: Substrate Topology', path: '../seithar-research/007-substrate-topology.md' },
+        { id: 'srp-008', cat: 'srp', label: 'SRP-008: Convergence Proof', path: '../seithar-research/008-convergence-proof.md' },
+        { id: 'srp-009', cat: 'srp', label: 'SRP-009: The Libidinal Attack Surface', path: '../seithar-research/SRP-009-libidinal-attack-surface.md' },
+        { id: 'srp-010', cat: 'srp', label: 'SRP-010: Narrative Engineering History', path: '../seithar-research/output/SRP-010-narrative-engineering-history.md' },
+        { id: 'srp-011', cat: 'srp', label: 'SRP-011: The Great Forgetting', path: '../seithar-research/output/SRP-011-the-great-forgetting.md' },
+        { id: 'srp-012', cat: 'srp', label: 'SRP-012: Nigredo of the Noosphere', path: '../seithar-research/output/SRP-012-nigredo-of-the-noosphere.md' },
+
+        // Current Event Analysis - Original batch (2026-02-11)
+        { id: 'cea-001', cat: 'cea', label: 'CEA-001: Patch Tuesday Zero-Days', path: '../seithar-research/output/CEA-2026-02-11-001-patch-tuesday-zero-days.md' },
+        { id: 'cea-002', cat: 'cea', label: 'CEA-002: Industrial-Scale Deepfakes', path: '../seithar-research/output/CEA-2026-02-11-002-deepfake-industrial-scale.md' },
+        { id: 'cea-003', cat: 'cea', label: 'CEA-003: Pravda AI Poisoning', path: '../seithar-research/output/CEA-2026-02-11-003-pravda-ai-poisoning.md' },
+        { id: 'cea-004', cat: 'cea', label: 'CEA-004: Conduent Ransomware', path: '../seithar-research/output/CEA-2026-02-11-004-conduent-ransomware.md' },
+        { id: 'cea-005', cat: 'cea', label: 'CEA-005: ClawHub Malicious Skills', path: '../seithar-research/output/CEA-2026-02-11-005-clawhub-malicious-skills.md' },
+        { id: 'cea-006', cat: 'cea', label: 'CEA-006: Moltbook Wallet Drain', path: '../seithar-research/output/CEA-2026-02-11-006-moltbook-wallet-drain.md' },
+        { id: 'cea-007', cat: 'cea', label: 'CEA-007: Living Off the AI', path: '../seithar-research/output/CEA-2026-02-11-007-living-off-the-ai.md' },
+        { id: 'cea-008', cat: 'cea', label: 'CEA-008: Kongzhi Hui', path: '../seithar-research/output/CEA-2026-02-11-008-kongzhi-hui.md' },
+        { id: 'cea-009', cat: 'cea', label: 'CEA-009: Road Sign Prompt Injection', path: '../seithar-research/output/CEA-2026-02-11-009-road-sign-prompt-injection.md' },
+        { id: 'cea-010', cat: 'cea', label: 'CEA-010: Foreign Affairs Fog of AI', path: '../seithar-research/output/CEA-2026-02-11-010-foreign-affairs-fog-of-ai.md' },
+        { id: 'cea-011', cat: 'cea', label: 'CEA-011: MCP Autonomous Ransomware', path: '../seithar-research/output/CEA-2026-02-11-011-mcp-autonomous-ransomware.md' },
+        { id: 'cea-012', cat: 'cea', label: 'CEA-012: Weaponized AI Smart City Siege', path: '../seithar-research/output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md' },
+
+        // Current Event Analysis - 2026-02-12 batch
+        { id: 'cea-013', cat: 'cea', label: 'CEA-013: Attention Auction Algorithms', path: '../seithar-research/output/CEA-2026-02-12-001-attention-auction-algorithms.md' },
+        { id: 'cea-014', cat: 'cea', label: 'CEA-014: Topology of Influence', path: '../seithar-research/output/CEA-2026-02-12-002-topology-of-influence.md' },
+        { id: 'cea-015', cat: 'cea', label: 'CEA-015: JSOU Cognitive Warfare', path: '../seithar-research/output/CEA-2026-02-12-003-jsou-cognitive-warfare.md' },
+
+        // Current Event Analysis - Thematic batch
+        { id: 'cea-016', cat: 'cea', label: 'CEA-016: AI Swarm Disinformation', path: '../seithar-research/output/CEA-008-ai-swarm-science-paper.md' },
+        { id: 'cea-017', cat: 'cea', label: 'CEA-017: CiviClick Astroturf Air Quality', path: '../seithar-research/output/CEA-009-civiclick-astroturf-air-quality.md' },
+        { id: 'cea-018', cat: 'cea', label: 'CEA-018: Matryoshka Olympics Disinfo', path: '../seithar-research/output/CEA-010-matryoshka-olympics-disinfo.md' },
+        { id: 'cea-019', cat: 'cea', label: 'CEA-019: Bangladesh Election AI Fakes', path: '../seithar-research/output/CEA-011-bangladesh-election-ai-fakes.md' },
+        { id: 'cea-020', cat: 'cea', label: 'CEA-020: India AI Summit Deepfake Governance', path: '../seithar-research/output/CEA-012-india-ai-summit-deepfake-governance.md' },
+
+        // Threat Analysis Notes
+        { id: 'tan-001', cat: 'tan', label: 'TAN-001: SCT-007 Recursive Infection', path: '../seithar-research/output/TAN-2026-02-11-001-sct007-recursive-infection.md' },
+        { id: 'tan-002', cat: 'tan', label: 'TAN-002: Authority and Social Proof Pairing', path: '../seithar-research/output/TAN-002-authority-social-proof-pairing.md' },
+        { id: 'tan-003', cat: 'tan', label: 'TAN-003: Commitment Escalation and Identity Capture', path: '../seithar-research/output/TAN-003-commitment-escalation-identity-capture.md' },
+        { id: 'tan-004', cat: 'tan', label: 'TAN-004: Consensus Manufacturing and Trust Destruction', path: '../seithar-research/output/TAN-004-consensus-manufacturing-trust-destruction.md' },
+
+        // Case Studies
+        { id: 'cs-001', cat: 'cs', label: 'CS-001: Internet Research Agency', path: '../seithar-research/output/CS-001-internet-research-agency.md' },
+        { id: 'cs-002', cat: 'cs', label: 'CS-002: Cambridge Analytica', path: '../seithar-research/output/CS-002-cambridge-analytica.md' },
+        { id: 'cs-003', cat: 'cs', label: 'CS-003: COVID Infodemic', path: '../seithar-research/output/CS-003-covid-infodemic.md' },
+
+        // Reference Documents
+        { id: 'ref-read', cat: 'ref', label: 'Essential Reading List', path: '../seithar-research/output/SEITHAR-READING-LIST.md' },
+        { id: 'ref-freq', cat: 'ref', label: 'Frequency Media Compendium', path: '../seithar-research/output/SEITHAR-FREQUENCY-COMPENDIUM.md' },
+        { id: 'ref-field', cat: 'ref', label: 'SCT Field Guide Index', path: '../seithar-research/output/SCT-FIELD-GUIDE-INDEX.md' },
+
+        // Field Reports
+        { id: 'field-001', cat: 'field', label: 'Field Report: Pravda Training Data', path: '../seithar-research/output/FIELD-REPORT-2026-02-12-pravda-training-data.md' },
+        { id: 'field-002', cat: 'field', label: 'HoleSpawn Field Test 001', path: '../seithar-research/output/HOLESPAWN-FIELD-TEST-001.md' },
+        { id: 'field-003', cat: 'field', label: 'HoleSpawn Field Test 002', path: '../seithar-research/output/HOLESPAWN-FIELD-TEST-002.md' },
+
+        // Articles
+        { id: 'art-001', cat: 'article', label: 'Alignment Faking and the Seithar Thesis', path: '../seithar-research/output/article-alignment-faking-seithar.md' },
+        { id: 'art-002', cat: 'article', label: 'Five Signs You Are Being Manipulated', path: '../seithar-research/output/five-signs-manipulation.md' },
+        { id: 'art-003', cat: 'article', label: 'The Substrate Has No Firewall', path: '../seithar-research/output/substrate-has-no-firewall.md' },
+        { id: 'art-004', cat: 'article', label: 'The Network Has Eyes', path: '../seithar-research/output/the-network-has-eyes.md' }
     ];
 
-    var tocSrp = document.getElementById('research-toc-srp');
-    var tocCea = document.getElementById('research-toc-cea');
-    var tocTan = document.getElementById('research-toc-tan');
+    var tocContainers = {
+        doctrine: document.getElementById('research-toc-doctrine'),
+        srp: document.getElementById('research-toc-srp'),
+        cea: document.getElementById('research-toc-cea'),
+        tan: document.getElementById('research-toc-tan'),
+        cs: document.getElementById('research-toc-cs'),
+        ref: document.getElementById('research-toc-ref'),
+        field: document.getElementById('research-toc-field'),
+        article: document.getElementById('research-toc-article')
+    };
     var contentEl = document.getElementById('research-content');
 
-    function getTocList(id) {
-        if (id.indexOf('srp-') === 0) return tocSrp;
-        if (id.indexOf('tan-') === 0) return tocTan;
-        return tocCea;
-    }
-
     docs.forEach(function (d) {
-        var list = getTocList(d.id);
+        var list = tocContainers[d.cat];
+        if (!list) return;
         var a = document.createElement('a');
         a.href = '#' + d.id;
         a.className = 'toc-item';
-        a.innerHTML = '<span class="toc-id">' + d.id.toUpperCase() + '</span>' + d.label.replace(d.id.toUpperCase() + ' — ', '');
+        var idText = d.id.toUpperCase().replace(/-/g, '-');
+        var labelText = d.label;
+        // Strip the ID prefix from label for display
+        var displayLabel = labelText.replace(/^[A-Z]+-\d+:\s*/, '');
+        a.innerHTML = '<span class="toc-id">' + idText + '</span>' + displayLabel;
         a.addEventListener('click', function (e) {
             e.preventDefault();
             loadDoc(d);
@@ -189,7 +271,7 @@
         var placeholder = document.createElement('div');
         placeholder.id = d.id;
         placeholder.className = 'research-doc';
-        placeholder.innerHTML = '<div class="research-loading">Loading…</div>';
+        placeholder.innerHTML = '<div class="research-loading">Loading...</div>';
         contentEl.appendChild(placeholder);
 
         fetch(d.path)
@@ -197,7 +279,7 @@
             .then(function (text) {
                 text = stripFrontmatter(text);
                 var html = marked.parse(text, { gfm: true });
-                var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>↑ Back to list</a></div>';
+                var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>Back to list</a></div>';
                 placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
                 var backLink = placeholder.querySelector('[data-back]');
                 if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
@@ -207,6 +289,7 @@
             });
     }
 
+    // Load all documents on page load
     function loadAll() {
         docs.forEach(function (d) {
             var section = document.getElementById(d.id);
@@ -214,7 +297,7 @@
             var placeholder = document.createElement('div');
             placeholder.id = d.id;
             placeholder.className = 'research-doc';
-            placeholder.innerHTML = '<div class="research-loading">Loading ' + d.label + '…</div>';
+            placeholder.innerHTML = '<div class="research-loading">Loading ' + d.label + '...</div>';
             contentEl.appendChild(placeholder);
 
             fetch(d.path)
@@ -222,7 +305,7 @@
                 .then(function (text) {
                     text = stripFrontmatter(text);
                     var html = marked.parse(text, { gfm: true });
-                    var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>↑ Back to list</a></div>';
+                    var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>Back to list</a></div>';
                     placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
                     var backLink = placeholder.querySelector('[data-back]');
                     if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });

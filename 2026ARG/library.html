@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library — SEITHAR GROUP</title>
+    <meta name="description" content="Seithar Group Library. Essential reading list and frequency media compendium for cognitive operations research.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Library — SEITHAR GROUP">
+    <meta property="og:description" content="Essential reading list and frequency media compendium.">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body.library-page { overflow-y: auto; overflow-x: hidden; }
+        body.library-page .container {
+            min-height: 100vh;
+            height: auto;
+            justify-content: flex-start;
+            padding: 5vh 6vw 12vh;
+            text-align: left;
+            align-items: stretch;
+        }
+        .library-inner { max-width: 820px; margin: 0 auto; width: 100%; }
+        .library-card {
+            background: #ffffff;
+            border-radius: 2px;
+            box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+            padding: 2.5rem 2.5rem 3rem;
+            margin-bottom: 2rem;
+        }
+        .library-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; }
+        .library-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.35rem; }
+        .library-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
+        .library-nav { margin-bottom: 2rem; display: flex; gap: 1.5rem; }
+        .library-nav a {
+            font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #666;
+            text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid transparent;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .library-nav a:hover, .library-nav a.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+        .library-section { margin-bottom: 3rem; }
+        .library-section-title { font-size: 10px; letter-spacing: 0.12em; color: #999; text-transform: uppercase; margin-bottom: 1rem; }
+        .library-content h1 { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1rem; color: #1a1a1a; }
+        .library-content h2 { font-size: 1rem; font-weight: 400; margin: 1.5rem 0 0.5rem; color: #1a1a1a; }
+        .library-content h3 { font-size: 12px; font-weight: 500; margin: 1.25rem 0 0.35rem; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
+        .library-content p { font-size: 14px; line-height: 1.8; color: #1a1a1a; margin-bottom: 1rem; font-weight: 300; }
+        .library-content strong { font-weight: 500; color: #1a1a1a; }
+        .library-content ul, .library-content ol { margin: 1rem 0 1.5rem; padding-left: 1.5em; font-size: 14px; line-height: 1.75; color: #1a1a1a; font-weight: 300; }
+        .library-content li { margin-bottom: 0.4em; }
+        .library-content a { color: #1a1a1a; text-decoration: underline; text-underline-offset: 2px; }
+        .library-content a:hover { opacity: 0.6; }
+        .library-content hr { border: none; border-top: 1px solid #e8e8e8; margin: 1.5rem 0; }
+        .library-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+        .library-content th, .library-content td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; font-weight: 300; }
+        .library-content th { background: #f5f5f5; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .library-loading { color: #666; font-size: 12px; padding: 1.5rem 0; }
+        @media (max-width: 768px) {
+            .library-card { padding: 1.5rem 1.25rem 2rem; }
+            body.library-page .container { padding: 3vh 4vw 10vh; }
+        }
+    </style>
+</head>
+<body class="library-page">
+    <div class="container">
+        <div class="library-inner">
+            <div class="library-card">
+                <div class="library-header">
+                    <h1 class="library-title">Library</h1>
+                    <p class="library-subtitle">Essential references for cognitive operations research</p>
+                </div>
+                <div class="library-nav">
+                    <a href="#reading-list" class="active" data-target="reading-list">Reading List</a>
+                    <a href="#frequency-compendium" data-target="frequency-compendium">Frequency Compendium</a>
+                </div>
+                <div class="library-section" id="reading-list">
+                    <div class="library-section-title">Essential Reading List</div>
+                    <div class="library-content" id="reading-list-content">
+                        <div class="library-loading">Loading...</div>
+                    </div>
+                </div>
+                <div class="library-section" id="frequency-compendium">
+                    <div class="library-section-title">Frequency Media Compendium</div>
+                    <div class="library-content" id="frequency-compendium-content">
+                        <div class="library-loading">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+        <a href="index.html" class="back-link">[ RETURN ]</a>
+    </div>
+    <script>
+(function () {
+    function stripFrontmatter(text) {
+        if (text.indexOf('---') === 0) {
+            var end = text.indexOf('---', 3);
+            if (end !== -1) return text.slice(end + 3).replace(/^\n+/, '');
+        }
+        return text;
+    }
+
+    function loadInto(url, elId) {
+        var el = document.getElementById(elId);
+        fetch(url)
+            .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
+            .then(function (text) {
+                text = stripFrontmatter(text);
+                el.innerHTML = marked.parse(text, { gfm: true });
+            })
+            .catch(function () {
+                el.innerHTML = '<div class="library-loading">Unable to load document.</div>';
+            });
+    }
+
+    loadInto('../seithar-research/output/SEITHAR-READING-LIST.md', 'reading-list-content');
+    loadInto('../seithar-research/output/SEITHAR-FREQUENCY-COMPENDIUM.md', 'frequency-compendium-content');
+
+    // Nav highlighting
+    document.querySelectorAll('.library-nav a').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelectorAll('.library-nav a').forEach(function (x) { x.classList.remove('active'); });
+            a.classList.add('active');
+            var target = document.getElementById(a.getAttribute('data-target'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+})();
+    </script>
+</body>
+</html>
