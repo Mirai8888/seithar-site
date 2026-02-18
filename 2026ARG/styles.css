@@ -55,8 +55,25 @@ body {
 .link-container {
     margin-top: 0;
     display: flex;
-    flex-direction: column;
-    gap: 4vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5vh 2.5vw;
+    max-width: 60vw;
+}
+
+.link-section-break {
+    width: 100%;
+    height: 1.5vh;
+}
+
+.link-section-label {
+    width: 100%;
+    font-size: 0.6vw;
+    letter-spacing: 0.2em;
+    color: #666;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 1vh;
 }
 
 .waiver-link {
