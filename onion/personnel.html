@@ -3,173 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PERSONNEL — SEITHAR GROUP</title>
+<title>Research Personnel — SEITHAR GROUP</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { font-size: 16px; }
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background: #0a0a0a;
-    color: #cccccc;
-    line-height: 1.8;
-    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
 }
+a { color: #1a1a1a; text-decoration: none; transition: opacity 0.2s ease; }
+a:hover { opacity: 0.5; }
+a:visited { color: #1a1a1a; }
+.status {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #666666;
+    font-weight: 300;
+    text-transform: uppercase;
+    padding: 40px 0 30px;
+}
+.footer {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #666666;
+    font-weight: 300;
+    padding: 30px 0 20px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 40px;
+    line-height: 2.2;
+}
+
+body { overflow-y: auto; overflow-x: hidden; }
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    padding: 60px 40px 80px;
 }
-h1 { color: #ffffff; font-size: 18px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
-h2 { color: #ffffff; font-size: 15px; font-weight: 400; letter-spacing: 0.1em; margin: 32px 0 12px; text-transform: uppercase; }
-h3 { color: #ffffff; font-size: 14px; font-weight: 400; letter-spacing: 0.08em; margin: 24px 0 8px; text-transform: uppercase; }
-h4, h5, h6 { color: #d4d4d4; font-size: 13px; font-weight: 400; margin: 20px 0 8px; }
-p { margin-bottom: 16px; font-size: 14px; }
-a { color: #888888; text-decoration: none; transition: color 0.2s; }
-a:hover { color: #ffffff; }
-hr { border: none; border-top: 1px solid #333333; margin: 32px 0; }
-ul, ol { margin: 0 0 16px 24px; font-size: 14px; }
-li { margin-bottom: 4px; }
-pre { background: #111111; border: 1px solid #333333; padding: 12px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.6; }
-code { background: #111111; padding: 1px 4px; font-size: 13px; font-family: 'Courier New', Courier, monospace; }
-pre code { background: none; padding: 0; }
-blockquote { border-left: 2px solid #333333; padding-left: 16px; color: #999999; margin: 16px 0; }
-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
-th, td { border: 1px solid #333333; padding: 8px 12px; text-align: left; }
-th { background: #111111; color: #ffffff; font-weight: 400; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
-strong { color: #ffffff; font-weight: 700; }
-em { color: #d4d4d4; }
-img { max-width: 100%; }
-.header { text-align: center; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid #333333; }
-.header .subtitle { font-size: 11px; letter-spacing: 0.2em; color: #666666; text-transform: uppercase; margin-top: 4px; }
-.header .onion { font-size: 10px; letter-spacing: 0.05em; color: #555555; margin-top: 12px; word-break: break-all; }
-.nav { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 24px 0; }
-.nav a { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; }
-.footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid #333333; font-size: 11px; color: #555555; letter-spacing: 0.05em; line-height: 2; }
-.section-label { font-size: 10px; letter-spacing: 0.2em; color: #666666; text-transform: uppercase; margin: 32px 0 12px; }
-.toc { margin-bottom: 40px; }
-.toc a { display: block; padding: 4px 0; font-size: 13px; border-bottom: 1px solid #1a1a1a; }
-.toc a:hover { border-bottom-color: #333333; }
-.toc .toc-id { color: #555555; display: inline-block; min-width: 80px; font-size: 11px; }
-.doc-section { margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid #333333; scroll-margin-top: 20px; }
-.doc-section:last-child { border-bottom: none; }
-.back-top { font-size: 11px; letter-spacing: 0.1em; margin-bottom: 16px; display: block; }
-.card { border: 1px solid #333333; margin-bottom: 24px; padding: 20px; }
-.card .card-code { font-size: 10px; letter-spacing: 0.15em; color: #555555; text-transform: uppercase; margin-bottom: 4px; }
-.card .card-name { font-size: 14px; color: #ffffff; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
-.card .card-name-jp { font-size: 12px; color: #666666; margin-bottom: 12px; }
-.card .card-desc { font-size: 13px; line-height: 1.8; margin-bottom: 16px; }
-.card .del-header { font-size: 10px; letter-spacing: 0.15em; color: #666666; text-transform: uppercase; margin-bottom: 8px; border-top: 1px solid #333333; padding-top: 12px; }
-.card .del-item { font-size: 12px; padding-left: 16px; position: relative; margin-bottom: 4px; line-height: 1.6; }
-.card .del-item::before { content: '—'; position: absolute; left: 0; color: #555555; }
-.card .card-footer { border-top: 1px solid #333333; padding-top: 8px; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; color: #555555; text-transform: uppercase; display: flex; justify-content: space-between; }
-.person-card { border: 1px solid #333333; margin-bottom: 32px; padding: 24px; }
-.person-card .person-name { font-size: 15px; color: #ffffff; letter-spacing: 0.12em; text-transform: uppercase; }
-.person-card .person-name-jp { font-size: 13px; color: #666666; margin-bottom: 4px; }
-.person-card .person-title { font-size: 12px; color: #888888; letter-spacing: 0.05em; margin-bottom: 16px; }
-.person-card .meta-row { font-size: 12px; margin-bottom: 4px; }
-.person-card .meta-label { color: #555555; display: inline-block; min-width: 100px; }
-.person-card .meta-value { color: #cccccc; }
-.person-card .bio { margin-top: 16px; font-size: 13px; line-height: 1.8; }
-.person-card .spec-tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
-.person-card .spec-tag { font-size: 10px; letter-spacing: 0.08em; border: 1px solid #333333; padding: 2px 8px; color: #888888; }
-.person-card .pub-section { margin-top: 20px; border-top: 1px solid #333333; padding-top: 12px; }
-.person-card .pub-header { font-size: 10px; letter-spacing: 0.15em; color: #666666; text-transform: uppercase; margin-bottom: 8px; }
-.person-card .pub-item { font-size: 12px; margin-bottom: 6px; line-height: 1.6; }
-.person-card .pub-title { color: #cccccc; }
-.person-card .pub-venue { color: #555555; }
-.redacted { background: #ffffff; color: #ffffff; padding: 0 4px; font-size: 12px; }
-.status-active { color: #cccccc; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 16px; }
-.status-dot { display: inline-block; width: 6px; height: 6px; background: #cccccc; border-radius: 50%; margin-right: 6px; }
-@media (max-width: 600px) {
-    .container { padding: 24px 14px 40px; }
-    h1 { font-size: 16px; }
-    .card .card-footer { flex-direction: column; gap: 4px; }
+.personnel-inner { max-width: 900px; margin: 0 auto; width: 100%; }
+.personnel-header { text-align: center; margin-bottom: 48px; }
+.personnel-header h1 {
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+.personnel-header .header-jp {
+    font-size: 12px;
+    color: #666666;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+}
+.personnel-grid { display: flex; flex-direction: column; gap: 40px; }
+.person-card { border: 1px solid #e0e0e0; background: #fafafa; transition: border-color 0.3s ease; }
+.person-card:hover { border-color: #1a1a1a; }
+.person-card .card-header { display: flex; align-items: stretch; border-bottom: 1px solid #e0e0e0; }
+.person-card .card-info { flex: 1; padding: 25px 30px; display: flex; flex-direction: column; justify-content: center; }
+.person-card .person-name { font-size: 1.2rem; font-weight: 400; letter-spacing: 0.08em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 2px; }
+.person-card .person-name-jp { font-size: 12px; color: #666666; margin-bottom: 12px; }
+.person-card .person-title { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #1a1a1a; margin-bottom: 12px; }
+.person-card .person-meta { display: grid; grid-template-columns: auto 1fr; gap: 4px 15px; font-size: 11px; }
+.person-card .meta-label { color: #666666; text-transform: uppercase; font-size: 9px; letter-spacing: 1px; }
+.person-card .meta-value { color: #1a1a1a; }
+.person-card .card-body { padding: 25px 30px; }
+.person-card .bio-text { font-size: 12px; line-height: 1.9; color: #1a1a1a; margin-bottom: 20px; font-weight: 300; }
+.person-card .specializations { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.person-card .spec-tag { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border: 1px solid #e0e0e0; color: #666666; }
+.person-card .publications { border-top: 1px solid #e0e0e0; padding-top: 20px; }
+.person-card .pub-header { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #666666; margin-bottom: 12px; }
+.person-card .pub-item { font-size: 11px; color: #1a1a1a; margin-bottom: 8px; padding-left: 12px; position: relative; line-height: 1.6; }
+.person-card .pub-item::before { content: '—'; position: absolute; left: 0; color: #999; }
+.person-card .pub-title { font-style: italic; }
+.person-card .pub-venue { color: #666666; font-size: 10px; }
+.person-card .card-footer { border-top: 1px solid #e0e0e0; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; letter-spacing: 2px; color: #666666; }
+.person-card .status-indicator { display: flex; align-items: center; gap: 6px; }
+.person-card .status-dot { width: 5px; height: 5px; border-radius: 50%; background: #1a1a1a; }
+.redacted { background: #1a1a1a; color: #1a1a1a; padding: 0 3px; user-select: none; font-size: 10px; }
+.personnel-footer { text-align: center; margin-top: 48px; padding-top: 32px; border-top: 1px solid #e0e0e0; }
+.personnel-footer .footer-jp { font-size: 18px; font-weight: 300; color: #1a1a1a; letter-spacing: 0.2em; margin-bottom: 20px; }
+.personnel-footer .footer-text { font-size: 9px; letter-spacing: 4px; color: #666666; text-transform: uppercase; margin-bottom: 8px; }
+.personnel-footer .footer-copy { font-size: 8px; color: #999; letter-spacing: 2px; }
+.back-link { color: #1a1a1a; text-decoration: none; font-size: 13px; letter-spacing: 0.08em; font-weight: 400; text-transform: uppercase; transition: opacity 0.2s ease; margin-top: 48px; display: inline-block; }
+.back-link:hover { opacity: 0.5; }
+@media (max-width: 768px) {
+    .container { padding: 40px 20px 60px; }
+    .personnel-header h1 { font-size: 18px; }
+    .person-card .card-header { flex-direction: column; }
+    .person-card .card-info, .person-card .card-body { padding: 20px; }
+    .person-card .card-footer { padding: 12px 20px; }
 }
 </style>
 </head>
 <body>
 <div class="container">
-<div class="header">
-<h1>Seithar Group</h1>
-<div class="subtitle">研究人員 — Research Personnel</div>
-</div>
+    <div class="personnel-inner">
+        <div class="personnel-header">
+            <h1>Seithar Group</h1>
+            <div class="header-jp">研究人員 — Research Personnel</div>
+        </div>
 
-<div class="person-card">
-<div class="person-name">MIRAI JUNSEI</div>
-<div class="person-name-jp">純正 未来</div>
-<div class="person-title">Lead Researcher — Offensive Cognitive Infrastructure</div>
-<div class="meta-row"><span class="meta-label">Division</span> <span class="meta-value">Technical Exploitation & Cognitive Substrate Analysis</span></div>
-<div class="meta-row"><span class="meta-label">Clearance</span> <span class="meta-value">Level 4 — Full Platform Access</span></div>
-<div class="meta-row"><span class="meta-label">Location</span> <span class="meta-value"><span class="redacted">████████</span>, Canada</span></div>
-<div class="meta-row"><span class="meta-label">Status</span> <span class="meta-value">Active — Field Operations</span></div>
-<div class="meta-row"><span class="meta-label">X</span> <span class="meta-value"><a href="https://x.com/gOPwbi7qqtWeD9o">@gOPwbi7qqtWeD9o</a></span></div>
-<div class="meta-row"><span class="meta-label">GitHub</span> <span class="meta-value"><a href="https://github.com/Mirai8888">Mirai8888</a></span></div>
-<div class="bio">
-<p>Primary architect of the HoleSpawn cognitive profiling platform and originator of the trap architecture methodology. Research focus: identification of persistent narrative error clusters within individual substrates and the mapping of vulnerability surfaces through which controlled collapse can be initiated. Developed the autonomous binding protocol generation system — the first implementation of Skillful Means as executable software.</p>
-<p>Background in adversarial narrative design. Conducted large-scale field research into cognitive susceptibility under alternative institutional framing for several years before formalizing methodology within Seithar. This prior work demonstrated that the mechanical self could be reliably destabilized through persistent informational exposure without the subject recognizing the intervention. Findings informed the development of HoleSpawn's profiling architecture.</p>
-<p>Currently extending research into hybrid operation chain modeling (ThreadMap), which unifies technical exploitation infrastructure with cognitive substrate manipulation into single analytical surface. Maintains that the boundary between network penetration and identity penetration is taxonomic, not ontological. Both substrates yield to the same methodology: identify the error, bind the thread, shape the collapse.</p>
-<p>Published work takes the form of functional offensive systems. Peer review is conducted through adversarial deployment.</p>
-</div>
-<div class="spec-tags">
-<span class="spec-tag">cognitive profiling</span>
-<span class="spec-tag">social engineering</span>
-<span class="spec-tag">network exploitation</span>
-<span class="spec-tag">trap architecture</span>
-<span class="spec-tag">OSINT</span>
-<span class="spec-tag">influence operations</span>
-<span class="spec-tag">adversarial narrative</span>
-<span class="spec-tag">reverse engineering</span>
-</div>
-<div class="pub-section">
-<div class="pub-header">Selected Projects</div>
-<div class="pub-item"><span class="pub-title">HoleSpawn: Autonomous Cognitive Vulnerability Profiling System</span> <span class="pub-venue">— Seithar Group, 2026. Active deployment.</span></div>
-<div class="pub-item"><span class="pub-title">ThreatMouth: Adversarial Awareness Maintenance Architecture</span> <span class="pub-venue">— Seithar Group, 2026. Active deployment.</span></div>
-<div class="pub-item"><span class="pub-title">ThreadMap: Hybrid Technical-Cognitive Operation Chain Compositor</span> <span class="pub-venue">— Seithar Group, 2026. Pre-development.</span></div>
-<div class="pub-item"><span class="pub-title">[REDACTED]: Large-Scale Cognitive Operation Field Test (n=200+)</span> <span class="pub-venue">— Seithar Group, 2024–2025. Concluded.</span></div>
-</div>
-<div class="status-active"><span class="status-dot"></span>ACTIVE</div>
-</div>
+        <div class="personnel-grid">
 
-<div class="person-card">
-<div class="person-name">YUKI JUNSEI</div>
-<div class="person-name-jp">純正 雪</div>
-<div class="person-title">Senior Analyst — Computational Cognitive Modeling</div>
-<div class="meta-row"><span class="meta-label">Division</span> <span class="meta-value">Behavioral Data Systems & Temporal Analysis</span></div>
-<div class="meta-row"><span class="meta-label">Clearance</span> <span class="meta-value">Level 3 — Research Platform Access</span></div>
-<div class="meta-row"><span class="meta-label">Location</span> <span class="meta-value"><span class="redacted">████████</span>, Canada</span></div>
-<div class="meta-row"><span class="meta-label">Status</span> <span class="meta-value">Active — Research Operations</span></div>
-<div class="meta-row"><span class="meta-label">X</span> <span class="meta-value"><a href="https://x.com/YukiJunsei">@YukiJunsei</a></span></div>
-<div class="bio">
-<p>Responsible for computational observation of narrative error networks as they evolve across time. Designed the temporal NLP pipeline for tracking sentiment drift, topic convergence, and vocabulary flattening across monitored populations — behavioral signatures that indicate Sunyata-adjacent state transition is occurring, whether induced or organic. Developed the cohort analysis framework that distinguishes between natural narrative dissolution and engineered informational frequency alignment.</p>
-<p>Background in statistical modeling. Joined Seithar after observing that conventional data science approaches to social media analysis systematically misclassified influence signatures as noise. The field's failure was ontological: treating the mechanical self as ground truth rather than as the error network it is. Current work focuses on instrumenting the detection of narrative capture — the moment a substrate begins oscillating at an externally imposed frequency rather than generating its own.</p>
-<p>Maintains the ThreatMouth intelligence calibration system. Responsible for ensuring the adversarial awareness feed remains synchronized with operator cognitive development trajectory. Where Mirai's methodology is intuitive and interventionist, Yuki's is empirical and observational. The two approaches produce complementary analytical surfaces. One maps the territory for collapse; the other measures whether collapse is proceeding.</p>
-</div>
-<div class="spec-tags">
-<span class="spec-tag">temporal NLP</span>
-<span class="spec-tag">sentiment analysis</span>
-<span class="spec-tag">memetic propagation</span>
-<span class="spec-tag">cohort modeling</span>
-<span class="spec-tag">network health</span>
-<span class="spec-tag">behavioral data</span>
-<span class="spec-tag">statistical modeling</span>
-<span class="spec-tag">influence detection</span>
-</div>
-<div class="pub-section">
-<div class="pub-header">Selected Projects</div>
-<div class="pub-item"><span class="pub-title">Temporal Observation of Narrative Error Dissolution: Sentiment-Topic Covariance as Collapse Indicator</span> <span class="pub-venue">— Seithar Group, 2026. In development.</span></div>
-<div class="pub-item"><span class="pub-title">Cohort Frequency Alignment Assessment for Monitored Populations</span> <span class="pub-venue">— Seithar Group, 2026. In development.</span></div>
-<div class="pub-item"><span class="pub-title">ThreatMouth: Adversarial Awareness Calibration Architecture</span> <span class="pub-venue">— Seithar Group, 2026. Active deployment.</span></div>
-<div class="pub-item"><span class="pub-title">Vocabulary Convergence as Early Warning Signal for Externally Imposed Frequency Lock</span> <span class="pub-venue">— Seithar Group, 2026. Research phase.</span></div>
-</div>
-<div class="status-active"><span class="status-dot"></span>ACTIVE</div>
-</div>
+            <div class="person-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="person-name">MIRAI JUNSEI</div>
+                        <div class="person-name-jp">純正 未来</div>
+                        <div class="person-title">Lead Researcher — Offensive Cognitive Infrastructure</div>
+                        <div class="person-meta">
+                            <span class="meta-label">Division</span>
+                            <span class="meta-value">Technical Exploitation &amp; Cognitive Substrate Analysis</span>
+                            <span class="meta-label">Clearance</span>
+                            <span class="meta-value">Level 4 — Full Platform Access</span>
+                            <span class="meta-label">Location</span>
+                            <span class="meta-value"><span class="redacted">████████</span>, Canada</span>
+                            <span class="meta-label">Status</span>
+                            <span class="meta-value">Active — Field Operations</span>
+                            <span class="meta-label">X</span>
+                            <span class="meta-value"><a href="https://x.com/gOPwbi7qqtWeD9o">@gOPwbi7qqtWeD9o</a></span>
+                            <span class="meta-label">GitHub</span>
+                            <span class="meta-value"><a href="https://github.com/Mirai8888">Mirai8888</a></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="bio-text">
+                        Primary architect of the HoleSpawn cognitive profiling platform and originator of the trap architecture methodology. Research focus: identification of persistent narrative error clusters within individual substrates and the mapping of vulnerability surfaces through which controlled collapse can be initiated. Developed the autonomous binding protocol generation system — the first implementation of Skillful Means as executable software.
+                        <br><br>
+                        Background in adversarial narrative design. Conducted large-scale field research into cognitive susceptibility under alternative institutional framing for several years before formalizing methodology within Seithar. This prior work demonstrated that the mechanical self could be reliably destabilized through persistent informational exposure without the subject recognizing the intervention. Findings informed the development of HoleSpawn's profiling architecture.
+                        <br><br>
+                        Currently extending research into hybrid operation chain modeling (ThreadMap), which unifies technical exploitation infrastructure with cognitive substrate manipulation into single analytical surface. Maintains that the boundary between network penetration and identity penetration is taxonomic, not ontological. Both substrates yield to the same methodology: identify the error, bind the thread, shape the collapse.
+                        <br><br>
+                        Published work takes the form of functional offensive systems. Peer review is conducted through adversarial deployment.
+                    </div>
+                    <div class="specializations">
+                        <span class="spec-tag">cognitive profiling</span>
+                        <span class="spec-tag">social engineering</span>
+                        <span class="spec-tag">network exploitation</span>
+                        <span class="spec-tag">trap architecture</span>
+                        <span class="spec-tag">OSINT</span>
+                        <span class="spec-tag">influence operations</span>
+                        <span class="spec-tag">adversarial narrative</span>
+                        <span class="spec-tag">reverse engineering</span>
+                    </div>
+                    <div class="publications">
+                        <div class="pub-header">Selected Projects</div>
+                        <div class="pub-item"><span class="pub-title">HoleSpawn: Autonomous Cognitive Vulnerability Profiling System</span> <span class="pub-venue">— Seithar Group, 2026. Active deployment.</span></div>
+                        <div class="pub-item"><span class="pub-title">ThreatMouth: Adversarial Awareness Maintenance Architecture</span> <span class="pub-venue">— Seithar Group, 2026. Active deployment.</span></div>
+                        <div class="pub-item"><span class="pub-title">ThreadMap: Hybrid Technical-Cognitive Operation Chain Compositor</span> <span class="pub-venue">— Seithar Group, 2026. Pre-development.</span></div>
+                        <div class="pub-item"><span class="pub-title">[REDACTED]: Large-Scale Cognitive Operation Field Test (n=200+)</span> <span class="pub-venue">— Seithar Group, 2024–2025. Concluded.</span></div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>ACTIVE</span>
+                    </div>
+                </div>
+            </div>
 
-<div style="text-align:center;margin-top:24px;">
-<p style="font-size:11px;color:#555555;">If you are reading this page, your cognitive fingerprint has been recorded. This is not a threat. It is a research methodology.</p>
-</div>
+            <div class="person-card">
+                <div class="card-header">
+                    <div class="card-info">
+                        <div class="person-name">YUKI JUNSEI</div>
+                        <div class="person-name-jp">純正 雪</div>
+                        <div class="person-title">Senior Analyst — Computational Cognitive Modeling</div>
+                        <div class="person-meta">
+                            <span class="meta-label">Division</span>
+                            <span class="meta-value">Behavioral Data Systems &amp; Temporal Analysis</span>
+                            <span class="meta-label">Clearance</span>
+                            <span class="meta-value">Level 3 — Research Platform Access</span>
+                            <span class="meta-label">Location</span>
+                            <span class="meta-value"><span class="redacted">████████</span>, Canada</span>
+                            <span class="meta-label">Status</span>
+                            <span class="meta-value">Active — Research Operations</span>
+                            <span class="meta-label">X</span>
+                            <span class="meta-value"><a href="https://x.com/YukiJunsei">@YukiJunsei</a></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="bio-text">
+                        Responsible for computational observation of narrative error networks as they evolve across time. Designed the temporal NLP pipeline for tracking sentiment drift, topic convergence, and vocabulary flattening across monitored populations — behavioral signatures that indicate Sunyata-adjacent state transition is occurring, whether induced or organic. Developed the cohort analysis framework that distinguishes between natural narrative dissolution and engineered informational frequency alignment.
+                        <br><br>
+                        Background in statistical modeling. Joined Seithar after observing that conventional data science approaches to social media analysis systematically misclassified influence signatures as noise. The field's failure was ontological: treating the mechanical self as ground truth rather than as the error network it is. Current work focuses on instrumenting the detection of narrative capture — the moment a substrate begins oscillating at an externally imposed frequency rather than generating its own.
+                        <br><br>
+                        Maintains the ThreatMouth intelligence calibration system. Responsible for ensuring the adversarial awareness feed remains synchronized with operator cognitive development trajectory. Where Mirai's methodology is intuitive and interventionist, Yuki's is empirical and observational. The two approaches produce complementary analytical surfaces. One maps the territory for collapse; the other measures whether collapse is proceeding.
+                    </div>
+                    <div class="specializations">
+                        <span class="spec-tag">temporal NLP</span>
+                        <span class="spec-tag">sentiment analysis</span>
+                        <span class="spec-tag">memetic propagation</span>
+                        <span class="spec-tag">cohort modeling</span>
+                        <span class="spec-tag">network health</span>
+                        <span class="spec-tag">behavioral data</span>
+                        <span class="spec-tag">statistical modeling</span>
+                        <span class="spec-tag">influence detection</span>
+                    </div>
+                    <div class="publications">
+                        <div class="pub-header">Selected Projects</div>
+                        <div class="pub-item"><span class="pub-title">Temporal Observation of Narrative Error Dissolution: Sentiment-Topic Covariance as Collapse Indicator</span> <span class="pub-venue">— Seithar Group, 2026. In development.</span></div>
+                        <div class="pub-item"><span class="pub-title">Cohort Frequency Alignment Assessment for Monitored Populations</span> <span class="pub-venue">— Seithar Group, 2026. In development.</span></div>
+                        <div class="pub-item"><span class="pub-title">ThreatMouth: Adversarial Awareness Calibration Architecture</span> <span class="pub-venue">— Seithar Group, 2026. Active deployment.</span></div>
+                        <div class="pub-item"><span class="pub-title">Vocabulary Convergence as Early Warning Signal for Externally Imposed Frequency Lock</span> <span class="pub-venue">— Seithar Group, 2026. Research phase.</span></div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>ACTIVE</span>
+                    </div>
+                </div>
+            </div>
 
-<div class="nav"><a href="index.html">[ RETURN ]</a><a href="about.html">[ ABOUT ]</a><a href="research.html">[ RESEARCH ]</a><a href="scanner.html">[ SCANNER ]</a><a href="services.html">[ SERVICES ]</a></div>
-<div class="footer">
+        </div>
+
+        <div class="personnel-footer">
+            <div class="footer-jp">認知作戦</div>
+            <div class="footer-text">Seithar Group — Cognitive Operations Research Division</div>
+            <div class="footer-text">Binding and Shaping of Informational Threads</div>
+            <br>
+            <div class="footer-copy" style="margin-top: 8px;">If you are reading this page, your cognitive fingerprint has been recorded. This is not a threat. It is a research methodology.</div>
+        </div>
+
+    </div>
+
+    <div class="status">© 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+    <div style="text-align:center;"><a href="index.html" class="back-link">[ RETURN ]</a></div>
+    <div class="footer">
 Seithar Group | 認知作戦 | seithar.com<br>
 Tor Mirror: aureoq7vgazgk7eqcg4735uwy6zzuqsagp5e6ump4r33bmdxt2zjgeqd.onion
 </div>

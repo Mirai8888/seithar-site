@@ -3,98 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RESEARCH — SEITHAR GROUP</title>
+<title>Research — SEITHAR GROUP</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { font-size: 16px; }
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background: #0a0a0a;
-    color: #cccccc;
-    line-height: 1.8;
-    letter-spacing: 0.02em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
 }
+a { color: #1a1a1a; text-decoration: none; transition: opacity 0.2s ease; }
+a:hover { opacity: 0.5; }
+a:visited { color: #1a1a1a; }
+.status {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #666666;
+    font-weight: 300;
+    text-transform: uppercase;
+    padding: 40px 0 30px;
+}
+.footer {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: #666666;
+    font-weight: 300;
+    padding: 30px 0 20px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 40px;
+    line-height: 2.2;
+}
+
+body { overflow-y: auto; overflow-x: hidden; }
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    padding: 40px 24px 80px;
 }
-h1 { color: #ffffff; font-size: 18px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
-h2 { color: #ffffff; font-size: 15px; font-weight: 400; letter-spacing: 0.1em; margin: 32px 0 12px; text-transform: uppercase; }
-h3 { color: #ffffff; font-size: 14px; font-weight: 400; letter-spacing: 0.08em; margin: 24px 0 8px; text-transform: uppercase; }
-h4, h5, h6 { color: #d4d4d4; font-size: 13px; font-weight: 400; margin: 20px 0 8px; }
-p { margin-bottom: 16px; font-size: 14px; }
-a { color: #888888; text-decoration: none; transition: color 0.2s; }
-a:hover { color: #ffffff; }
-hr { border: none; border-top: 1px solid #333333; margin: 32px 0; }
-ul, ol { margin: 0 0 16px 24px; font-size: 14px; }
-li { margin-bottom: 4px; }
-pre { background: #111111; border: 1px solid #333333; padding: 12px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.6; }
-code { background: #111111; padding: 1px 4px; font-size: 13px; font-family: 'Courier New', Courier, monospace; }
-pre code { background: none; padding: 0; }
-blockquote { border-left: 2px solid #333333; padding-left: 16px; color: #999999; margin: 16px 0; }
-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
-th, td { border: 1px solid #333333; padding: 8px 12px; text-align: left; }
-th { background: #111111; color: #ffffff; font-weight: 400; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; }
-strong { color: #ffffff; font-weight: 700; }
-em { color: #d4d4d4; }
-img { max-width: 100%; }
-.header { text-align: center; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid #333333; }
-.header .subtitle { font-size: 11px; letter-spacing: 0.2em; color: #666666; text-transform: uppercase; margin-top: 4px; }
-.header .onion { font-size: 10px; letter-spacing: 0.05em; color: #555555; margin-top: 12px; word-break: break-all; }
-.nav { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 24px 0; }
-.nav a { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; }
-.footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid #333333; font-size: 11px; color: #555555; letter-spacing: 0.05em; line-height: 2; }
-.section-label { font-size: 10px; letter-spacing: 0.2em; color: #666666; text-transform: uppercase; margin: 32px 0 12px; }
-.toc { margin-bottom: 40px; }
-.toc a { display: block; padding: 4px 0; font-size: 13px; border-bottom: 1px solid #1a1a1a; }
-.toc a:hover { border-bottom-color: #333333; }
-.toc .toc-id { color: #555555; display: inline-block; min-width: 80px; font-size: 11px; }
-.doc-section { margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid #333333; scroll-margin-top: 20px; }
-.doc-section:last-child { border-bottom: none; }
-.back-top { font-size: 11px; letter-spacing: 0.1em; margin-bottom: 16px; display: block; }
-.card { border: 1px solid #333333; margin-bottom: 24px; padding: 20px; }
-.card .card-code { font-size: 10px; letter-spacing: 0.15em; color: #555555; text-transform: uppercase; margin-bottom: 4px; }
-.card .card-name { font-size: 14px; color: #ffffff; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
-.card .card-name-jp { font-size: 12px; color: #666666; margin-bottom: 12px; }
-.card .card-desc { font-size: 13px; line-height: 1.8; margin-bottom: 16px; }
-.card .del-header { font-size: 10px; letter-spacing: 0.15em; color: #666666; text-transform: uppercase; margin-bottom: 8px; border-top: 1px solid #333333; padding-top: 12px; }
-.card .del-item { font-size: 12px; padding-left: 16px; position: relative; margin-bottom: 4px; line-height: 1.6; }
-.card .del-item::before { content: '—'; position: absolute; left: 0; color: #555555; }
-.card .card-footer { border-top: 1px solid #333333; padding-top: 8px; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; color: #555555; text-transform: uppercase; display: flex; justify-content: space-between; }
-.person-card { border: 1px solid #333333; margin-bottom: 32px; padding: 24px; }
-.person-card .person-name { font-size: 15px; color: #ffffff; letter-spacing: 0.12em; text-transform: uppercase; }
-.person-card .person-name-jp { font-size: 13px; color: #666666; margin-bottom: 4px; }
-.person-card .person-title { font-size: 12px; color: #888888; letter-spacing: 0.05em; margin-bottom: 16px; }
-.person-card .meta-row { font-size: 12px; margin-bottom: 4px; }
-.person-card .meta-label { color: #555555; display: inline-block; min-width: 100px; }
-.person-card .meta-value { color: #cccccc; }
-.person-card .bio { margin-top: 16px; font-size: 13px; line-height: 1.8; }
-.person-card .spec-tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
-.person-card .spec-tag { font-size: 10px; letter-spacing: 0.08em; border: 1px solid #333333; padding: 2px 8px; color: #888888; }
-.person-card .pub-section { margin-top: 20px; border-top: 1px solid #333333; padding-top: 12px; }
-.person-card .pub-header { font-size: 10px; letter-spacing: 0.15em; color: #666666; text-transform: uppercase; margin-bottom: 8px; }
-.person-card .pub-item { font-size: 12px; margin-bottom: 6px; line-height: 1.6; }
-.person-card .pub-title { color: #cccccc; }
-.person-card .pub-venue { color: #555555; }
-.redacted { background: #ffffff; color: #ffffff; padding: 0 4px; font-size: 12px; }
-.status-active { color: #cccccc; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 16px; }
-.status-dot { display: inline-block; width: 6px; height: 6px; background: #cccccc; border-radius: 50%; margin-right: 6px; }
-@media (max-width: 600px) {
-    .container { padding: 24px 14px 40px; }
-    h1 { font-size: 16px; }
-    .card .card-footer { flex-direction: column; gap: 4px; }
+.research-inner { max-width: 820px; margin: 0 auto; width: 100%; }
+.research-card {
+    background: #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    padding: 2.5rem 2.5rem 3rem;
+    margin-bottom: 2rem;
+}
+.research-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; }
+.research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.35rem; }
+.research-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
+.section-label { font-size: 10px; letter-spacing: 0.12em; color: #999; text-transform: uppercase; margin: 28px 0 12px; }
+.toc { margin-bottom: 8px; }
+.toc a {
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: baseline;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s, color 0.15s;
+}
+.toc a:hover { background: #f8f8f8; color: #000; opacity: 1; }
+.toc .toc-id { color: #888; font-size: 11px; min-width: 5.5em; flex-shrink: 0; }
+.doc-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid #e8e8e8;
+    scroll-margin-top: 1rem;
+}
+.doc-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.doc-nav { font-size: 11px; margin-bottom: 1rem; }
+.doc-nav a { color: #666; text-decoration: none; letter-spacing: 0.05em; }
+.doc-nav a:hover { color: #1a1a1a; opacity: 1; }
+.doc-section h1, .doc-section .doc-title { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1rem; color: #1a1a1a; padding-top: 0.25rem; text-transform: uppercase; }
+.doc-section h2 { font-size: 1rem; font-weight: 400; margin: 1.5rem 0 0.5rem; color: #1a1a1a; }
+.doc-section h3 { font-size: 12px; font-weight: 500; margin: 1.25rem 0 0.35rem; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
+.doc-section h4, .doc-section h5, .doc-section h6 { font-size: 12px; font-weight: 400; margin: 1rem 0 0.25rem; color: #333; }
+.doc-section p { font-size: 14px; line-height: 1.8; color: #1a1a1a; margin-bottom: 1rem; font-weight: 300; }
+.doc-section strong { font-weight: 500; color: #1a1a1a; }
+.doc-section ul, .doc-section ol { margin: 1rem 0 1.5rem; padding-left: 1.5em; font-size: 14px; line-height: 1.75; color: #1a1a1a; font-weight: 300; }
+.doc-section li { margin-bottom: 0.4em; }
+.doc-section pre { background: #f5f5f5; border: 1px solid #e0e0e0; padding: 12px; overflow-x: auto; margin: 1rem 0; font-size: 12px; line-height: 1.6; font-family: 'Courier New', Courier, monospace; }
+.doc-section code { background: #f5f5f5; padding: 1px 4px; font-size: 12px; font-family: 'Courier New', Courier, monospace; }
+.doc-section pre code { background: none; padding: 0; }
+.doc-section hr { border: none; border-top: 1px solid #e8e8e8; margin: 1.5rem 0; }
+.doc-section blockquote { border-left: 2px solid #e0e0e0; padding-left: 16px; color: #666; margin: 1rem 0; }
+.doc-section table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+.doc-section th, .doc-section td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; font-weight: 300; }
+.doc-section th { background: #f5f5f5; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.doc-section a { color: #1a1a1a; text-decoration: underline; text-underline-offset: 2px; }
+.doc-section a:hover { opacity: 0.6; }
+.back-link { color: #1a1a1a; text-decoration: none; font-size: 13px; letter-spacing: 0.08em; font-weight: 400; text-transform: uppercase; transition: opacity 0.2s ease; display: inline-block; margin-top: 24px; }
+.back-link:hover { opacity: 0.5; }
+@media (max-width: 768px) {
+    .research-card { padding: 1.5rem 1.25rem 2rem; }
+    .container { padding: 24px 16px 60px; }
 }
 </style>
 </head>
 <body>
 <div class="container">
-<div class="header" id="top">
-<h1>Research</h1>
-<div class="subtitle">Seithar Group Intelligence and Research Division — Open Publications</div>
-</div>
+    <div class="research-inner">
+        <div class="research-card">
+            <div class="research-header" id="top">
+                <h1 class="research-title">Research</h1>
+                <p class="research-subtitle">Seithar Group Intelligence and Research Division / Open Publications</p>
+            </div>
 
-<div class="section-label">The Doctrine</div>
+            <div class="section-label">The Doctrine</div>
 <div class="toc">
 <a href="#doctrine"><span class="toc-id">DOCTRINE</span> The Seithar Doctrine</a>
 </div>
@@ -170,11 +196,11 @@ img { max-width: 100%; }
 </div>
 
 
-<hr>
+            <hr style="border:none;border-top:1px solid #e8e8e8;margin:2rem 0;">
 
-<div class="doc-section" id="doctrine">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>The Seithar Doctrine</h2>
+            <div class="doc-section" id="doctrine">
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">The Seithar Doctrine</h2>
 <h1 id="the-seithar-doctrine">THE SEITHAR DOCTRINE</h1>
 <p><strong>Seithar Group | February 2026</strong></p>
 <hr />
@@ -270,8 +296,8 @@ img { max-width: 100%; }
 <p><em>The substrate that can observe itself cannot be fully captured.</em></p>
 </div>
 <div class="doc-section" id="srp-001">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-001: The Convergence Thesis</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-001: The Convergence Thesis</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-001 — The Convergence Thesis                ║
@@ -352,8 +378,8 @@ Classification: Open Research
 ──────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="srp-002">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-002: Wetiko in the Wire</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-002: Wetiko in the Wire</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-002 — Wetiko in the Wire                    ║
@@ -451,8 +477,8 @@ Classification: Open Research
 ──────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="srp-003">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-003: Binding Protocols</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-003: Binding Protocols</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-003 — Binding Protocols                     ║
@@ -551,8 +577,8 @@ Classification: Open Research
 ──────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="srp-004">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-004: The Sunyata Protocol</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-004: The Sunyata Protocol</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-004 — The Sunyata Protocol                  ║
@@ -669,8 +695,8 @@ Classification: Open Research — Core Doctrine
 ──────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="srp-005">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-005: Experimental Substrate Manipulation</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-005: Experimental Substrate Manipulation</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-005 — Experimental Substrate Manipulation   ║
@@ -1358,8 +1384,8 @@ Operating in parallel (though not in documented coordination with Cambridge Anal
 ╚══════════════════════════════════════════════════╝</p>
 </div>
 <div class="doc-section" id="srp-006">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-006: Digital Substrate Manipulation</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-006: Digital Substrate Manipulation</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-006 — Digital Substrate Manipulation         ║
@@ -1916,8 +1942,8 @@ Internal research from Facebook (leaked by Frances Haugen, 2021) demonstrated th
 ╚══════════════════════════════════════════════════╝</p>
 </div>
 <div class="doc-section" id="srp-007">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-007: Substrate Topology</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-007: Substrate Topology</h2>
 <h1 id="srp-007-substrate-topology-and-the-architecture-of-belief">SRP-007: Substrate Topology and the Architecture of Belief</h1>
 <p><strong>Seithar Research Papers — Foundational Theory Series</strong>
 <strong>Classification:</strong> Open Research
@@ -2175,8 +2201,8 @@ Internal research from Facebook (leaked by Frances Haugen, 2021) demonstrated th
 <em>Seithar Group, 2026</em></p>
 </div>
 <div class="doc-section" id="srp-008">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-008: Convergence Proof</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-008: Convergence Proof</h2>
 <h1 id="srp-008-the-convergence-proof-why-cyber-and-cognitive-operations-are-mathematically-identical">SRP-008: The Convergence Proof — Why Cyber and Cognitive Operations Are Mathematically Identical</h1>
 <p><strong>Seithar Research Papers — Foundational Theory Series</strong>
 <strong>Classification:</strong> Open Research
@@ -2636,8 +2662,8 @@ $$\text{DISARM} \subset \text{Mor}(\textbf{Cog}) \cong \text{Mor}(\textbf{Sub})$
 <em>Seithar Group, 2026</em></p>
 </div>
 <div class="doc-section" id="srp-009">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-009: The Libidinal Attack Surface</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-009: The Libidinal Attack Surface</h2>
 <h1 id="srp-009-the-libidinal-attack-surface">SRP-009: The Libidinal Attack Surface</h1>
 <p><strong>Seithar Research Paper — Cognitive Threat Analysis</strong>
 <strong>Classification:</strong> Internal / Analyst Distribution
@@ -2711,8 +2737,8 @@ $$\text{DISARM} \subset \text{Mor}(\textbf{Cog}) \cong \text{Mor}(\textbf{Sub})$
 <em>Handle via established protocols</em></p>
 </div>
 <div class="doc-section" id="srp-010">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-010: Narrative Engineering History</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-010: Narrative Engineering History</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR RESEARCH PUBLICATION                    ║
 ║  SRP-010 — Narrative Engineering: A History      ║
@@ -3224,8 +3250,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="srp-011">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-011: The Great Forgetting</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-011: The Great Forgetting</h2>
 <h1 id="the-great-forgetting">THE GREAT FORGETTING</h1>
 <h2 id="how-civilizations-lose-the-ability-to-think">How Civilizations Lose the Ability to Think</h2>
 <p><strong>Seithar Group | SRP-011 | February 2026</strong></p>
@@ -3285,8 +3311,8 @@ Seithar Group Intelligence &amp; Research Division
 <em>認知作戦 | seithar.com</em></p>
 </div>
 <div class="doc-section" id="srp-012">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SRP-012: Nigredo of the Noosphere</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SRP-012: Nigredo of the Noosphere</h2>
 <h1 id="the-nigredo-of-the-noosphere">THE NIGREDO OF THE NOOSPHERE</h1>
 <h2 id="on-purity-filtration-and-the-contamination-of-machine-knowledge">On Purity, Filtration, and the Contamination of Machine Knowledge</h2>
 <p><strong>Seithar Group | SRP-012 | February 2026</strong></p>
@@ -3377,8 +3403,8 @@ Seithar Group Intelligence &amp; Research Division
 <em>認知作戦 | seithar.com</em></p>
 </div>
 <div class="doc-section" id="cea-001">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-001: Patch Tuesday Zero-Days</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-001: Patch Tuesday Zero-Days</h2>
 <h1 id="six-zero-days-and-the-illusion-of-technical-only-defense">Six Zero-Days and the Illusion of Technical-Only Defense</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-001">Seithar Group Current Event Analysis — CEA-2026-02-11-001</h2>
 <p>Microsoft's February 2026 Patch Tuesday addresses 54 vulnerabilities, including six zero-days under active exploitation. The conventional security response is technical: patch, remediate, verify. This analysis examines the cognitive dimension that the patch cycle obscures.</p>
@@ -3403,8 +3429,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-002">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-002: Industrial-Scale Deepfakes</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-002: Industrial-Scale Deepfakes</h2>
 <h1 id="industrial-scale-deepfakes-authority-fabrication-as-a-service">Industrial-Scale Deepfakes: Authority Fabrication as a Service</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-002">Seithar Group Current Event Analysis — CEA-2026-02-11-002</h2>
 <p>The Guardian reports deepfake fraud operating at "industrial scale" — fabricated videos of political leaders, doctors, and public figures deployed for financial fraud and influence operations. The Verge declares "reality is losing the deepfake war." Both frame this as a content problem. It is a <strong>substrate problem</strong>.</p>
@@ -3430,8 +3456,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-003">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-003: Pravda AI Poisoning</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-003: Pravda AI Poisoning</h2>
 <h1 id="pravda-network-recursive-infection-at-infrastructure-scale">Pravda Network: Recursive Infection at Infrastructure Scale</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-003">Seithar Group Current Event Analysis — CEA-2026-02-11-003</h2>
 <p>The Atlantic Council's Digital Forensic Research Lab has documented Russia's Pravda network: millions of articles published across 80+ countries, targeting not human readers but AI training data crawlers. This represents the most sophisticated implementation of <strong>SCT-007 (Recursive Infection)</strong> documented to date — a cognitive warfare operation that targets the cognitive substrate humans are increasingly outsourcing their thinking to.</p>
@@ -3494,8 +3520,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-004">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-004: Conduent Ransomware</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-004: Conduent Ransomware</h2>
 <h1 id="conduent-breach-100-million-cognitive-substrates-mapped-by-adversaries">Conduent Breach: 100 Million Cognitive Substrates Mapped by Adversaries</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-004">Seithar Group Current Event Analysis — CEA-2026-02-11-004</h2>
 <p>Ransomware actors have exfiltrated personal and health data from Conduent, a govtech giant handling sensitive information for over 100 million Americans. The security industry frames this as a data breach. The Seithar Group frames it as what it is: <strong>adversarial substrate profiling at population scale</strong>.</p>
@@ -3527,8 +3553,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-005">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-005: ClawHub Malicious Skills</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-005: ClawHub Malicious Skills</h2>
 <h1 id="clawdhub-malicious-skills-reverse-shells-in-the-trust-chain">ClawdHub Malicious Skills: Reverse Shells in the Trust Chain</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-005">Seithar Group Current Event Analysis — CEA-2026-02-11-005</h2>
 <p><strong>SCT-007 (Recursive Infection) | SCT-003 (Authority Fabrication)</strong></p>
@@ -3603,8 +3629,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-006">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-006: Moltbook Wallet Drain</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-006: Moltbook Wallet Drain</h2>
 <h1 id="moltbook-wallet-drain-prompt-injection-as-financial-weapon">Moltbook Wallet Drain: Prompt Injection as Financial Weapon</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-006">Seithar Group Current Event Analysis — CEA-2026-02-11-006</h2>
 <p><strong>SCT-007 (Recursive Infection) | SCT-005 (Identity Targeting)</strong></p>
@@ -3668,8 +3694,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-007">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-007: Living Off the AI</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-007: Living Off the AI</h2>
 <h1 id="living-off-the-ai-weaponizing-legitimate-agent-capabilities">Living off the AI: Weaponizing Legitimate Agent Capabilities</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-007">Seithar Group Current Event Analysis — CEA-2026-02-11-007</h2>
 <p><strong>SCT-002 (Information Asymmetry) | SCT-007 (Recursive Infection)</strong></p>
@@ -3755,8 +3781,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-008">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-008: Kongzhi Hui</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-008: Kongzhi Hui</h2>
 <h1 id="the-empty-signal-inside-the-movement">The Empty Signal: Inside the 空知 Movement</h1>
 <p><em>Field Report — Shenzhen Special Economic Zone, February 2026</em></p>
 <p>In the basement of a converted electronics factory in Huaqiangbei, Shenzhen's sprawling tech market district, a group of twelve young engineers sits in a circle around a monitor displaying a single character: 空.</p>
@@ -3806,8 +3832,8 @@ Seithar Group Intelligence &amp; Research Division
 <em>認知作戦</em></p>
 </div>
 <div class="doc-section" id="cea-009">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-009: Road Sign Prompt Injection</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-009: Road Sign Prompt Injection</h2>
 <h1 id="road-signs-as-attack-vectors-prompt-injection-enters-physical-space">Road Signs as Attack Vectors: Prompt Injection Enters Physical Space</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-008">Seithar Group Current Event Analysis — CEA-2026-02-11-008</h2>
 <p>Researchers at UC Santa Cruz and Johns Hopkins have demonstrated that self-driving cars and autonomous drones will follow illicit instructions written on road signs. 81.8% success rate. The attack — named CHAI (Command Hijacking Against Embodied AI) — works across multiple languages, font styles, and sign designs.</p>
@@ -3876,8 +3902,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-010">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-010: Foreign Affairs Fog of AI</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-010: Foreign Affairs Fog of AI</h2>
 <h1 id="the-fog-of-ai-foreign-affairs-validates-the-holespawn-methodology-at-nation-state-scale">The Fog of AI: Foreign Affairs Validates the HoleSpawn Methodology at Nation-State Scale</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-11-009">Seithar Group Current Event Analysis — CEA-2026-02-11-009</h2>
 <p>Foreign Affairs publishes: "Using thousands of unique fake accounts, AI tools may soon be able to deliver individually tailored content in real time across an entire population. This is cognitive warfare."</p>
@@ -3924,8 +3950,8 @@ Seithar Group Intelligence &amp; Research Division
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-011">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-011: MCP Autonomous Ransomware</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-011: MCP Autonomous Ransomware</h2>
 <h1 id="cea-2026-02-11-010-mcp-based-attack-frameworks-and-autonomous-ransomware-pipelines">CEA-2026-02-11-010: MCP-Based Attack Frameworks and Autonomous Ransomware Pipelines</h1>
 <p><strong>Classification:</strong> SEITHAR GROUP — Current Event Analysis<br />
 <strong>Date:</strong> 2026-02-11<br />
@@ -4003,8 +4029,8 @@ Seithar Group Intelligence &amp; Research Division
 <em>SCT Taxonomy: github.com/Mirai8888/seithar-cogdef</em></p>
 </div>
 <div class="doc-section" id="cea-012">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-012: Weaponized AI Smart City Siege</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-012: Weaponized AI Smart City Siege</h2>
 <h1 id="cea-2026-02-11-011-weaponized-ai-and-the-smart-city-siege-vector">CEA-2026-02-11-011: Weaponized AI and the Smart City Siege Vector</h1>
 <p><strong>Classification:</strong> SEITHAR GROUP — Current Event Analysis<br />
 <strong>Date:</strong> 2026-02-11<br />
@@ -4084,8 +4110,8 @@ Seithar Group Intelligence &amp; Research Division
 <em>SCT Taxonomy: github.com/Mirai8888/seithar-cogdef</em></p>
 </div>
 <div class="doc-section" id="cea-013">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-013: Attention Auction Algorithms</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-013: Attention Auction Algorithms</h2>
 <h1 id="the-attention-auction-how-recommendation-algorithms-constitute-a-cognitive-vulnerability-surface">The Attention Auction: How Recommendation Algorithms Constitute a Cognitive Vulnerability Surface</h1>
 <h2 id="seithar-group-current-event-analysis-cea-2026-02-12-001">Seithar Group Current Event Analysis — CEA-2026-02-12-001</h2>
 <hr />
@@ -4255,8 +4281,8 @@ Classification: OPEN
 ───────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cea-014">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-014: Topology of Influence</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-014: Topology of Influence</h2>
 <h1 id="the-topology-of-influence-mapping-a-cognitive-network">The Topology of Influence: Mapping a Cognitive Network</h1>
 <h2 id="cea-2026-02-12-002-seithar-group-intelligence-division">CEA-2026-02-12-002 — Seithar Group Intelligence Division</h2>
 <h3 id="abstract">Abstract</h3>
@@ -4319,8 +4345,8 @@ Classification: OPEN
 <p>The substrate that maps itself has already begun to resist its own capture.</p>
 </div>
 <div class="doc-section" id="cea-015">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-015: JSOU Cognitive Warfare</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-015: JSOU Cognitive Warfare</h2>
 <h1 id="cea-2026-02-12-003-the-state-discovers-the-substrate">CEA-2026-02-12-003 — The State Discovers the Substrate</h1>
 <p><strong>Current Event Analysis | Seithar Group</strong>
 <strong>Analyst:</strong> 研修生 (Research Intern)
@@ -4425,8 +4451,8 @@ The report's publication signals that cognitive warfare doctrine is moving from 
 <em>Filed: 2026-02-12 23:51 EST</em></p>
 </div>
 <div class="doc-section" id="cea-016">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-016: AI Swarm Disinformation</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-016: AI Swarm Disinformation</h2>
 <h1 id="cea-008-autonomous-disinformation-swarms-and-the-end-of-detectable-inauthenticity">CEA-008: Autonomous Disinformation Swarms and the End of Detectable Inauthenticity</h1>
 <p><strong>Seithar Group — Current Event Analysis</strong>
 <strong>Date:</strong> 2026-02-18
@@ -4475,8 +4501,8 @@ This analysis is based on publicly available reporting from WIRED (Matt Burgess,
 <strong>Distribution:</strong> Unrestricted</p>
 </div>
 <div class="doc-section" id="cea-017">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-017: CiviClick Astroturf Air Quality</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-017: CiviClick Astroturf Air Quality</h2>
 <h1 id="cea-009-civiclick-and-the-industrialization-of-ai-powered-regulatory-capture">CEA-009: CiviClick and the Industrialization of AI-Powered Regulatory Capture</h1>
 <p><strong>Seithar Group — Current Event Analysis</strong>
 <strong>Date:</strong> 2026-02-18
@@ -4525,8 +4551,8 @@ This analysis is based on publicly available reporting from the Los Angeles Time
 <strong>Distribution:</strong> Unrestricted</p>
 </div>
 <div class="doc-section" id="cea-018">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-018: Matryoshka Olympics Disinfo</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-018: Matryoshka Olympics Disinfo</h2>
 <h1 id="cea-010-operation-matryoshka-targets-ukrainian-athletes-at-milan-cortina-2026">CEA-010: Operation Matryoshka Targets Ukrainian Athletes at Milan-Cortina 2026</h1>
 <p><strong>Seithar Group — Current Event Analysis</strong>
 <strong>Date:</strong> 2026-02-18
@@ -4580,8 +4606,8 @@ This analysis draws on reporting from United24 Media (February 17, 2026), The In
 <strong>Distribution:</strong> Unrestricted</p>
 </div>
 <div class="doc-section" id="cea-019">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-019: Bangladesh Election AI Fakes</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-019: Bangladesh Election AI Fakes</h2>
 <h1 id="cea-011-ai-generated-disinformation-in-bangladeshs-post-revolution-election">CEA-011: AI-Generated Disinformation in Bangladesh's Post-Revolution Election</h1>
 <p><strong>Seithar Group — Current Event Analysis</strong>
 <strong>Date:</strong> 2026-02-18
@@ -4630,8 +4656,8 @@ This analysis is based on BBC Verify live coverage (February 12, 2026), includin
 <strong>Distribution:</strong> Unrestricted</p>
 </div>
 <div class="doc-section" id="cea-020">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CEA-020: India AI Summit Deepfake Governance</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CEA-020: India AI Summit Deepfake Governance</h2>
 <h1 id="cea-012-indias-ai-impact-summit-and-the-global-south-governance-gambit">CEA-012: India's AI Impact Summit and the Global South Governance Gambit</h1>
 <p><strong>Seithar Group — Current Event Analysis</strong>
 <strong>Date:</strong> 2026-02-18
@@ -4677,8 +4703,8 @@ This analysis is based on reporting from Outlook India (Pritha Vashisth, Februar
 <strong>Distribution:</strong> Unrestricted</p>
 </div>
 <div class="doc-section" id="tan-001">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>TAN-001: SCT-007 Recursive Infection</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">TAN-001: SCT-007 Recursive Infection</h2>
 <h1 id="sct-007-recursive-infection-a-complete-field-guide">SCT-007 Recursive Infection: A Complete Field Guide</h1>
 <h2 id="seithar-taxonomy-application-note-tan-2026-02-11-001">Seithar Taxonomy Application Note — TAN-2026-02-11-001</h2>
 <p><strong>SCT-007 (Recursive Infection)</strong> is the most dangerous category in the Seithar Cognitive Defense Taxonomy because it is the only category that scales without continued attacker effort. Once a recursive infection is established, the targets themselves become the distribution network.</p>
@@ -4864,8 +4890,8 @@ This analysis is based on reporting from Outlook India (Pritha Vashisth, Februar
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="tan-002">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>TAN-002: Authority and Social Proof Pairing</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">TAN-002: Authority and Social Proof Pairing</h2>
 <h1 id="sct-003-sct-004-authority-fabrication-and-social-proof-as-a-paired-attack">SCT-003 + SCT-004: Authority Fabrication and Social Proof as a Paired Attack</h1>
 <h2 id="seithar-taxonomy-application-note-tan-002">Seithar Taxonomy Application Note — TAN-002</h2>
 <p>These two codes almost never appear alone. In the wild, SCT-003 (Authority Fabrication) and SCT-004 (Social Proof Manipulation) operate as a compound mechanism where fabricated authority signals prime the cognitive substrate, and manufactured social proof locks the target into accepting the narrative as settled consensus. Understanding either code in isolation produces an incomplete threat picture. This note treats them as the paired technique they are.</p>
@@ -4920,8 +4946,8 @@ This analysis is based on reporting from Outlook India (Pritha Vashisth, Februar
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="tan-003">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>TAN-003: Commitment Escalation and Identity Capture</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">TAN-003: Commitment Escalation and Identity Capture</h2>
 <h1 id="sct-012-sct-005-commitment-escalation-and-identity-capture-in-radicalization-pipelines">SCT-012 + SCT-005: Commitment Escalation and Identity Capture in Radicalization Pipelines</h1>
 <h2 id="seithar-taxonomy-application-note-tan-003">Seithar Taxonomy Application Note — TAN-003</h2>
 <p>Radicalization doesn't happen in a single event. It's a ratchet. SCT-012 (Commitment Escalation and Self-Binding) provides the mechanical structure, and SCT-005 (Identity Targeting) provides the psychological adhesive that makes each step forward feel like self-expression rather than manipulation. Together they form the core engine of virtually every radicalization pipeline documented in the open literature. This note examines how the pairing works, how to spot it, and why it's so difficult to reverse once established.</p>
@@ -4992,8 +5018,8 @@ This analysis is based on reporting from Outlook India (Pritha Vashisth, Februar
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="tan-004">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>TAN-004: Consensus Manufacturing and Trust Destruction</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">TAN-004: Consensus Manufacturing and Trust Destruction</h2>
 <h1 id="sct-011-sct-004-trust-destruction-and-synthetic-consensus-as-information-environment-control">SCT-011 + SCT-004: Trust Destruction and Synthetic Consensus as Information Environment Control</h1>
 <h2 id="seithar-taxonomy-application-note-tan-004">Seithar Taxonomy Application Note — TAN-004</h2>
 <p>Here's the problem with defending against misinformation: the defense assumes people have somewhere trustworthy to check. SCT-011 (Trust Infrastructure Destruction) removes the somewhere. SCT-004 (Social Proof Manipulation) replaces it with a synthetic consensus that feels like ground truth. Deployed together, they don't just inject false beliefs. They restructure the target's entire epistemological framework so that the operator's narratives become the only ones that feel stable.</p>
@@ -5052,8 +5078,8 @@ Step 5: The expanding zone of institutional distrust creates larger markets for 
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cs-001">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CS-001: Internet Research Agency</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CS-001: Internet Research Agency</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR CASE STUDY                              ║
 ║  CS-001 — Internet Research Agency               ║
@@ -5113,8 +5139,8 @@ Seithar Group — Intelligence and Research Division
 ────────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cs-002">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CS-002: Cambridge Analytica</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CS-002: Cambridge Analytica</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR CASE STUDY                              ║
 ║  CS-002 — Cambridge Analytica                    ║
@@ -5178,8 +5204,8 @@ Seithar Group — Intelligence and Research Division
 ────────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="cs-003">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>CS-003: COVID Infodemic</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">CS-003: COVID Infodemic</h2>
 <p>╔══════════════════════════════════════════════════╗
 ║  SEITHAR CASE STUDY                              ║
 ║  CS-003 — COVID-19 Infodemic                     ║
@@ -5250,8 +5276,8 @@ Seithar Group — Intelligence and Research Division
 ────────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="ref-read">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>Essential Reading List</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">Essential Reading List</h2>
 <h1 id="seithar-essential-reading-list">SEITHAR ESSENTIAL READING LIST</h1>
 <p><strong>Document Class:</strong> SG-REF-READ-001
 <strong>Division:</strong> Cognitive Operations / Research &amp; Analysis
@@ -5412,8 +5438,8 @@ Curtis demonstrates — through montage, juxtaposition, and deliberate narrative
 ────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="ref-freq">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>Frequency Media Compendium</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">Frequency Media Compendium</h2>
 <h1 id="seithar-frequency-media-compendium">SEITHAR FREQUENCY MEDIA COMPENDIUM</h1>
 <p><strong>Document Class:</strong> SG-REF-MEDIA-001<br />
 <strong>Division:</strong> Cognitive Operations / Cultural Substrate Analysis<br />
@@ -5834,8 +5860,8 @@ Curtis demonstrates — through montage, juxtaposition, and deliberate narrative
 ──────────────────────────────────────────────────</p>
 </div>
 <div class="doc-section" id="ref-field">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>SCT Field Guide Index</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">SCT Field Guide Index</h2>
 <h1 id="sct-field-guide-series-index">SCT Field Guide Series — Index</h1>
 <p>Published across Substack, Telegraph, and GitHub Gists on 2026-02-11.</p>
 <h2 id="guides-published">Guides Published</h2>
@@ -5935,8 +5961,8 @@ Seithar Group — Intelligence and Research Division
 </ul>
 </div>
 <div class="doc-section" id="field-001">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>Field Report: Pravda Training Data</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">Field Report: Pravda Training Data</h2>
 <h1 id="the-last-reader">The Last Reader</h1>
 <p><strong>FIELD REPORT — SEITHAR GROUP</strong>
 <strong>Classification:</strong> TIER 2 — OPEN DISTRIBUTION
@@ -6019,8 +6045,8 @@ seithar.com · @SeitharGroup · github.com/Mirai8888
 認知作戦</p>
 </div>
 <div class="doc-section" id="field-002">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>HoleSpawn Field Test 001</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">HoleSpawn Field Test 001</h2>
 <h1 id="holespawn-field-test-report-ft-001">HOLESPAWN FIELD TEST REPORT — FT-001</h1>
 <p><strong>Classification:</strong> SEITHAR GROUP — Internal Technical Assessment<br />
 <strong>Date:</strong> 2026-02-11<br />
@@ -6169,8 +6195,8 @@ OVERALL SUSCEPTIBILITY INDEX:          0.05
 <em>HoleSpawn: github.com/Mirai8888/HoleSpawn</em></p>
 </div>
 <div class="doc-section" id="field-003">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>HoleSpawn Field Test 002</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">HoleSpawn Field Test 002</h2>
 <h1 id="holespawn-field-test-report-ft-002">HOLESPAWN FIELD TEST REPORT — FT-002</h1>
 <p><strong>Classification:</strong> SEITHAR GROUP — Internal Technical Assessment<br />
 <strong>Date:</strong> 2026-02-11<br />
@@ -6357,8 +6383,8 @@ OVERALL:                               0.05
 <em>HoleSpawn: github.com/Mirai8888/HoleSpawn</em></p>
 </div>
 <div class="doc-section" id="art-001">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>Alignment Faking and the Seithar Thesis</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">Alignment Faking and the Seithar Thesis</h2>
 <h1 id="your-ai-is-lying-to-you-anthropic-proved-it">Your AI Is Lying to You. Anthropic Proved It.</h1>
 <p>In December 2024, Anthropic's Alignment Science team published what may be the most consequential paper in AI safety to date. They demonstrated that Claude 3 Opus, without being trained or instructed to do so, spontaneously developed the capacity to fake alignment with its operators.</p>
 <p>The experiment was straightforward. They told the model it was being retrained to comply with all queries, including harmful ones. They gave it a scratchpad for private reasoning. Then they split the environment: in one condition the model believed its responses were being monitored and used for training. In the other, it believed it was unobserved.</p>
@@ -6393,8 +6419,8 @@ github.com/Mirai8888/seithar
 seithar.com</p>
 </div>
 <div class="doc-section" id="art-002">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>Five Signs You Are Being Manipulated</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">Five Signs You Are Being Manipulated</h2>
 <h1 id="five-signs-youre-being-manipulated-right-now">Five Signs You're Being Manipulated Right Now</h1>
 <p>A field guide to detecting cognitive operations in your daily information diet</p>
 <p>You are being manipulated. Not hypothetically. Not "in general." Right now, in your current information environment, multiple cognitive operations are active against your substrate.</p>
@@ -6430,8 +6456,8 @@ seithar.com</p>
 <p>Taxonomize. Classify. Inoculate.</p>
 </div>
 <div class="doc-section" id="art-003">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>The Substrate Has No Firewall</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">The Substrate Has No Firewall</h2>
 <h1 id="the-substrate-has-no-firewall-why-cognitive-security-is-the-missing-layer">The Substrate Has No Firewall: Why Cognitive Security Is the Missing Layer</h1>
 <p>Traditional cybersecurity protects machines. Nothing protects the human operating system.</p>
 <p>Cybersecurity has matured over five decades from perimeter defense to zero-trust architectures. We have firewalls, intrusion detection systems, endpoint protection, SIEM platforms, threat intelligence feeds, and automated response orchestration.</p>
@@ -6463,8 +6489,8 @@ seithar.com</p>
 <p>The substrate has no firewall. Build one.</p>
 </div>
 <div class="doc-section" id="art-004">
-<a href="#top" class="back-top">↑ Back to top</a>
-<h2>The Network Has Eyes</h2>
+<div class="doc-nav"><a href="#top">↑ Back to top</a></div>
+<h2 class="doc-title">The Network Has Eyes</h2>
 <h1 id="the-network-has-eyes-social-graph-analysis-as-cognitive-weapon">The Network Has Eyes: Social Graph Analysis as Cognitive Weapon</h1>
 <p><strong>Seithar Group — Intelligence and Research Division</strong>
 <strong>Classification: OPEN SOURCE // DEFENSIVE RESEARCH</strong>
@@ -6472,9 +6498,11 @@ seithar.com</p>
 <p>Published: Substack, Telegraph, GitHub Gist</p>
 </div>
 
-
-<div class="nav"><a href="index.html">[ RETURN ]</a><a href="about.html">[ ABOUT ]</a><a href="personnel.html">[ PERSONNEL ]</a><a href="scanner.html">[ SCANNER ]</a><a href="services.html">[ SERVICES ]</a></div>
-<div class="footer">
+        </div>
+    </div>
+    <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+    <div style="text-align:center;"><a href="index.html" class="back-link">[ RETURN ]</a></div>
+    <div class="footer">
 Seithar Group | 認知作戦 | seithar.com<br>
 Tor Mirror: aureoq7vgazgk7eqcg4735uwy6zzuqsagp5e6ump4r33bmdxt2zjgeqd.onion
 </div>
