@@ -8,44 +8,175 @@
     
     <meta property="og:type" content="website">
     <meta property="og:title" content="SEITHAR GROUP">
-    <meta property="og:description" content="Seithar Group">
+    <meta property="og:description" content="The Armor of Intelligence">
     <meta property="og:image" content="og-image.svg">
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SEITHAR GROUP">
     <meta name="twitter:image" content="og-image.svg">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        html {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        body {
+            overflow: auto;
+            height: auto;
+            min-height: 100vh;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.25;
+            filter: grayscale(100%);
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-title {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 6vw;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: #1a1a1a;
+            margin-bottom: 2vh;
+            line-height: 1.2;
+        }
+        .hero-subtitle {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 1.4vw;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 8vh;
+        }
+        .hero-enter {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #999;
+            text-decoration: none;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 4px;
+            transition: color 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+        .hero-enter:hover {
+            color: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+
+        /* ── Navigation section ── */
+        .nav-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8vh 8vw;
+            background: #ffffff;
+        }
+        .nav-section .link-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+        .nav-section .waiver-link {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            color: #666;
+            text-decoration: none;
+            padding: 6px 0;
+            transition: color 0.2s;
+        }
+        .nav-section .waiver-link:hover {
+            color: #1a1a1a;
+        }
+        .nav-section .link-section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #bbb;
+            margin-top: 4vh;
+            margin-bottom: 1.5vh;
+        }
+        .nav-section .link-section-label:first-child {
+            margin-top: 0;
+        }
+        .nav-footer {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: #ccc;
+            margin-top: 8vh;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 10vw; }
+            .hero-subtitle { font-size: 2.8vw; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="timer" id="timer">SEITHAR GROUP</div>
-        <div class="link-container" id="link-container" style="display:flex;">
-
-            <div class="link-section-label"></div>
-
-            <a href="about.html" class="waiver-link">[ ABOUT ]</a>
-            <a href="personnel.html" class="waiver-link">[ PERSONNEL ]</a>
-            <a href="research.html" class="waiver-link">[ RESEARCH ]</a>
-            <a href="scanner.html" class="waiver-link">[ SCANNER ]</a>
-            <a href="services.html" class="waiver-link">[ SERVICES ]</a>
-            <a href="archive.html" class="waiver-link">[ ARCHIVE ]</a>
-
-            <div class="link-section-break"></div>
-            <div class="link-section-label">External</div>
-
-            <a href="https://discord.gg/MktZyb2bvx" class="waiver-link" target="_blank">[ DISCORD ]</a>
-            <a href="https://x.com/SeitharGroup" class="waiver-link" target="_blank">[ X / TWITTER ]</a>
-            <a href="https://github.com/Mirai8888" class="waiver-link" target="_blank">[ GITHUB ]</a>
-            <a href="https://seithar.substack.com" class="waiver-link" target="_blank">[ SUBSTACK ]</a>
-
-            <div class="link-section-break"></div>
-            <div class="link-section-label">Resources</div>
-
-            <a href="Seithar96723.pdf" class="waiver-link" download>[ WHITEPAPER ]</a>
-            <a href="https://github.com/Mirai8888/seithar-research" class="waiver-link" target="_blank">[ RESEARCH ARCHIVE ]</a>
-
+    <!-- Hero: the front of the card -->
+    <section class="hero" id="hero">
+        <!-- Drop your hero image here. Replace src with the armor image or mood board visual. -->
+        <img class="hero-bg" src="images/Mirai.jpg" alt="">
+        <div class="hero-content">
+            <div class="hero-title">SEITHAR GROUP</div>
+            <div class="hero-subtitle">The Armor of Intelligence</div>
+            <a class="hero-enter" onclick="document.getElementById('nav').scrollIntoView({behavior:'smooth'})">Enter</a>
         </div>
-        <div class="status" id="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED. &nbsp;</div>
-    </div>
+    </section>
+
+    <!-- Navigation: the back of the card -->
+    <section class="nav-section" id="nav">
+        <div class="link-container">
+            <div class="link-section-label">Division</div>
+            <a href="about.html" class="waiver-link">About</a>
+            <a href="personnel.html" class="waiver-link">Personnel</a>
+            <a href="research.html" class="waiver-link">Research</a>
+            <a href="scanner.html" class="waiver-link">Scanner</a>
+            <a href="services.html" class="waiver-link">Services</a>
+            <a href="archive.html" class="waiver-link">Archive</a>
+
+            <div class="link-section-label">External</div>
+            <a href="https://discord.gg/MktZyb2bvx" class="waiver-link" target="_blank">Discord</a>
+            <a href="https://x.com/SeitharGroup" class="waiver-link" target="_blank">X / Twitter</a>
+            <a href="https://github.com/Mirai8888" class="waiver-link" target="_blank">GitHub</a>
+            <a href="https://seithar.substack.com" class="waiver-link" target="_blank">Substack</a>
+
+            <div class="link-section-label">Resources</div>
+            <a href="Seithar96723.pdf" class="waiver-link" download>Whitepaper</a>
+            <a href="https://github.com/Mirai8888/seithar-research" class="waiver-link" target="_blank">Research Archive</a>
+        </div>
+        <div class="nav-footer">&copy; 2026 SEITHAR GROUP</div>
+    </section>
 </body>
 </html>
