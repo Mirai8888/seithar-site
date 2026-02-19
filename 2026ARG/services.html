@@ -3,208 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Seithar Group services. Cognitive warfare operations for private sector clients.">
+    <meta name="description" content="Seithar Group services">
     <title>SERVICES - SEITHAR GROUP</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body.services-page {
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
+        body.services-page { overflow-y: auto; overflow-x: hidden; }
         body.services-page .container {
-            min-height: 100vh;
-            height: auto;
+            min-height: 100vh; height: auto;
             justify-content: flex-start;
             padding: 10vh 12vw 12vh;
             text-align: left;
         }
-
-        .services-inner {
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
+        .services-inner { max-width: 680px; margin: 0 auto; width: 100%; }
+        .services-inner h1 {
+            font-size: 1.6vw; font-weight: 400;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            margin-bottom: 2vh; color: #1a1a1a;
         }
-
-        .services-header {
-            margin-bottom: 8vh;
+        .services-inner .line { width: 60px; height: 1px; background: #1a1a1a; margin-bottom: 6vh; }
+        .svc { margin-bottom: 6vh; }
+        .svc h2 {
+            font-size: 14px; font-weight: 400;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #1a1a1a; margin-bottom: 1.5vh;
         }
-
-        .services-header h1 {
-            font-size: 1.8vw;
-            font-weight: 400;
-            letter-spacing: 0.12em;
-            color: #1a1a1a;
-            text-transform: uppercase;
-            margin-bottom: 2vh;
-        }
-
-        .services-header .header-line {
-            width: 60px;
-            height: 1px;
-            background: #1a1a1a;
-            margin-bottom: 2vh;
-        }
-
-        .services-header p {
-            font-size: 12px;
-            line-height: 2;
-            color: #666;
-            font-weight: 300;
-            max-width: 600px;
-        }
-
-        .service-block {
-            margin-bottom: 6vh;
-        }
-
-        .service-block h2 {
-            font-size: 1rem;
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            color: #1a1a1a;
-            text-transform: uppercase;
+        .svc p {
+            font-size: 13px; line-height: 2;
+            color: #1a1a1a; font-weight: 300;
             margin-bottom: 1.5vh;
         }
-
-        .service-block p {
-            font-size: 12px;
-            line-height: 2;
-            color: #1a1a1a;
-            font-weight: 300;
-            margin-bottom: 1.5vh;
-        }
-
-        .service-block p.deliverable {
-            color: #666;
-        }
-
-        .service-divider {
-            width: 40px;
-            height: 1px;
-            background: #e0e0e0;
-            margin-bottom: 6vh;
-        }
-
-        .contact-section {
-            margin-top: 4vh;
-            padding-top: 4vh;
+        .svc-div { width: 30px; height: 1px; background: #ddd; margin-bottom: 6vh; }
+        .contact-block {
+            margin-top: 2vh; padding-top: 4vh;
             border-top: 1px solid #e0e0e0;
         }
-
-        .contact-section p {
-            font-size: 12px;
-            line-height: 2;
-            color: #1a1a1a;
-            font-weight: 300;
+        .contact-block p {
+            font-size: 13px; line-height: 2;
+            color: #1a1a1a; font-weight: 300;
             margin-bottom: 2vh;
         }
-
-        .contact-section a {
-            color: #1a1a1a;
-            text-decoration: none;
-            font-size: 12px;
-            letter-spacing: 0.05em;
-            transition: opacity 0.2s ease;
+        .contact-block a {
+            color: #1a1a1a; text-decoration: none;
+            font-size: 12px; letter-spacing: 0.05em;
         }
-
-        .contact-section a:hover {
-            opacity: 0.5;
-        }
-
-        .services-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 2vh;
+        .contact-block a:hover { opacity: 0.5; }
+        .svc-nav {
             margin-top: 6vh;
-            align-items: flex-start;
+            display: flex; flex-direction: column; gap: 1.5vh;
         }
-
+        .svc-nav a {
+            color: #888; text-decoration: none;
+            font-size: 11px; letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .svc-nav a:hover { color: #1a1a1a; }
         @media (max-width: 768px) {
-            body.services-page .container {
-                padding: 6vh 6vw 10vh;
-            }
-
-            .services-header h1 {
-                font-size: 5vw;
-            }
-
-            .service-block h2 {
-                font-size: 4vw;
-            }
-
-            .service-block p,
-            .services-header p,
-            .contact-section p,
-            .contact-section a {
-                font-size: 3.2vw;
-            }
+            body.services-page .container { padding: 6vh 6vw 10vh; }
+            .services-inner h1 { font-size: 5vw; }
+            .svc h2 { font-size: 3.5vw; }
+            .svc p, .contact-block p { font-size: 3.2vw; }
         }
     </style>
 </head>
 <body class="services-page">
     <div class="container">
         <div class="services-inner">
+            <h1>Services</h1>
+            <div class="line"></div>
 
-            <div class="services-header">
-                <h1>Services</h1>
-                <div class="header-line"></div>
-                <p>Five operational tiers. Each can be engaged independently or combined into a unified campaign. All engagements begin with a scoping consultation.</p>
-            </div>
-
-            <div class="service-block">
+            <div class="svc">
                 <h2>Sensor Grid</h2>
-                <p>Continuous monitoring of your information environment. We detect narrative attacks, influence operations, and hostile information activity targeting your organization, personnel, or brand. Automated detection backed by analyst verification, running 24/7 across the platforms that matter to you.</p>
-                <p class="deliverable">You receive real-time threat alerts, weekly cognitive threat briefings, monthly vulnerability assessments, and quarterly trend reporting. Custom alerting thresholds calibrated to your risk profile.</p>
+                <p>We watch your information environment. Continuously. The scanner reads for active cognitive manipulation across the platforms where your organization, your people, and your brand exist. When someone begins an operation against you, we see it. You get threat alerts, periodic briefings, and the pattern analysis that tells you what is happening before it becomes visible to anyone else.</p>
             </div>
+            <div class="svc-div"></div>
 
-            <div class="service-divider"></div>
-
-            <div class="service-block">
+            <div class="svc">
                 <h2>Threat Mapping</h2>
-                <p>Adversary network intelligence. We identify, classify, and track the actors, infrastructure, and coordination patterns behind hostile information operations targeting you. This produces actionable intelligence on who is operating against you, how they are organized, and where they are exposed.</p>
-                <p class="deliverable">You receive adversary network topology, attribution assessments, technique and infrastructure mapping per threat actor, coordination pattern analysis, and vulnerability assessment of adversary networks. Typical engagement runs two to six weeks.</p>
+                <p>We identify who is operating against you. Network topology. Coordination patterns. Infrastructure. The output is an intelligence brief that tells you how the adversary is organized, which nodes carry the most influence, where the operation is vulnerable, and what it will do next. This is not social media monitoring. It is adversary analysis.</p>
             </div>
+            <div class="svc-div"></div>
 
-            <div class="service-divider"></div>
-
-            <div class="service-block">
+            <div class="svc">
                 <h2>Active Defense</h2>
-                <p>Counter-narrative deployment and defensive information operations. We design, produce, and deploy narrative interventions that neutralize hostile cognitive campaigns. Operations are calibrated to the specific threat environment with measurable effectiveness criteria.</p>
-                <p class="deliverable">You receive a counter-narrative strategy and deployment plan, effectiveness metrics and impact assessment, threat neutralization reporting, and post-operation analysis. We handle narrative design, multi-platform deployment, real-time campaign adjustment, and adversary response tracking.</p>
+                <p>Counter-operations. We design and deploy narrative interventions that neutralize hostile campaigns in progress. The method depends on the threat. Sometimes the correct response is inoculation, pre-exposing the target audience to attenuated versions of the attack narrative. Sometimes it is disruption. Sometimes it is silence. We determine which, execute it, and measure whether it worked.</p>
             </div>
+            <div class="svc-div"></div>
 
-            <div class="service-divider"></div>
-
-            <div class="service-block">
+            <div class="svc">
                 <h2>Persona Operations</h2>
-                <p>Synthetic operator deployment for sustained cognitive operations. We design, build, and operate persona networks with verified behavioral authenticity and platform-native engagement patterns. Personas function as persistent assets within target information environments, executing assigned objectives over extended timelines.</p>
-                <p class="deliverable">You receive operational status and activity reporting, influence reach and engagement metrics, network penetration assessment, and objective completion tracking. We handle persona design, lifecycle management, behavioral calibration, and operational security.</p>
+                <p>Sustained presence in target information environments through synthetic operators. These are not bots. They are coherent identities with behavioral depth, platform history, and social context. They function as persistent assets executing assigned objectives over weeks or months. Positioning, narrative seeding, community engagement, influence mapping from the inside.</p>
+            </div>
+            <div class="svc-div"></div>
+
+            <div class="svc">
+                <h2>Full Spectrum</h2>
+                <p>Everything above, unified into a single campaign. We design the operation, build the infrastructure, deploy the assets, run the engagement, and report the outcome. You define the objective. We handle everything between the objective and the result. This is cognitive warfare as a managed service.</p>
             </div>
 
-            <div class="service-divider"></div>
-
-            <div class="service-block">
-                <h2>Full Spectrum Operations</h2>
-                <p>Complete cognitive campaign design, deployment, and management. Integrates all service tiers into a unified operational framework tailored to your strategic objectives. Monitoring, adversary intelligence, counter-narrative operations, persona networks, and coordinated information environment shaping under centralized command.</p>
-                <p class="deliverable">You receive a unified campaign strategy, consolidated intelligence and operations reporting, regular command briefings and strategic review sessions, and full post-campaign documentation. This is end-to-end cognitive warfare as a managed service.</p>
-            </div>
-
-            <div class="contact-section">
-                <p>All engagements begin with a consultation to determine scope, threat environment, and operational requirements. We do not publish pricing. We do not accept engagements we cannot execute to standard.</p>
+            <div class="contact-block">
+                <p>Tell us the problem. We will tell you if we can solve it.</p>
                 <a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a>
             </div>
 
-            <div class="services-nav">
-                <a href="about.html" class="back-link" style="margin-top:0;">About</a>
-                <a href="personnel.html" class="back-link" style="margin-top:0;">Personnel</a>
-                <a href="research.html" class="back-link" style="margin-top:0;">Research</a>
-                <a href="index.html" class="back-link" style="margin-top:0;">Return</a>
+            <div class="svc-nav">
+                <a href="about.html">About</a>
+                <a href="personnel.html">Personnel</a>
+                <a href="research.html">Research</a>
+                <a href="index.html">Return</a>
             </div>
-
         </div>
-
-        <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+        <div class="status">&copy; 2026 SEITHAR GROUP</div>
     </div>
 </body>
 </html>

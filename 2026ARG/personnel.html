@@ -3,122 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Seithar Group personnel.">
+    <meta name="description" content="Seithar Group personnel">
     <title>PERSONNEL - SEITHAR GROUP</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body.personnel-page { overflow-y: auto; overflow-x: hidden; }
+        body.personnel-page .container {
+            min-height: 100vh; height: auto;
+            justify-content: flex-start;
+            padding: 10vh 12vw 12vh;
+            text-align: left;
+        }
+        .personnel-inner { max-width: 680px; margin: 0 auto; width: 100%; }
+        .personnel-inner h1 {
+            font-size: 1.6vw; font-weight: 400;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            margin-bottom: 2vh; color: #1a1a1a;
+        }
+        .personnel-inner .line { width: 60px; height: 1px; background: #1a1a1a; margin-bottom: 6vh; }
+        .person { margin-bottom: 6vh; }
+        .person-name {
+            font-size: 14px; font-weight: 400;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #1a1a1a; margin-bottom: 0.5vh;
+        }
+        .person-role {
+            font-size: 11px; letter-spacing: 0.06em;
+            color: #888; margin-bottom: 2vh;
+        }
+        .person p {
+            font-size: 13px; line-height: 2;
+            color: #1a1a1a; font-weight: 300;
+            margin-bottom: 1.5vh;
+        }
+        .person-links {
+            margin-top: 1.5vh;
+            display: flex; gap: 2em;
+        }
+        .person-links a {
+            color: #888; text-decoration: none;
+            font-size: 11px; letter-spacing: 0.06em;
+        }
+        .person-links a:hover { color: #1a1a1a; }
+        .person-div { width: 30px; height: 1px; background: #ddd; margin-bottom: 6vh; }
+        .contact-block {
+            margin-top: 2vh; padding-top: 4vh;
+            border-top: 1px solid #e0e0e0;
+        }
+        .contact-block a {
+            color: #1a1a1a; text-decoration: none;
+            font-size: 12px; letter-spacing: 0.05em;
+        }
+        .contact-block a:hover { opacity: 0.5; }
+        .pers-nav {
+            margin-top: 6vh;
+            display: flex; flex-direction: column; gap: 1.5vh;
+        }
+        .pers-nav a {
+            color: #888; text-decoration: none;
+            font-size: 11px; letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .pers-nav a:hover { color: #1a1a1a; }
+        @media (max-width: 768px) {
+            body.personnel-page .container { padding: 6vh 6vw 10vh; }
+            .personnel-inner h1 { font-size: 5vw; }
+            .person-name { font-size: 3.5vw; }
+            .person p { font-size: 3.2vw; }
+        }
+    </style>
 </head>
 <body class="personnel-page">
     <div class="container">
         <div class="personnel-inner">
+            <h1>Personnel</h1>
+            <div class="line"></div>
 
-            <div class="personnel-header">
-                <h1>Personnel</h1>
-            </div>
-
-            <div class="personnel-grid">
-
-                <div class="person-card">
-                    <div class="card-header">
-                        <div class="card-photo">
-                            <img src="images/mirai.jpg" alt="Mirai Junsei" class="card-photo-img">
-                        </div>
-                        <div class="card-info">
-                            <div class="person-name">MIRAI JUNSEI</div>
-                            <div class="person-title">Lead Researcher, Offensive Cognitive Infrastructure</div>
-                            <div class="person-meta">
-                                <span class="meta-label">Location</span>
-                                <span class="meta-value">Canada</span>
-                                <span class="meta-label">X</span>
-                                <span class="meta-value"><a href="https://x.com/gOPwbi7qqtWeD9o" target="_blank" rel="noopener noreferrer">@gOPwbi7qqtWeD9o</a></span>
-                                <span class="meta-label">GitHub</span>
-                                <span class="meta-value"><a href="https://github.com/Mirai8888" target="_blank" rel="noopener noreferrer">Mirai8888</a></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="bio-text">
-                            Architect of the HoleSpawn cognitive profiling platform and originator of the trap architecture methodology. Research focus: identification of persistent narrative vulnerabilities within individual targets and mapping of attack surfaces for controlled influence operations. Developed the autonomous binding protocol generation system, the first implementation of Seithar methodology as executable software.
-                            <br><br>
-                            Background in adversarial narrative design. Conducted large-scale field research into cognitive susceptibility across multiple operational contexts before formalizing methodology within Seithar Group. Demonstrated that target belief structures can be reliably reshaped through persistent informational exposure without detection. Findings informed HoleSpawn's profiling architecture.
-                            <br><br>
-                            Currently extending research into hybrid operation chain modeling via ThreadMap, which unifies technical exploitation infrastructure with cognitive manipulation into a single analytical surface. Maintains that the boundary between network penetration and identity penetration is taxonomic, not ontological. Both yield to the same methodology.
-                        </div>
-                        <div class="specializations">
-                            <span class="spec-tag">cognitive profiling</span>
-                            <span class="spec-tag">social engineering</span>
-                            <span class="spec-tag">network exploitation</span>
-                            <span class="spec-tag">trap architecture</span>
-                            <span class="spec-tag">OSINT</span>
-                            <span class="spec-tag">influence operations</span>
-                            <span class="spec-tag">adversarial narrative</span>
-                        </div>
-                        <div class="publications">
-                            <div class="pub-header">Projects</div>
-                            <div class="pub-item"><span class="pub-title">HoleSpawn: Autonomous Cognitive Vulnerability Profiling System</span> <span class="pub-venue">Active deployment.</span></div>
-                            <div class="pub-item"><span class="pub-title">ThreatMouth: Adversarial Awareness Maintenance Architecture</span> <span class="pub-venue">Active deployment.</span></div>
-                            <div class="pub-item"><span class="pub-title">ThreadMap: Hybrid Technical-Cognitive Operation Chain Compositor</span> <span class="pub-venue">Pre-development.</span></div>
-                        </div>
-                    </div>
+            <div class="person">
+                <div class="person-name">Mirai Junsei</div>
+                <div class="person-role">Lead Researcher, Offensive Cognitive Infrastructure</div>
+                <p>Primary architect of the HoleSpawn profiling platform and the trap architecture methodology. Research focus: mapping vulnerability surfaces through which controlled narrative collapse can be initiated. Built the autonomous binding protocol generation system. Background in adversarial narrative design and large-scale field research into cognitive susceptibility. Currently extending into hybrid operation chain modeling through ThreadMap, which unifies technical exploitation with cognitive substrate manipulation into a single analytical surface.</p>
+                <p>Published work takes the form of functional offensive systems. Peer review is conducted through adversarial deployment.</p>
+                <div class="person-links">
+                    <a href="https://x.com/gOPwbi7qqtWeD9o" target="_blank">X</a>
+                    <a href="https://github.com/Mirai8888" target="_blank">GitHub</a>
                 </div>
+            </div>
 
-                <div class="person-card">
-                    <div class="card-header">
-                        <div class="card-photo">
-                            <img src="images/yuki.jpg" alt="Yuki Junsei" class="card-photo-img">
-                        </div>
-                        <div class="card-info">
-                            <div class="person-name">YUKI JUNSEI</div>
-                            <div class="person-title">Senior Analyst, Computational Cognitive Modeling</div>
-                            <div class="person-meta">
-                                <span class="meta-label">Location</span>
-                                <span class="meta-value">Canada</span>
-                                <span class="meta-label">X</span>
-                                <span class="meta-value"><a href="https://x.com/YukiJunsei" target="_blank" rel="noopener noreferrer">@YukiJunsei</a></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="bio-text">
-                            Responsible for computational observation of narrative influence patterns as they evolve across time. Designed the temporal NLP pipeline for tracking sentiment drift, topic convergence, and vocabulary flattening across monitored populations. Developed the cohort analysis framework that distinguishes between organic narrative shifts and engineered influence operations.
-                            <br><br>
-                            Background in statistical modeling. Joined Seithar after observing that conventional data science approaches to social media analysis systematically misclassified influence operation signatures as noise. Current work focuses on detecting the moment a target population begins responding to externally imposed narrative structures rather than generating its own.
-                            <br><br>
-                            Maintains the ThreatMouth intelligence calibration system. Where Mirai's methodology is interventionist, Yuki's is empirical and observational. The two approaches produce complementary analytical surfaces. One maps the territory for operations; the other measures whether operations are succeeding.
-                        </div>
-                        <div class="specializations">
-                            <span class="spec-tag">temporal NLP</span>
-                            <span class="spec-tag">sentiment analysis</span>
-                            <span class="spec-tag">memetic propagation</span>
-                            <span class="spec-tag">cohort modeling</span>
-                            <span class="spec-tag">behavioral data</span>
-                            <span class="spec-tag">statistical modeling</span>
-                            <span class="spec-tag">influence detection</span>
-                        </div>
-                        <div class="publications">
-                            <div class="pub-header">Projects</div>
-                            <div class="pub-item"><span class="pub-title">ThreatMouth: Adversarial Awareness Calibration Architecture</span> <span class="pub-venue">Active deployment.</span></div>
-                            <div class="pub-item"><span class="pub-title">Temporal Observation of Narrative Dissolution Patterns</span> <span class="pub-venue">In development.</span></div>
-                            <div class="pub-item"><span class="pub-title">Cohort Frequency Alignment Assessment for Monitored Populations</span> <span class="pub-venue">In development.</span></div>
-                        </div>
-                    </div>
+            <div class="person-div"></div>
+
+            <div class="person">
+                <div class="person-name">Yuki Junsei</div>
+                <div class="person-role">Senior Analyst, Computational Cognitive Modeling</div>
+                <p>Designed the temporal NLP pipeline for tracking sentiment drift, topic convergence, and vocabulary flattening across monitored populations. These are the behavioral signatures that indicate a narrative environment is being moved, whether by intent or by accident. Built the cohort analysis framework that distinguishes between natural narrative dissolution and engineered frequency alignment. Maintains the ThreatMouth intelligence calibration system.</p>
+                <p>Where Mirai's methodology is interventionist, Yuki's is empirical. One maps the territory for collapse. The other measures whether collapse is proceeding.</p>
+                <div class="person-links">
+                    <a href="https://x.com/YukiJunsei" target="_blank">X</a>
                 </div>
-
             </div>
 
-            <div class="personnel-footer">
-                <p style="font-size: 12px; font-weight: 300; color: #666; margin-bottom: 2vh;"><a href="mailto:seithargroup@gmail.com" style="color:#1a1a1a; text-decoration:none; transition: opacity 0.2s ease;">seithargroup@gmail.com</a></p>
+            <div class="contact-block">
+                <a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 2vh; margin-top: 4vh; align-items: center;">
-                <a href="services.html" class="back-link" style="margin-top:0;">Services</a>
-                <a href="about.html" class="back-link" style="margin-top:0;">About</a>
-                <a href="research.html" class="back-link" style="margin-top:0;">Research</a>
-                <a href="index.html" class="back-link" style="margin-top:0;">Return</a>
+            <div class="pers-nav">
+                <a href="about.html">About</a>
+                <a href="services.html">Services</a>
+                <a href="research.html">Research</a>
+                <a href="index.html">Return</a>
             </div>
-
         </div>
-
-        <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+        <div class="status">&copy; 2026 SEITHAR GROUP</div>
     </div>
 </body>
 </html>
