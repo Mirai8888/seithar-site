@@ -3,13 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Seithar Group — Cognitive Warfare as a Service. Sensor grid, threat mapping, active defense, persona operations, full spectrum cognitive campaigns.">
+    <meta name="description" content="Seithar Group services. Cognitive warfare operations for private sector clients.">
     <title>SERVICES - SEITHAR GROUP</title>
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="SEITHAR GROUP — Services">
-    <meta property="og:description" content="Cognitive Warfare as a Service. Five-tier operational model for private sector clients.">
-    
     <link rel="stylesheet" href="styles.css">
     <style>
         body.services-page {
@@ -32,16 +27,7 @@
         }
 
         .services-header {
-            text-align: center;
             margin-bottom: 8vh;
-        }
-
-        .services-header .header-label {
-            font-size: 10px;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            color: #666666;
-            margin-bottom: 1.5vh;
         }
 
         .services-header h1 {
@@ -57,154 +43,72 @@
             width: 60px;
             height: 1px;
             background: #1a1a1a;
-            margin: 0 auto 2vh;
+            margin-bottom: 2vh;
         }
 
-        .services-header .header-subtitle {
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #666666;
+        .services-header p {
+            font-size: 12px;
             line-height: 2;
+            color: #666;
+            font-weight: 300;
+            max-width: 600px;
         }
 
-        .services-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 5vh;
+        .service-block {
+            margin-bottom: 6vh;
         }
 
-        .service-card {
-            border: 1px solid #e0e0e0;
-            background: #fafafa;
-            transition: border-color 0.3s ease;
-        }
-
-        .service-card:hover {
-            border-color: #1a1a1a;
-        }
-
-        .service-card .card-header {
-            padding: 25px 30px 0;
-        }
-
-        .service-card .service-code {
-            font-size: 9px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #999;
-            margin-bottom: 8px;
-        }
-
-        .service-card .service-name {
-            font-size: 1.1rem;
+        .service-block h2 {
+            font-size: 1rem;
             font-weight: 400;
             letter-spacing: 0.08em;
             color: #1a1a1a;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 1.5vh;
         }
 
-        .service-card .service-name-jp {
-            font-size: 12px;
-            color: #666666;
-            margin-bottom: 0;
-        }
-
-        .service-card .card-body {
-            padding: 20px 30px 25px;
-        }
-
-        .service-card .service-desc {
+        .service-block p {
             font-size: 12px;
             line-height: 2;
             color: #1a1a1a;
             font-weight: 300;
-            margin-bottom: 20px;
+            margin-bottom: 1.5vh;
         }
 
-        .service-card .deliverables {
-            border-top: 1px solid #e0e0e0;
-            padding-top: 18px;
-            margin-bottom: 16px;
+        .service-block p.deliverable {
+            color: #666;
         }
 
-        .service-card .del-header {
-            font-size: 9px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #666666;
-            margin-bottom: 10px;
+        .service-divider {
+            width: 40px;
+            height: 1px;
+            background: #e0e0e0;
+            margin-bottom: 6vh;
         }
 
-        .service-card .del-item {
-            font-size: 11px;
-            color: #1a1a1a;
-            margin-bottom: 6px;
-            padding-left: 12px;
-            position: relative;
-            line-height: 1.6;
-            font-weight: 300;
-        }
-
-        .service-card .del-item::before {
-            content: '\2014';
-            position: absolute;
-            left: 0;
-            color: #999;
-        }
-
-        .service-card .card-footer {
-            border-top: 1px solid #e0e0e0;
-            padding: 12px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 9px;
-            letter-spacing: 2px;
-            color: #666666;
-            text-transform: uppercase;
-        }
-
-        .engagement-section {
-            text-align: center;
-            margin-top: 8vh;
+        .contact-section {
+            margin-top: 4vh;
             padding-top: 4vh;
             border-top: 1px solid #e0e0e0;
         }
 
-        .engagement-section .eng-title {
-            font-size: 10px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: #666666;
-            margin-bottom: 3vh;
-        }
-
-        .engagement-section .eng-text {
+        .contact-section p {
             font-size: 12px;
-            line-height: 2.2;
+            line-height: 2;
             color: #1a1a1a;
             font-weight: 300;
-            max-width: 600px;
-            margin: 0 auto 3vh;
+            margin-bottom: 2vh;
         }
 
-        .engagement-section .eng-contact {
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #1a1a1a;
-            font-weight: 400;
-        }
-
-        .engagement-section .eng-contact a {
+        .contact-section a {
             color: #1a1a1a;
             text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.05em;
             transition: opacity 0.2s ease;
         }
 
-        .engagement-section .eng-contact a:hover {
+        .contact-section a:hover {
             opacity: 0.5;
         }
 
@@ -213,19 +117,7 @@
             flex-direction: column;
             gap: 2vh;
             margin-top: 6vh;
-            align-items: center;
-        }
-
-        .services-footer {
-            text-align: center;
-            margin-top: 6vh;
-        }
-
-        .services-footer .footer-jp {
-            font-size: 14px;
-            font-weight: 300;
-            color: #999;
-            letter-spacing: 0.15em;
+            align-items: flex-start;
         }
 
         @media (max-width: 768px) {
@@ -237,16 +129,15 @@
                 font-size: 5vw;
             }
 
-            .service-card .card-header,
-            .service-card .card-body {
-                padding-left: 20px;
-                padding-right: 20px;
+            .service-block h2 {
+                font-size: 4vw;
             }
 
-            .service-card .card-footer {
-                padding: 12px 20px;
-                flex-direction: column;
-                gap: 4px;
+            .service-block p,
+            .services-header p,
+            .contact-section p,
+            .contact-section a {
+                font-size: 3.2vw;
             }
         }
     </style>
@@ -256,188 +147,59 @@
         <div class="services-inner">
 
             <div class="services-header">
-                <div class="header-label">Seithar Group</div>
-                <h1>Cognitive Warfare as a Service</h1>
+                <h1>Services</h1>
                 <div class="header-line"></div>
-                <div class="header-subtitle">Five-tier operational model for private sector cognitive operations</div>
+                <p>Five operational tiers. Each can be engaged independently or combined into a unified campaign. All engagements begin with a scoping consultation.</p>
             </div>
 
-            <div class="services-grid">
-
-                <div class="service-card">
-                    <div class="card-header">
-                        <div class="service-code">SVC-001</div>
-                        <div class="service-name">Sensor Grid</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="service-desc">
-                            Continuous cognitive threat monitoring across your information environment. Automated detection of narrative attacks, influence operations, and hostile information activity targeting your organization, personnel, or brand. Operates 24/7 with analyst-verified alerting and periodic threat landscape reporting.
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Client Receives</div>
-                            <div class="del-item">Real-time threat alerts with severity classification</div>
-                            <div class="del-item">Weekly cognitive threat landscape briefings</div>
-                            <div class="del-item">Monthly vulnerability surface assessment</div>
-                            <div class="del-item">Quarterly trend analysis and forecast reporting</div>
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Seithar Operates</div>
-                            <div class="del-item">Continuous monitoring infrastructure across target platforms</div>
-                            <div class="del-item">Automated narrative detection and classification pipeline</div>
-                            <div class="del-item">Analyst review and verification layer</div>
-                            <div class="del-item">Custom alerting thresholds calibrated to client risk profile</div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span>Continuous Engagement</span>
-                        <span>Clearance: Standard</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="card-header">
-                        <div class="service-code">SVC-002</div>
-                        <div class="service-name">Threat Mapping</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="service-desc">
-                            Adversary network intelligence and cognitive order-of-battle mapping. We identify, classify, and track the actors, infrastructure, and coordination patterns behind hostile information operations. Produces actionable intelligence on who is targeting you, how they are organized, and where they are vulnerable.
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Client Receives</div>
-                            <div class="del-item">Adversary network topology and attribution assessment</div>
-                            <div class="del-item">Technique and infrastructure mapping per threat actor</div>
-                            <div class="del-item">Coordination pattern analysis and predictive indicators</div>
-                            <div class="del-item">Vulnerability assessment of adversary networks</div>
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Seithar Operates</div>
-                            <div class="del-item">OSINT collection and network graph construction</div>
-                            <div class="del-item">Behavioral pattern analysis and actor clustering</div>
-                            <div class="del-item">Cross-platform infrastructure correlation</div>
-                            <div class="del-item">Ongoing adversary tracking and update reporting</div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span>Duration: 2-6 weeks</span>
-                        <span>Clearance: Elevated</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="card-header">
-                        <div class="service-code">SVC-003</div>
-                        <div class="service-name">Active Defense</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="service-desc">
-                            Counter-narrative deployment and defensive information operations. We design, produce, and deploy narrative interventions that neutralize hostile cognitive campaigns targeting your organization. Operations are calibrated to the specific threat environment and employ tested counter-messaging frameworks with measurable effectiveness criteria.
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Client Receives</div>
-                            <div class="del-item">Counter-narrative strategy and deployment plan</div>
-                            <div class="del-item">Effectiveness metrics and impact assessment</div>
-                            <div class="del-item">Threat neutralization reporting</div>
-                            <div class="del-item">Post-operation analysis and lessons learned</div>
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Seithar Operates</div>
-                            <div class="del-item">Narrative design and message testing</div>
-                            <div class="del-item">Multi-platform deployment and amplification</div>
-                            <div class="del-item">Real-time campaign monitoring and adjustment</div>
-                            <div class="del-item">Adversary response tracking and counter-adaptation</div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span>Duration: Variable</span>
-                        <span>Clearance: Elevated</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="card-header">
-                        <div class="service-code">SVC-004</div>
-                        <div class="service-name">Persona Operations</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="service-desc">
-                            Synthetic operator deployment for sustained cognitive operations. We design, build, and operate persona networks with verified behavioral authenticity, platform-native engagement patterns, and operational security. Personas operate as persistent assets within target information environments, executing assigned cognitive objectives over extended timelines.
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Client Receives</div>
-                            <div class="del-item">Operational status and activity reporting</div>
-                            <div class="del-item">Influence reach and engagement metrics</div>
-                            <div class="del-item">Network penetration assessment</div>
-                            <div class="del-item">Objective completion tracking</div>
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Seithar Operates</div>
-                            <div class="del-item">Persona design, backstopping, and lifecycle management</div>
-                            <div class="del-item">Platform-native behavioral calibration</div>
-                            <div class="del-item">Operational security and compartmentalization</div>
-                            <div class="del-item">Sustained engagement and objective execution</div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span>Duration: Ongoing</span>
-                        <span>Clearance: Restricted</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="card-header">
-                        <div class="service-code">SVC-005</div>
-                        <div class="service-name">Full Spectrum Operations</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="service-desc">
-                            Complete cognitive campaign design, deployment, and management. Integrates all Seithar service tiers into a unified operational framework tailored to the client's strategic objectives. Full spectrum engagements encompass continuous monitoring, adversary intelligence, counter-narrative operations, persona networks, and coordinated information environment shaping. All operations are executed under Seithar methodology with centralized command and reporting.
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Client Receives</div>
-                            <div class="del-item">Unified campaign strategy and operational plan</div>
-                            <div class="del-item">Consolidated intelligence and operations dashboard</div>
-                            <div class="del-item">Regular command briefings and strategic review sessions</div>
-                            <div class="del-item">Full post-campaign assessment and documentation</div>
-                        </div>
-                        <div class="deliverables">
-                            <div class="del-header">Seithar Operates</div>
-                            <div class="del-item">End-to-end campaign planning and execution</div>
-                            <div class="del-item">Cross-tier coordination and resource allocation</div>
-                            <div class="del-item">Real-time operational adjustment and escalation management</div>
-                            <div class="del-item">Full operational security and compartmentalization</div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span>Duration: Campaign-length</span>
-                        <span>Clearance: Restricted</span>
-                    </div>
-                </div>
-
+            <div class="service-block">
+                <h2>Sensor Grid</h2>
+                <p>Continuous monitoring of your information environment. We detect narrative attacks, influence operations, and hostile information activity targeting your organization, personnel, or brand. Automated detection backed by analyst verification, running 24/7 across the platforms that matter to you.</p>
+                <p class="deliverable">You receive real-time threat alerts, weekly cognitive threat briefings, monthly vulnerability assessments, and quarterly trend reporting. Custom alerting thresholds calibrated to your risk profile.</p>
             </div>
 
-            <div class="engagement-section">
-                <div class="eng-title">Engagement</div>
-                <div class="eng-text">
-                    All engagements begin with a consultation to determine scope, threat environment, and operational requirements. The Seithar Group does not publish pricing. We do not accept engagements we cannot execute to institutional standard.
-                </div>
-                <div class="eng-contact">
-                    <a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a>
-                </div>
-                <div style="margin-top: 2vh;">
-                    <a href="https://discord.gg/MktZyb2bvx" class="back-link" target="_blank" style="font-size: 10px; letter-spacing: 3px;">[ DISCORD ]</a>
-                </div>
+            <div class="service-divider"></div>
+
+            <div class="service-block">
+                <h2>Threat Mapping</h2>
+                <p>Adversary network intelligence. We identify, classify, and track the actors, infrastructure, and coordination patterns behind hostile information operations targeting you. This produces actionable intelligence on who is operating against you, how they are organized, and where they are exposed.</p>
+                <p class="deliverable">You receive adversary network topology, attribution assessments, technique and infrastructure mapping per threat actor, coordination pattern analysis, and vulnerability assessment of adversary networks. Typical engagement runs two to six weeks.</p>
+            </div>
+
+            <div class="service-divider"></div>
+
+            <div class="service-block">
+                <h2>Active Defense</h2>
+                <p>Counter-narrative deployment and defensive information operations. We design, produce, and deploy narrative interventions that neutralize hostile cognitive campaigns. Operations are calibrated to the specific threat environment with measurable effectiveness criteria.</p>
+                <p class="deliverable">You receive a counter-narrative strategy and deployment plan, effectiveness metrics and impact assessment, threat neutralization reporting, and post-operation analysis. We handle narrative design, multi-platform deployment, real-time campaign adjustment, and adversary response tracking.</p>
+            </div>
+
+            <div class="service-divider"></div>
+
+            <div class="service-block">
+                <h2>Persona Operations</h2>
+                <p>Synthetic operator deployment for sustained cognitive operations. We design, build, and operate persona networks with verified behavioral authenticity and platform-native engagement patterns. Personas function as persistent assets within target information environments, executing assigned objectives over extended timelines.</p>
+                <p class="deliverable">You receive operational status and activity reporting, influence reach and engagement metrics, network penetration assessment, and objective completion tracking. We handle persona design, lifecycle management, behavioral calibration, and operational security.</p>
+            </div>
+
+            <div class="service-divider"></div>
+
+            <div class="service-block">
+                <h2>Full Spectrum Operations</h2>
+                <p>Complete cognitive campaign design, deployment, and management. Integrates all service tiers into a unified operational framework tailored to your strategic objectives. Monitoring, adversary intelligence, counter-narrative operations, persona networks, and coordinated information environment shaping under centralized command.</p>
+                <p class="deliverable">You receive a unified campaign strategy, consolidated intelligence and operations reporting, regular command briefings and strategic review sessions, and full post-campaign documentation. This is end-to-end cognitive warfare as a managed service.</p>
+            </div>
+
+            <div class="contact-section">
+                <p>All engagements begin with a consultation to determine scope, threat environment, and operational requirements. We do not publish pricing. We do not accept engagements we cannot execute to standard.</p>
+                <a href="mailto:seithargroup@gmail.com">seithargroup@gmail.com</a>
             </div>
 
             <div class="services-nav">
-                <a href="about.html" class="back-link">[ ABOUT ]</a>
-                <a href="personnel.html" class="back-link">[ PERSONNEL ]</a>
-                <a href="research.html" class="back-link">[ RESEARCH ]</a>
-                <a href="scanner.html" class="back-link">[ SCANNER ]</a>
-                <a href="index.html" class="back-link">[ RETURN ]</a>
-            </div>
-
-            <div class="services-footer">
+                <a href="about.html" class="back-link" style="margin-top:0;">About</a>
+                <a href="personnel.html" class="back-link" style="margin-top:0;">Personnel</a>
+                <a href="research.html" class="back-link" style="margin-top:0;">Research</a>
+                <a href="index.html" class="back-link" style="margin-top:0;">Return</a>
             </div>
 
         </div>
