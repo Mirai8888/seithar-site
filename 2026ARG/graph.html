@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEITHAR — Network</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d0d1a;
+            color: #E8E8F0;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        #graph-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        #info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            color: #8a9bb0;
+            pointer-events: none;
+        }
+        #info .title {
+            font-size: 14px;
+            color: #E8E8F0;
+            letter-spacing: 0.3em;
+            margin-bottom: 8px;
+        }
+        #node-info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10;
+            font-size: 12px;
+            color: #E8E8F0;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #node-info.visible { opacity: 1; }
+        #node-info .label { font-size: 16px; margin-bottom: 4px; }
+        #node-info .meta { color: #8a9bb0; font-size: 10px; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div class="title">SEITHAR</div>
+        <span id="stats"></span>
+    </div>
+    <div id="node-info">
+        <div class="label" id="node-label"></div>
+        <div class="meta" id="node-meta"></div>
+    </div>
+    <div id="graph-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology-layout-forceatlas2/0.10.1/graphology-layout-forceatlas2.min.js"></script>
+    <script>
+        const CLUSTERS = {
+            cognitive_security: [
+                "Cognitive Armor", "Identity Drift", "T0 Baseline", "Embedding Similarity",
+                "Homeostatic Correction", "Drift Detection", "Shield Module", "Agent Hardening",
+                "Adversarial Pressure", "Goal Coherence", "Dynamic Immune System",
+                "Free Energy Defense", "SCT Scanning", "Behavioral Analysis",
+                "Paranoia Prevention", "Environmental Calibration", "Drift Rate",
+                "Correction Threshold", "Reanchor Protocol", "Cognitive Fingerprint",
+                "Baseline Spread", "Signal Fusion", "Threat Assessment",
+                "Composite Score", "Weight Adaptation", "Armor Deployment",
+                "Inbound Detection", "Landscape Currency", "Behavioral Exploit Detection",
+            ],
+            threat_landscape: [
+                "SCT-001 Emotional Hijack", "SCT-002 Info Asymmetry", "SCT-003 Authority Fabrication",
+                "SCT-004 Social Proof", "SCT-005 Identity Targeting", "SCT-006 Temporal Manipulation",
+                "SCT-007 Recursive Infection", "SCT-008 Substrate Intervention",
+                "SCT-009 Distributional Shift", "SCT-010 Attention Manipulation",
+                "SCT-011 Trust Destruction", "SCT-012 Commitment Escalation",
+                "Prompt Injection", "Context Poisoning", "Narrative Manipulation",
+                "Jailbreak Patterns", "Multi-Turn Drift", "Goal Hijacking",
+                "Persona Spoofing", "Memory Poisoning", "Tool Misuse",
+                "Indirect Injection", "Cross-Agent Contamination", "Policy Erosion",
+                "Adversarial Examples", "Data Poisoning", "Model Extraction",
+            ],
+            network_analysis: [
+                "Eigenvector Centrality", "Cascade Threshold", "Community Detection",
+                "Power Hierarchy", "Bridge Nodes", "Gatekeepers", "Influence Score",
+                "Social Graph", "Reply Graph", "Deference Patterns", "Vulnerability Surface",
+                "Load-Bearing Beliefs", "Leverage Points", "Network Topology",
+                "Betweenness Centrality", "Clustering Coefficient", "Degree Distribution",
+                "Modularity", "Weak Ties", "Structural Holes", "Information Cascades",
+                "Contagion Dynamics", "Threshold Models", "Graph Embedding",
+                "PageRank", "Katz Centrality", "Network Motifs",
+            ],
+            active_inference: [
+                "Free Energy Principle", "Belief State", "Prediction Error",
+                "Epistemic Instability", "KL Divergence", "Vocabulary Distribution",
+                "Community Model", "Surprise Measurement", "Prior Updating",
+                "Generative Model", "Active Sensing", "Precision Weighting",
+                "Bayesian Inference", "Markov Blanket", "Expected Free Energy",
+                "Epistemic Value", "Pragmatic Value", "Policy Selection",
+                "Variational Inference", "Belief Propagation", "Message Passing",
+                "Predictive Processing", "Allostasis", "Interoception",
+            ],
+            persona_ops: [
+                "Persona Session", "Voice Calibration", "Community Infiltration",
+                "Behavioral Traits", "Lurk Phase", "Light Engagement", "Full Deployment",
+                "Evasion Analysis", "Temporal Synchrony", "Content Similarity",
+                "Swarm Coordination", "Pincer Pattern", "Saturation Pattern",
+                "Cascade Pattern", "Amplification", "Bot Runtime",
+                "Fleet Cycle", "Identity Generation", "Culture Packs",
+                "Persona Blueprint", "Social Climbing", "Trust Building",
+                "Rapport Mirroring", "Graduated Compliance", "Consensus Fabrication",
+                "Dormant Phase", "Burned Detection", "Exfiltration Cycle",
+            ],
+            research: [
+                "Dezfouli 2020 PNAS", "Friston 2010", "Schroeder 2026 Science",
+                "Orlando Behavioral Traits", "DISARM Framework", "MITRE ATT&CK",
+                "Dual Substrate Theory", "Sequential Prediction", "Adversarial ML",
+                "Cognitive Warfare Doctrine", "PLA Three Warfares", "Reflexive Control",
+                "Moltbook Dataset", "Armstrong CogWar Critique", "Russo Cost Asymmetry",
+                "Lumbaca Cognitive Contagions", "DeepContext Paper", "Bai Persuasion 2025",
+                "NATO 6th Domain", "Intelligentized Warfare", "Information Confrontation",
+                "Dezfouli Methodology", "LSTM Exploitation", "Behavioral Fingerprinting",
+            ],
+            platform: [
+                "HoleSpawn", "ThreatMouth", "ThreadMap", "Autoprompt",
+                "MCP Server", "Collector DB", "Bot Runtime Engine", "Fleet Manager",
+                "Orchestrator", "Dashboard", "Analytics Engine", "Middleware",
+                "Sensor Grid", "Self-Edit Engine", "Campaign Manager",
+                "Counter-Ops", "Threat Mapper", "Discord Connector",
+                "Telegram Connector", "Twitter Connector", "Community Intel",
+                "Adversarial Model", "LSTM Predictor", "Swarm Planner",
+                "Identity Generator", "Memecoin Pipeline", "Coin Namer",
+            ],
+            concepts: [
+                "Anatta Principle", "Cybernetic Lineage", "Wiener Feedback",
+                "Bateson Mind", "Situated Cognition", "Hyperfiefdom",
+                "Hypermedievalism", "Knights Archetype", "Volur Archetype",
+                "Jesters Archetype", "Nornir Archetype", "Cathedral Aesthetic",
+                "Cognitive Substrate", "Binding Protocol", "Frequency Lock",
+                "Narrative Capture", "Substrate Priming", "Amplification Vector",
+                "Seithr Etymology", "Thread Magic", "The Weave",
+                "Self-Overcoming System", "Recursive Self-Improvement",
+                "Hyperstition", "Egregore", "Memetic Propagation",
+            ],
+        };
+
+        // Cross-cluster bridges (semantic connections, not hub-spoke)
+        const BRIDGES = [
+            ["Identity Drift", "SCT-005 Identity Targeting"],
+            ["Identity Drift", "SCT-012 Commitment Escalation"],
+            ["Cognitive Armor", "Dynamic Immune System"],
+            ["Shield Module", "Armor Deployment"],
+            ["SCT Scanning", "SCT-001 Emotional Hijack"],
+            ["SCT Scanning", "SCT-007 Recursive Infection"],
+            ["Behavioral Analysis", "Behavioral Traits"],
+            ["Behavioral Analysis", "Dezfouli 2020 PNAS"],
+            ["Goal Coherence", "Goal Hijacking"],
+            ["Free Energy Defense", "Free Energy Principle"],
+            ["Environmental Calibration", "Epistemic Instability"],
+            ["Drift Detection", "Multi-Turn Drift"],
+            ["Signal Fusion", "Composite Score"],
+            ["Cascade Threshold", "Information Cascades"],
+            ["Cascade Threshold", "Contagion Dynamics"],
+            ["Eigenvector Centrality", "PageRank"],
+            ["Bridge Nodes", "Structural Holes"],
+            ["Community Detection", "Modularity"],
+            ["Vulnerability Surface", "SCT-005 Identity Targeting"],
+            ["Load-Bearing Beliefs", "Cascade Threshold"],
+            ["Leverage Points", "Eigenvector Centrality"],
+            ["Free Energy Principle", "Friston 2010"],
+            ["Free Energy Principle", "Predictive Processing"],
+            ["Belief State", "Prior Updating"],
+            ["KL Divergence", "Prediction Error"],
+            ["Markov Blanket", "Generative Model"],
+            ["Persona Session", "Bot Runtime"],
+            ["Voice Calibration", "Culture Packs"],
+            ["Community Infiltration", "Lurk Phase"],
+            ["Swarm Coordination", "Fleet Cycle"],
+            ["Evasion Analysis", "Temporal Synchrony"],
+            ["Rapport Mirroring", "SCT-005 Identity Targeting"],
+            ["Graduated Compliance", "SCT-012 Commitment Escalation"],
+            ["Consensus Fabrication", "SCT-004 Social Proof"],
+            ["Dezfouli 2020 PNAS", "Sequential Prediction"],
+            ["Dezfouli 2020 PNAS", "LSTM Exploitation"],
+            ["Adversarial ML", "Adversarial Examples"],
+            ["DISARM Framework", "Narrative Manipulation"],
+            ["Dual Substrate Theory", "Cognitive Substrate"],
+            ["PLA Three Warfares", "Cognitive Warfare Doctrine"],
+            ["Reflexive Control", "NATO 6th Domain"],
+            ["MCP Server", "Orchestrator"],
+            ["Collector DB", "Analytics Engine"],
+            ["Sensor Grid", "Threat Mapper"],
+            ["Community Intel", "Social Graph"],
+            ["Community Intel", "Community Detection"],
+            ["Adversarial Model", "LSTM Predictor"],
+            ["Self-Edit Engine", "Autoprompt"],
+            ["Swarm Planner", "Swarm Coordination"],
+            ["Anatta Principle", "Dynamic Immune System"],
+            ["Cybernetic Lineage", "Wiener Feedback"],
+            ["Hyperstition", "Memetic Propagation"],
+            ["Egregore", "SCT-007 Recursive Infection"],
+            ["The Weave", "Network Topology"],
+            ["Thread Magic", "Seithr Etymology"],
+            ["Cathedral Aesthetic", "Hypermedievalism"],
+            ["HoleSpawn", "Vulnerability Surface"],
+            ["ThreatMouth", "Threat Landscape"],
+            ["Prompt Injection", "Jailbreak Patterns"],
+            ["Context Poisoning", "Memory Poisoning"],
+            ["Data Poisoning", "Model Extraction"],
+        ];
+
+        // Build graph — NO central hub
+        const graph = new graphology.Graph();
+
+        // Add all nodes with cluster-based initial positions (for better layout)
+        const clusterKeys = Object.keys(CLUSTERS);
+        clusterKeys.forEach((cluster, ci) => {
+            const angle = (ci / clusterKeys.length) * Math.PI * 2;
+            const cx = Math.cos(angle) * 150;
+            const cy = Math.sin(angle) * 150;
+            CLUSTERS[cluster].forEach((label, ni) => {
+                const a = Math.random() * Math.PI * 2;
+                const r = 20 + Math.random() * 60;
+                graph.addNode(label, {
+                    x: cx + Math.cos(a) * r,
+                    y: cy + Math.sin(a) * r,
+                    size: 2,
+                    color: "rgba(210,210,220,0.5)",
+                    label: label,
+                    cluster: cluster,
+                });
+            });
+        });
+
+        // Intra-cluster edges
+        for (const [cluster, nodes] of Object.entries(CLUSTERS)) {
+            for (let i = 0; i < nodes.length; i++) {
+                const nEdges = 2 + Math.floor(Math.random() * 2);
+                for (let j = 0; j < nEdges; j++) {
+                    const ti = Math.floor(Math.random() * nodes.length);
+                    if (ti !== i && !graph.hasEdge(nodes[i], nodes[ti])) {
+                        graph.addEdge(nodes[i], nodes[ti], {
+                            color: "rgba(210,210,220,0.07)",
+                            size: 0.3,
+                        });
+                    }
+                }
+                // Also connect to neighbors in list (chain structure within cluster)
+                if (i < nodes.length - 1 && !graph.hasEdge(nodes[i], nodes[i+1])) {
+                    graph.addEdge(nodes[i], nodes[i+1], {
+                        color: "rgba(210,210,220,0.07)",
+                        size: 0.3,
+                    });
+                }
+            }
+        }
+
+        // Semantic bridge edges
+        for (const [a, b] of BRIDGES) {
+            if (graph.hasNode(a) && graph.hasNode(b) && !graph.hasEdge(a, b)) {
+                graph.addEdge(a, b, {
+                    color: "rgba(210,210,220,0.05)",
+                    size: 0.2,
+                });
+            }
+        }
+
+        // Additional random cross-cluster for density
+        const allNodes = graph.nodes();
+        for (let i = 0; i < 80; i++) {
+            const a = allNodes[Math.floor(Math.random() * allNodes.length)];
+            const b = allNodes[Math.floor(Math.random() * allNodes.length)];
+            if (a !== b && !graph.hasEdge(a, b)) {
+                const ca = graph.getNodeAttribute(a, "cluster");
+                const cb = graph.getNodeAttribute(b, "cluster");
+                if (ca !== cb) {
+                    graph.addEdge(a, b, {
+                        color: "rgba(210,210,220,0.03)",
+                        size: 0.15,
+                    });
+                }
+            }
+        }
+
+        // Set sizes by degree
+        graph.forEachNode((node) => {
+            const deg = graph.degree(node);
+            graph.setNodeAttribute(node, "size", Math.max(1.5, 1 + deg * 0.3));
+        });
+
+        // Store originals
+        graph.forEachNode((n) => {
+            graph.setNodeAttribute(n, "origColor", graph.getNodeAttribute(n, "color"));
+            graph.setNodeAttribute(n, "origSize", graph.getNodeAttribute(n, "size"));
+        });
+        graph.forEachEdge((e) => {
+            graph.setEdgeAttribute(e, "origColor", graph.getEdgeAttribute(e, "color"));
+            graph.setEdgeAttribute(e, "origSize", graph.getEdgeAttribute(e, "size"));
+        });
+
+        document.getElementById("stats").textContent =
+            `${graph.order} nodes · ${graph.size} edges`;
+
+        // Layout
+        const settings = graphologyLayoutForceAtlas2.inferSettings(graph);
+        settings.gravity = 0.3;
+        settings.scalingRatio = 5;
+        settings.barnesHutOptimize = true;
+        graphologyLayoutForceAtlas2.assign(graph, {
+            iterations: 300,
+            settings: settings,
+        });
+
+        // Sigma
+        const container = document.getElementById("graph-container");
+        const renderer = new Sigma(graph, container, {
+            renderEdgeLabels: false,
+            renderLabels: false,
+            labelColor: { color: "#E8E8F0" },
+            labelFont: "Courier New",
+            labelSize: 10,
+            defaultEdgeType: "line",
+            minCameraRatio: 0.08,
+            maxCameraRatio: 10,
+        });
+
+        // Click: highlight node + neighbors
+        let selected = null;
+
+        renderer.on("clickNode", ({ node }) => {
+            if (selected === node) {
+                selected = null;
+                resetAll();
+                document.getElementById("node-info").classList.remove("visible");
+                return;
+            }
+            selected = node;
+            const neighbors = new Set(graph.neighbors(node));
+
+            graph.forEachNode((n) => {
+                if (n === node) {
+                    graph.setNodeAttribute(n, "color", "#ffffff");
+                    graph.setNodeAttribute(n, "size", Math.max(5, graph.degree(n) * 0.7));
+                } else if (neighbors.has(n)) {
+                    graph.setNodeAttribute(n, "color", "rgba(255,255,255,0.8)");
+                    graph.setNodeAttribute(n, "size", graph.getNodeAttribute(n, "origSize") * 1.3);
+                } else {
+                    graph.setNodeAttribute(n, "color", "rgba(210,210,220,0.04)");
+                    graph.setNodeAttribute(n, "size", graph.getNodeAttribute(n, "origSize") * 0.6);
+                }
+            });
+
+            graph.forEachEdge((edge, attrs, source, target) => {
+                if ((source === node && neighbors.has(target)) ||
+                    (target === node && neighbors.has(source))) {
+                    graph.setEdgeAttribute(edge, "color", "rgba(255,255,255,0.45)");
+                    graph.setEdgeAttribute(edge, "size", 0.8);
+                } else {
+                    graph.setEdgeAttribute(edge, "color", "rgba(210,210,220,0.008)");
+                    graph.setEdgeAttribute(edge, "size", 0.05);
+                }
+            });
+
+            document.getElementById("node-label").textContent = node;
+            document.getElementById("node-meta").textContent =
+                `${graph.getNodeAttribute(node, "cluster")} · ${graph.degree(node)} connections`;
+            document.getElementById("node-info").classList.add("visible");
+
+            renderer.refresh();
+        });
+
+        renderer.on("clickStage", () => {
+            selected = null;
+            resetAll();
+            document.getElementById("node-info").classList.remove("visible");
+        });
+
+        renderer.on("enterNode", ({ node }) => {
+            if (!selected) {
+                graph.setNodeAttribute(node, "color", "#ffffff");
+                graph.setNodeAttribute(node, "size", graph.getNodeAttribute(node, "origSize") * 1.5);
+                renderer.refresh();
+            }
+        });
+
+        renderer.on("leaveNode", ({ node }) => {
+            if (!selected) {
+                graph.setNodeAttribute(node, "color", graph.getNodeAttribute(node, "origColor"));
+                graph.setNodeAttribute(node, "size", graph.getNodeAttribute(node, "origSize"));
+                renderer.refresh();
+            }
+        });
+
+        function resetAll() {
+            graph.forEachNode((n) => {
+                graph.setNodeAttribute(n, "color", graph.getNodeAttribute(n, "origColor"));
+                graph.setNodeAttribute(n, "size", graph.getNodeAttribute(n, "origSize"));
+            });
+            graph.forEachEdge((e) => {
+                graph.setEdgeAttribute(e, "color", graph.getEdgeAttribute(e, "origColor"));
+                graph.setEdgeAttribute(e, "size", graph.getEdgeAttribute(e, "origSize"));
+            });
+            renderer.refresh();
+        }
+    </script>
+</body>
+</html>
