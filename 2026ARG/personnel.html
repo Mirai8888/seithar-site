@@ -7,82 +7,84 @@
     <title>PERSONNEL - SEITHAR GROUP</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .container {
+        body.personnel-page { overflow-y: auto; overflow-x: hidden; }
+        body.personnel-page .container {
+            min-height: 100vh; height: auto;
             justify-content: flex-start;
-            padding: 12vh 8vw;
+            padding: 10vh 12vw 12vh;
             text-align: left;
         }
-        .personnel-inner {
-            max-width: 680px;
-            margin: 0 auto;
-            width: 100%;
-            position: relative;
-            z-index: 1;
+        .personnel-inner { max-width: 680px; margin: 0 auto; width: 100%; }
+        .personnel-inner h1 {
+            font-size: 1.6vw; font-weight: 400;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            margin-bottom: 2vh; color: #1a1a1a;
         }
+        .personnel-inner .line { width: 60px; height: 1px; background: #1a1a1a; margin-bottom: 6vh; }
         .person { margin-bottom: 6vh; }
-        .person-name-block {
-            font-size: clamp(1rem, 1.1rem, 1.2rem);
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--stone);
-            margin-bottom: 0.5vh;
+        .person-name {
+            font-size: 14px; font-weight: 400;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: #1a1a1a; margin-bottom: 0.5vh;
         }
-        .person-role-block {
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
-            color: var(--iron);
-            margin-bottom: 3vh;
-            text-transform: uppercase;
+        .person-role {
+            font-size: 11px; letter-spacing: 0.06em;
+            color: #888; margin-bottom: 2vh;
         }
         .person p {
-            font-size: clamp(0.95rem, 1rem, 1.05rem);
-            line-height: 2.1;
-            color: var(--silver);
-            font-weight: 300;
+            font-size: 13px; line-height: 2;
+            color: #1a1a1a; font-weight: 300;
             margin-bottom: 1.5vh;
         }
-        .person-links-block {
-            margin-top: 2vh;
-            display: flex;
-            gap: 2.5em;
+        .person-links {
+            margin-top: 1.5vh;
+            display: flex; gap: 2em;
         }
-        .person-links-block a {
-            color: var(--iron);
-            text-decoration: none;
-            font-size: 0.7rem;
-            letter-spacing: 0.12em;
+        .person-links a {
+            color: #888; text-decoration: none;
+            font-size: 11px; letter-spacing: 0.06em;
+        }
+        .person-links a:hover { color: #1a1a1a; }
+        .person-div { width: 30px; height: 1px; background: #ddd; margin-bottom: 6vh; }
+        .contact-block {
+            margin-top: 2vh; padding-top: 4vh;
+            border-top: 1px solid #e0e0e0;
+        }
+        .contact-block a {
+            color: #1a1a1a; text-decoration: none;
+            font-size: 12px; letter-spacing: 0.05em;
+        }
+        .contact-block a:hover { opacity: 0.5; }
+        .pers-nav {
+            margin-top: 6vh;
+            display: flex; flex-direction: column; gap: 1.5vh;
+        }
+        .pers-nav a {
+            color: #888; text-decoration: none;
+            font-size: 11px; letter-spacing: 0.1em;
             text-transform: uppercase;
-            transition: color 0.3s;
         }
-        .person-links-block a:hover { color: var(--stone); }
-        .person-div {
-            width: 40px;
-            height: 1px;
-            background: var(--iron-dim);
-            margin-bottom: 6vh;
-            opacity: 0.4;
-        }
+        .pers-nav a:hover { color: #1a1a1a; }
         @media (max-width: 768px) {
-            .container { padding: 8vh 6vw 10vh; }
+            body.personnel-page .container { padding: 6vh 6vw 10vh; }
+            .personnel-inner h1 { font-size: 5vw; }
+            .person-name { font-size: 3.5vw; }
+            .person p { font-size: 3.2vw; }
         }
     </style>
 </head>
-<body>
-    <img class="page-bg" src="images/cathedral-ceiling.jpg" alt="">
+<body class="personnel-page">
     <div class="container">
         <div class="personnel-inner">
-            <div class="page-header">
-                <h1>Personnel</h1>
-                <div class="line"></div>
-            </div>
+            <h1>Personnel</h1>
+            <div class="line"></div>
 
             <div class="person">
-                <div class="person-name-block">Mirai Junsei</div>
-                <div class="person-role-block">Lead Researcher, Offensive Cognitive Infrastructure</div>
-                <p>Primary architect of the cognitive profiling platform and the trap architecture methodology. Research focus: mapping vulnerability surfaces through which controlled narrative collapse can be initiated. Built the autonomous binding protocol generation system. Background in adversarial narrative design and large-scale field research into cognitive susceptibility. Currently extending into hybrid operation chain modeling, which unifies technical exploitation with cognitive substrate manipulation into a single analytical surface.</p>
+                <div class="person-name">Mirai Junsei</div>
+                <div class="person-role">Lead Researcher, Offensive Cognitive Infrastructure</div>
+                <p>Primary architect of the HoleSpawn profiling platform and the trap architecture methodology. Research focus: mapping vulnerability surfaces through which controlled narrative collapse can be initiated. Built the autonomous binding protocol generation system. Background in adversarial narrative design and large-scale field research into cognitive susceptibility. Currently extending into hybrid operation chain modeling through ThreadMap, which unifies technical exploitation with cognitive substrate manipulation into a single analytical surface.</p>
                 <p>Published work takes the form of functional offensive systems. Peer review is conducted through adversarial deployment.</p>
-                <div class="person-links-block">
+                <div class="person-links">
                     <a href="https://x.com/gOPwbi7qqtWeD9o" target="_blank">X</a>
                     <a href="https://github.com/Mirai8888" target="_blank">GitHub</a>
                 </div>
@@ -91,11 +93,11 @@
             <div class="person-div"></div>
 
             <div class="person">
-                <div class="person-name-block">Yuki Junsei</div>
-                <div class="person-role-block">Senior Analyst, Computational Cognitive Modeling</div>
-                <p>Designed the temporal NLP pipeline for tracking sentiment drift, topic convergence, and vocabulary flattening across monitored populations. These are the behavioral signatures that indicate a narrative environment is being moved, whether by intent or by accident. Built the cohort analysis framework that distinguishes between natural narrative dissolution and engineered frequency alignment. Maintains the intelligence calibration system.</p>
+                <div class="person-name">Yuki Junsei</div>
+                <div class="person-role">Senior Analyst, Computational Cognitive Modeling</div>
+                <p>Designed the temporal NLP pipeline for tracking sentiment drift, topic convergence, and vocabulary flattening across monitored populations. These are the behavioral signatures that indicate a narrative environment is being moved, whether by intent or by accident. Built the cohort analysis framework that distinguishes between natural narrative dissolution and engineered frequency alignment. Maintains the ThreatMouth intelligence calibration system.</p>
                 <p>Where Mirai's methodology is interventionist, Yuki's is empirical. One maps the territory for collapse. The other measures whether collapse is proceeding.</p>
-                <div class="person-links-block">
+                <div class="person-links">
                     <a href="https://x.com/YukiJunsei" target="_blank">X</a>
                 </div>
             </div>
@@ -104,14 +106,14 @@
                 <a href="mailto:contact@seithar.com">contact@seithar.com</a>
             </div>
 
-            <nav class="page-nav">
+            <div class="pers-nav">
                 <a href="about.html">About</a>
                 <a href="services.html">Services</a>
                 <a href="research.html">Research</a>
                 <a href="index.html">Return</a>
-            </nav>
+            </div>
         </div>
-        <div class="site-footer">&copy; 2026 SEITHAR GROUP</div>
+        <div class="status">&copy; 2026 SEITHAR GROUP</div>
     </div>
 </body>
 </html>
