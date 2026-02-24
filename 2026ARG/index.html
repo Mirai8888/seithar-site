@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Seithar Group">
-    <title>SEITHAR GROUP</title>
-    
+    <meta name="description" content="Seithar Group. Cognitive security infrastructure.">
+    <title>SEITHAR</title>
+
     <meta property="og:type" content="website">
-    <meta property="og:title" content="SEITHAR GROUP">
-    <meta property="og:description" content="The Armor of Intelligence">
+    <meta property="og:title" content="SEITHAR">
+    <meta property="og:description" content="Minds are hackable. Seithar is the security layer.">
     <meta property="og:image" content="og-image.svg">
-    
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SEITHAR GROUP">
+    <meta name="twitter:title" content="SEITHAR">
     <meta name="twitter:image" content="og-image.svg">
-    <link rel="stylesheet" href="styles.css">
+
     <style>
-        html {
-            overflow-y: auto;
-            overflow-x: hidden;
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --night: #0d0d1a;
+            --stone: #E8E8F0;
+            --silver: #C0C0D0;
+            --steel: #4a6fa5;
+            --iron: #8a9bb0;
+            --ember: #a08060;
         }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            overflow: auto;
-            height: auto;
-            min-height: 100vh;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--night);
+            color: var(--stone);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* ── Hero ── */
@@ -38,58 +50,92 @@
             text-align: center;
             overflow: hidden;
         }
+
         .hero-bg {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.25;
-            filter: grayscale(100%);
+            opacity: 0.1;
+            filter: grayscale(60%) brightness(0.4);
             z-index: 0;
         }
-        .hero-content {
-            position: relative;
+
+        .hero-vignette {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, var(--night) 0%, transparent 15%, transparent 85%, var(--night) 100%);
             z-index: 1;
         }
-        .hero-title {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 6vw;
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            color: #1a1a1a;
-            margin-bottom: 2vh;
-            line-height: 1.2;
-        }
-        .hero-subtitle {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 1.4vw;
-            font-weight: 300;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: #555;
-            margin-bottom: 8vh;
-        }
-        .hero-enter {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: #999;
-            text-decoration: none;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4px;
-            transition: color 0.3s, border-color 0.3s;
-            cursor: pointer;
-        }
-        .hero-enter:hover {
-            color: #1a1a1a;
-            border-color: #1a1a1a;
+
+        /* ── Gothic Ribbing (pure CSS, GPU-accelerated) ── */
+        .vault-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
         }
 
-        /* ── Navigation section ── */
+        .vault-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: clamp(2.5rem, 7vw, 8rem);
+            font-weight: 300;
+            letter-spacing: 0.25em;
+            color: var(--stone);
+            margin-bottom: 1.5vh;
+            text-shadow: 0 0 60px rgba(200,200,220,0.08);
+        }
+
+        .hero-line {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--silver), transparent);
+            margin: 2vh auto;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.7rem, 1.1vw, 1rem);
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--iron);
+            font-style: italic;
+        }
+
+        .hero-enter {
+            display: inline-block;
+            margin-top: 8vh;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--iron);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(138,155,176,0.3);
+            padding-bottom: 4px;
+            transition: color 0.4s, border-color 0.4s;
+            cursor: pointer;
+        }
+
+        .hero-enter:hover {
+            color: var(--stone);
+            border-color: var(--stone);
+        }
+
+        /* ── Navigation Section ── */
         .nav-section {
             min-height: 100vh;
             display: flex;
@@ -97,83 +143,102 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 8vh 8vw;
-            background: #ffffff;
+            padding: 10vh 8vw;
+            background: var(--night);
+            position: relative;
         }
-        .nav-section .link-container {
+
+        .nav-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(180deg, var(--iron), transparent);
+        }
+
+        .nav-links {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0;
         }
-        .nav-section .waiver-link {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.2em;
-            color: #666;
-            text-decoration: none;
-            padding: 6px 0;
-            transition: color 0.2s;
-        }
-        .nav-section .waiver-link:hover {
-            color: #1a1a1a;
-        }
-        .nav-section .link-section-label {
-            font-size: 0.65rem;
-            letter-spacing: 0.3em;
+
+        .nav-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
-            color: #bbb;
-            margin-top: 4vh;
-            margin-bottom: 1.5vh;
-        }
-        .nav-section .link-section-label:first-child {
-            margin-top: 0;
-        }
-        .nav-footer {
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            color: #ccc;
-            margin-top: 8vh;
+            color: var(--iron);
+            opacity: 0.5;
+            margin-top: 5vh;
+            margin-bottom: 2vh;
         }
 
+        .nav-label:first-child { margin-top: 0; }
+
+        .nav-link {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            color: var(--silver);
+            text-decoration: none;
+            padding: 0.6vh 0;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover { color: #ffffff; }
+
+        .nav-footer {
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: rgba(138,155,176,0.3);
+            margin-top: 10vh;
+        }
+
+        /* ── Responsive ── */
         @media (max-width: 768px) {
-            .hero-title { font-size: 10vw; }
-            .hero-subtitle { font-size: 2.8vw; }
+            .hero-title { letter-spacing: 0.15em; }
+            .hero-subtitle { letter-spacing: 0.2em; font-size: 2.5vw; }
+            .nav-link { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Hero: the front of the card -->
     <section class="hero" id="hero">
-        <!-- Drop your hero image here. Replace src with the armor image or mood board visual. -->
-        <img class="hero-bg" src="images/Mirai.jpg" alt="">
+        <!-- basalt cathedral available at images/basalt-cathedral.jpg for subpages -->
+        <div class="vault-bg">
+            <img src="images/vault-ceiling.jpg" alt="">
+        </div>
+        <div class="hero-vignette"></div>
         <div class="hero-content">
-            <div class="hero-title">SEITHAR GROUP</div>
-            <div class="hero-subtitle">Cognitive Warfare</div>
+            <div class="hero-title">SEITHAR</div>
+            <div class="hero-line"></div>
+            <div class="hero-subtitle">Cognitive Security Infrastructure</div>
             <a class="hero-enter" onclick="document.getElementById('nav').scrollIntoView({behavior:'smooth'})">Enter</a>
         </div>
     </section>
 
-    <!-- Navigation: the back of the card -->
     <section class="nav-section" id="nav">
-        <div class="link-container">
-            <div class="link-section-label">Division</div>
-            <a href="about.html" class="waiver-link">About</a>
-            <a href="personnel.html" class="waiver-link">Personnel</a>
-            <a href="research.html" class="waiver-link">Research</a>
-            <a href="services.html" class="waiver-link">Services</a>
+        <div class="nav-links">
+            <div class="nav-label">Division</div>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="personnel.html" class="nav-link">Personnel</a>
+            <a href="research.html" class="nav-link">Research</a>
+            <a href="services.html" class="nav-link">Services</a>
 
-            <div class="link-section-label">External</div>
-            <a href="https://discord.gg/MktZyb2bvx" class="waiver-link" target="_blank">Discord</a>
-            <a href="https://x.com/SeitharGroup" class="waiver-link" target="_blank">X / Twitter</a>
-            <a href="https://github.com/Mirai8888" class="waiver-link" target="_blank">GitHub</a>
-            <a href="https://seithar.substack.com" class="waiver-link" target="_blank">Substack</a>
+            <div class="nav-label">External</div>
+            <a href="https://discord.gg/MktZyb2bvx" class="nav-link" target="_blank">Discord</a>
+            <a href="https://x.com/SeitharGroup" class="nav-link" target="_blank">X</a>
+            <a href="https://github.com/Mirai8888" class="nav-link" target="_blank">GitHub</a>
+            <a href="https://seithar.substack.com" class="nav-link" target="_blank">Substack</a>
 
-            <div class="link-section-label">Resources</div>
-            <a href="Seithar96723.pdf" class="waiver-link" download>Whitepaper</a>
+            <div class="nav-label">Resources</div>
+            <a href="Seithar96723.pdf" class="nav-link" download>Whitepaper</a>
         </div>
-        <div class="nav-footer">&copy; 2026 SEITHAR GROUP</div>
+        <div class="nav-footer">SEITHAR GROUP &middot; 2026</div>
     </section>
 </body>
 </html>
