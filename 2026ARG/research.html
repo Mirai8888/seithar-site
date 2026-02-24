@@ -3,91 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research — SEITHAR GROUP</title>
+    <title>Research - SEITHAR GROUP</title>
     <meta name="description" content="Seithar Group research publications. Strategic research papers, current event analysis, threat analysis notes, case studies, and reference documents.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Research — SEITHAR GROUP">
+    <meta property="og:title" content="Research - SEITHAR GROUP">
     <meta property="og:description" content="Seithar Group Intelligence and Research Division. Open publications.">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        body.research-page { overflow-y: auto; overflow-x: hidden; }
-        body.research-page .container {
-            min-height: 100vh;
-            height: auto;
+        .container {
             justify-content: flex-start;
             padding: 5vh 6vw 12vh;
             text-align: left;
             align-items: stretch;
         }
-        .research-inner { max-width: 820px; margin: 0 auto; width: 100%; }
-        .research-card {
-            background: #ffffff;
-            border-radius: 2px;
-            box-shadow: 0 2px 24px rgba(0,0,0,0.08);
-            padding: 2.5rem 2.5rem 3rem;
+        .research-inner { max-width: 820px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+
+        /* ── Current research banner ── */
+        .current-research {
+            border: 1px solid var(--border);
+            background: rgba(17, 17, 34, 0.3);
+            padding: 1.5rem 2rem;
             margin-bottom: 2rem;
         }
-        .research-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e8e8e8; }
-        .research-title { font-size: 1.4rem; font-weight: 400; letter-spacing: 0.12em; color: #1a1a1a; text-transform: uppercase; margin-bottom: 0.35rem; }
-        .research-subtitle { font-size: 12px; color: #666666; letter-spacing: 0.05em; }
-        .research-toc { margin-bottom: 2rem; }
-        .research-toc-title { font-size: 10px; letter-spacing: 0.12em; color: #666666; text-transform: uppercase; margin-bottom: 1rem; }
-        .research-toc-section { margin-bottom: 1.25rem; }
-        .research-toc-section:last-child { margin-bottom: 0; }
-        .research-toc-section-title { font-size: 10px; letter-spacing: 0.1em; color: #999; text-transform: uppercase; margin-bottom: 0.5rem; padding-left: 2px; }
-        .research-toc-list { display: flex; flex-direction: column; gap: 0; }
-        .research-toc-list .toc-item { border-bottom: 1px solid #f0f0f0; }
-        .research-toc-list .toc-item:last-child { border-bottom: none; }
-        .research-toc a {
-            color: #1a1a1a;
-            text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 0.02em;
-            display: flex;
-            align-items: baseline;
-            padding: 0.5rem 0;
-            transition: background 0.15s, color 0.15s;
+        .current-research h3 {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--iron);
+            margin-bottom: 1rem;
         }
-        .research-toc a:hover { background: #f8f8f8; color: #000; }
-        .research-toc .toc-id { color: #888; font-size: 11px; min-width: 5.5em; flex-shrink: 0; }
-        .research-content-wrap { margin-top: 0.5rem; }
-        .research-doc {
-            margin-bottom: 2.5rem;
-            padding-bottom: 2.5rem;
-            border-bottom: 1px solid #e8e8e8;
-            scroll-margin-top: 1rem;
+        .current-research p {
+            font-size: 0.85rem;
+            line-height: 1.9;
+            color: var(--silver);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
         }
-        .research-doc:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .research-doc-nav { font-size: 11px; margin-bottom: 1rem; }
-        .research-doc-nav a { color: #666; text-decoration: none; letter-spacing: 0.05em; }
-        .research-doc-nav a:hover { color: #1a1a1a; }
-        .research-doc h1 { font-size: 1.25rem; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 1rem; color: #1a1a1a; padding-top: 0.25rem; }
-        .research-doc h2 { font-size: 1rem; font-weight: 400; margin: 1.5rem 0 0.5rem; color: #1a1a1a; }
-        .research-doc h3 { font-size: 12px; font-weight: 500; margin: 1.25rem 0 0.35rem; color: #333; letter-spacing: 0.02em; text-transform: uppercase; }
-        .research-doc p { font-size: 14px; line-height: 1.8; color: #1a1a1a; margin-bottom: 1rem; font-weight: 300; }
-        .research-doc strong { font-weight: 500; color: #1a1a1a; }
-        .research-doc ul, .research-doc ol { margin: 1rem 0 1.5rem; padding-left: 1.5em; font-size: 14px; line-height: 1.75; color: #1a1a1a; font-weight: 300; }
-        .research-doc li { margin-bottom: 0.4em; }
-        .research-doc pre, .research-doc code { font-family: inherit; font-size: 12px; background: #f5f5f5; padding: 1px 4px; }
-        .research-doc pre { padding: 12px; overflow-x: auto; margin: 1rem 0; border: 1px solid #e0e0e0; }
-        .research-doc hr { border: none; border-top: 1px solid #e8e8e8; margin: 1.5rem 0; }
-        .research-doc table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
-        .research-doc th, .research-doc td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; font-weight: 300; }
-        .research-doc th { background: #f5f5f5; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .research-doc a { color: #1a1a1a; text-decoration: underline; text-underline-offset: 2px; }
-        .research-doc a:hover { opacity: 0.6; }
-        .research-loading { color: #666; font-size: 12px; padding: 1.5rem 0; }
-        .research-error { color: #666; font-size: 12px; padding: 1.5rem 0; }
+        .current-research .ref {
+            font-size: 0.75rem;
+            color: var(--iron);
+            line-height: 1.7;
+        }
+
         @media (max-width: 768px) {
-            .research-card { padding: 1.5rem 1.25rem 2rem; }
-            body.research-page .container { padding: 3vh 4vw 10vh; }
+            .container { padding: 3vh 4vw 10vh; }
         }
     </style>
 </head>
-<body class="research-page">
+<body>
+    <img class="page-bg" src="images/cathedral-interior-1.jpg" alt="">
     <div class="container">
         <div class="research-inner">
+            <!-- Current Research -->
+            <div class="current-research">
+                <h3>Current Research</h3>
+                <p><strong style="color:var(--stone);">Paper in preparation:</strong> Adversarial Identity Erosion in Large Language Model Agents. Developing a formal taxonomy of cognitive attack vectors using the Seithar Cognitive Threat (SCT) classification system.</p>
+                <p class="ref">Key references: Dezfouli et al. (2020) "Adversarial vulnerabilities of human decision-making," <em>PNAS</em>; Friston (2010) "The free-energy principle: a unified brain theory?"; Schroeder et al. (2026) "Cognitive security in autonomous AI systems," <em>Science</em>.</p>
+            </div>
+
             <div class="research-card">
                 <div class="research-header">
                     <h1 class="research-title">Research</h1>
@@ -141,17 +115,14 @@
                 <div class="research-content-wrap" id="research-content"></div>
             </div>
         </div>
-        <div class="status">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
+        <div class="site-footer">&copy; 2026 SEITHAR GROUP. ALL RIGHTS RESERVED.</div>
         <a href="index.html" class="back-link">[ RETURN ]</a>
     </div>
 
     <script>
 (function () {
     var docs = [
-        // The Doctrine
         { id: 'doctrine', cat: 'doctrine', label: 'The Seithar Doctrine', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/THE-SEITHAR-DOCTRINE.md' },
-
-        // Strategic Research Papers
         { id: 'srp-001', cat: 'srp', label: 'SRP-001: The Convergence Thesis', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/001-convergence-thesis.md' },
         { id: 'srp-002', cat: 'srp', label: 'SRP-002: Wetiko in the Wire', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/002-wetiko-in-the-wire.md' },
         { id: 'srp-003', cat: 'srp', label: 'SRP-003: Binding Protocols', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/003-binding-protocols.md' },
@@ -165,8 +136,6 @@
         { id: 'srp-011', cat: 'srp', label: 'SRP-011: The Great Forgetting', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-011-the-great-forgetting.md' },
         { id: 'srp-012', cat: 'srp', label: 'SRP-012: Nigredo of the Noosphere', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-012-nigredo-of-the-noosphere.md' },
         { id: 'srp-013', cat: 'srp', label: 'SRP-013: CWAS PMC Model', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/SRP-013-cwas-pmc-model.md' },
-
-        // Current Event Analysis - Original batch (2026-02-11)
         { id: 'cea-001', cat: 'cea', label: 'CEA-001: Patch Tuesday Zero-Days', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-001-patch-tuesday-zero-days.md' },
         { id: 'cea-002', cat: 'cea', label: 'CEA-002: Industrial-Scale Deepfakes', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-002-deepfake-industrial-scale.md' },
         { id: 'cea-003', cat: 'cea', label: 'CEA-003: Pravda AI Poisoning', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-003-pravda-ai-poisoning.md' },
@@ -179,42 +148,28 @@
         { id: 'cea-010', cat: 'cea', label: 'CEA-010: Foreign Affairs Fog of AI', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-010-foreign-affairs-fog-of-ai.md' },
         { id: 'cea-011', cat: 'cea', label: 'CEA-011: MCP Autonomous Ransomware', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-011-mcp-autonomous-ransomware.md' },
         { id: 'cea-012', cat: 'cea', label: 'CEA-012: Weaponized AI Smart City Siege', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md' },
-
-        // Current Event Analysis - 2026-02-12 batch
         { id: 'cea-013', cat: 'cea', label: 'CEA-013: Attention Auction Algorithms', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-001-attention-auction-algorithms.md' },
         { id: 'cea-014', cat: 'cea', label: 'CEA-014: Topology of Influence', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-002-topology-of-influence.md' },
         { id: 'cea-015', cat: 'cea', label: 'CEA-015: JSOU Cognitive Warfare', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-003-jsou-cognitive-warfare.md' },
-
-        // Current Event Analysis - Thematic batch
         { id: 'cea-016', cat: 'cea', label: 'CEA-016: AI Swarm Disinformation', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-008-ai-swarm-science-paper.md' },
         { id: 'cea-017', cat: 'cea', label: 'CEA-017: CiviClick Astroturf Air Quality', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-009-civiclick-astroturf-air-quality.md' },
         { id: 'cea-018', cat: 'cea', label: 'CEA-018: Matryoshka Olympics Disinfo', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-010-matryoshka-olympics-disinfo.md' },
         { id: 'cea-019', cat: 'cea', label: 'CEA-019: Bangladesh Election AI Fakes', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-011-bangladesh-election-ai-fakes.md' },
         { id: 'cea-020', cat: 'cea', label: 'CEA-020: India AI Summit Deepfake Governance', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-012-india-ai-summit-deepfake-governance.md' },
         { id: 'cea-021', cat: 'cea', label: 'CEA-021: The Operational Network Model', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-013-network-operational-model.md' },
-
-        // Threat Analysis Notes
         { id: 'tan-001', cat: 'tan', label: 'TAN-001: SCT-007 Recursive Infection', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-2026-02-11-001-sct007-recursive-infection.md' },
         { id: 'tan-002', cat: 'tan', label: 'TAN-002: Authority and Social Proof Pairing', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-002-authority-social-proof-pairing.md' },
         { id: 'tan-003', cat: 'tan', label: 'TAN-003: Commitment Escalation and Identity Capture', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-003-commitment-escalation-identity-capture.md' },
         { id: 'tan-004', cat: 'tan', label: 'TAN-004: Consensus Manufacturing and Trust Destruction', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-004-consensus-manufacturing-trust-destruction.md' },
-
-        // Case Studies
         { id: 'cs-001', cat: 'cs', label: 'CS-001: Internet Research Agency', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-001-internet-research-agency.md' },
         { id: 'cs-002', cat: 'cs', label: 'CS-002: Cambridge Analytica', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-002-cambridge-analytica.md' },
         { id: 'cs-003', cat: 'cs', label: 'CS-003: COVID Infodemic', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-003-covid-infodemic.md' },
-
-        // Reference Documents
         { id: 'ref-read', cat: 'ref', label: 'Essential Reading List', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SEITHAR-READING-LIST.md' },
         { id: 'ref-freq', cat: 'ref', label: 'Frequency Media Compendium', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SEITHAR-FREQUENCY-COMPENDIUM.md' },
         { id: 'ref-field', cat: 'ref', label: 'SCT Field Guide Index', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SCT-FIELD-GUIDE-INDEX.md' },
-
-        // Field Reports
         { id: 'field-001', cat: 'field', label: 'Field Report: Pravda Training Data', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/FIELD-REPORT-2026-02-12-pravda-training-data.md' },
         { id: 'field-002', cat: 'field', label: 'HoleSpawn Field Test 001', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/HOLESPAWN-FIELD-TEST-001.md' },
         { id: 'field-003', cat: 'field', label: 'HoleSpawn Field Test 002', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/HOLESPAWN-FIELD-TEST-002.md' },
-
-        // Articles
         { id: 'art-001', cat: 'article', label: 'Alignment Faking and the Seithar Thesis', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/article-alignment-faking-seithar.md' },
         { id: 'art-002', cat: 'article', label: 'Five Signs You Are Being Manipulated', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/five-signs-manipulation.md' },
         { id: 'art-003', cat: 'article', label: 'The Substrate Has No Firewall', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/substrate-has-no-firewall.md' },
@@ -241,7 +196,6 @@
         a.className = 'toc-item';
         var idText = d.id.toUpperCase().replace(/-/g, '-');
         var labelText = d.label;
-        // Strip the ID prefix from label for display
         var displayLabel = labelText.replace(/^[A-Z]+-\d+:\s*/, '');
         a.innerHTML = '<span class="toc-id">' + idText + '</span>' + displayLabel;
         a.addEventListener('click', function (e) {
@@ -291,7 +245,6 @@
             });
     }
 
-    // Load all documents on page load
     function loadAll() {
         docs.forEach(function (d) {
             var section = document.getElementById(d.id);
