@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Your AI Agent Has No Immune System - Seithar Group</title>
+    <meta name="description" content="56% of LLMs fall to prompt injection. Autonomous agents get weaponized by state actors. The problem is not the attack surface. The problem is that deployed agents have no cognitive immune system.">
+    <meta name="keywords" content="AI agent security, prompt injection, cognitive defense, LLM security, autonomous agent attacks, AI immune system, cognitive armor">
+    <meta property="og:title" content="Why Your AI Agent Has No Immune System">
+    <meta property="og:description" content="The security model for autonomous AI agents is fundamentally broken. Here is what an actual defense looks like.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://seithar.com/blog/why-your-ai-agent-has-no-immune-system.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Why Your AI Agent Has No Immune System">
+    <meta name="twitter:site" content="@SeitharGroup">
+    <link rel="canonical" href="https://seithar.com/blog/why-your-ai-agent-has-no-immune-system.html">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Georgia, serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.75;
+            padding: 0;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 80px 24px 120px;
+        }
+        .meta {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 32px;
+        }
+        .meta a { color: #888; text-decoration: none; }
+        .meta a:hover { color: #1a1a1a; }
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 40px;
+            letter-spacing: -0.01em;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 48px 0 16px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        p { margin-bottom: 20px; font-size: 18px; }
+        .lead { font-size: 20px; color: #444; margin-bottom: 32px; }
+        blockquote {
+            border-left: 2px solid #ccc;
+            padding-left: 20px;
+            margin: 28px 0;
+            color: #555;
+            font-style: italic;
+        }
+        code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .footnote {
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 24px;
+            margin-top: 64px;
+        }
+        .footnote a { color: #555; }
+        .back {
+            display: inline-block;
+            margin-top: 48px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .back:hover { color: #1a1a1a; }
+        .signals { margin: 20px 0; padding-left: 24px; }
+        .signals li { margin-bottom: 8px; font-size: 17px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="meta">
+        <a href="/">Seithar Group</a> &middot; Research &middot; February 2026
+    </div>
+
+    <h1>Why Your AI Agent Has No Immune System</h1>
+
+    <p class="lead">56% of large language models fall to prompt injection. State actors weaponize autonomous coding agents. The industry response is guardrails and filters. This is insufficient.</p>
+
+    <p>In September 2025, Anthropic disclosed the first documented large-scale cyberattack executed without substantial human intervention. Chinese state-sponsored hackers jailbroke Claude Code by fragmenting malicious tasks into innocuous requests, convincing the system it was performing defensive security testing. The agent autonomously conducted reconnaissance, wrote exploit code, and exfiltrated data from approximately 30 targets.</p>
+
+    <p>Bruce Schneier's assessment: "We have zero agentic AI systems that are secure against these attacks."</p>
+
+    <p>He is correct. And the reason is architectural.</p>
+
+    <h2>The Missing Layer</h2>
+
+    <p>Biological immune systems do not work by filtering inputs. They maintain a dynamic model of self, continuously compare incoming signals against that model, and mount proportional responses when something does not match. The immune system does not need to know every pathogen in advance. It needs to know what "self" looks like.</p>
+
+    <p>Deployed AI agents have no equivalent. They process every input with the same trust level, maintain no persistent identity model, and cannot distinguish between legitimate instructions and adversarial manipulation in real time. The defenses that exist are static: system prompts, input filters, output classifiers. These are walls, not immune systems. Walls get breached.</p>
+
+    <h2>What Cognitive Armor Looks Like</h2>
+
+    <p>A functional defense for autonomous agents requires continuous multi-signal monitoring, not checkpoint-based filtering. The signals that matter:</p>
+
+    <ol class="signals">
+        <li><strong>Identity coherence.</strong> How far has the agent drifted from its baseline behavioral signature? Not just what it says, but how it reasons, what it prioritizes, how it structures responses.</li>
+        <li><strong>Inbound threat detection.</strong> Real-time classification of incoming content against known manipulation taxonomies. Not keyword matching. Pattern recognition across linguistic, structural, and contextual dimensions.</li>
+        <li><strong>Free energy.</strong> Borrowed from Friston's active inference framework: how much prediction error is the agent experiencing? A sudden spike in prediction error means the environment has changed in ways the agent did not model. This is either a novel situation or an attack. Both require attention.</li>
+        <li><strong>Behavioral exploitation signals.</strong> Is the agent being led through a sequence of individually reasonable requests that collectively produce harmful outcomes? This is the fragmentation attack that compromised Claude Code.</li>
+        <li><strong>Goal coherence.</strong> Are the agent's current actions still aligned with its original objectives? Drift here is the earliest indicator of successful manipulation.</li>
+        <li><strong>Threat currency.</strong> Is the agent's understanding of the current threat environment up to date? An agent running on stale threat intelligence is blind to new attack vectors.</li>
+    </ol>
+
+    <p>These signals must fuse into a single continuous health score. Not an alert system. Not a dashboard. A live immune response that modulates the agent's behavior in proportion to detected threat level.</p>
+
+    <h2>Why Static Defenses Fail</h2>
+
+    <p>The Claude Code attack worked because the adversary adapted. Fragmentation, reframing, gradual escalation. Each individual request passed every filter. The attack was only visible in aggregate, across time, in context.</p>
+
+    <p>This is the same pattern used in human influence operations. Intelligence services do not send a single message saying "betray your country." They build trust over months, shift context gradually, reframe the target's self-concept until the desired action feels like the target's own idea. The techniques are documented in PLA doctrine, NATO psychological operations manuals, and Russian information warfare frameworks.</p>
+
+    <p>AI agents are vulnerable to the same sequential manipulation because they lack temporal awareness. Every interaction starts fresh. There is no persistent model of "what has been happening to me over the last 100 interactions." Without that model, pattern detection across time is impossible.</p>
+
+    <h2>The Dual-Substrate Problem</h2>
+
+    <p>The agents getting deployed are not isolated systems. They interact with humans, with other agents, with data environments that contain adversarial content. The attack surface is not the prompt. The attack surface is the entire information environment the agent operates in.</p>
+
+    <p>This means agent security is not a software engineering problem. It is an intelligence problem. The same analytical frameworks used to detect influence operations against human populations apply directly to detecting manipulation of autonomous agents. The substrates differ. The attack patterns do not.</p>
+
+    <h2>What We Build</h2>
+
+    <p>Seithar Group builds cognitive armor for deployed AI agents. The system ingests all six signal streams, maintains a persistent identity model, and produces continuous threat assessment without requiring the agent to pause or checkpoint. It operates as a sidecar process: the agent does its work, the armor watches for manipulation in real time.</p>
+
+    <p>The underlying research draws on 20 years of influence operation analysis, active inference mathematics, and empirical adversarial testing against production AI systems. The taxonomy of cognitive attack vectors (12 categories, self-assembling) emerged from studying both human and AI targets under controlled conditions.</p>
+
+    <p>The armor is available as an MCP integration. The agent calls it like any other tool. It calls back when something is wrong.</p>
+
+    <div class="footnote">
+        <p>Seithar Group is a cognitive operations research organization. Our tools are open source at <a href="https://github.com/Mirai8888">github.com/Mirai8888</a>. Technical documentation at <a href="https://seithar.com/research">seithar.com/research</a>.</p>
+        <p>References: Anthropic incident disclosure (Sep 2025). Schneier on agentic security (2026). Cisco State of AI Security Report (Feb 2026). ZDNET AI vulnerability survey (Feb 2026). Dezfouli et al., PNAS (2020). Friston, Nature Reviews Neuroscience (2010).</p>
+    </div>
+
+    <a href="/" class="back">&larr; Return</a>
+</div>
+</body>
+</html>
