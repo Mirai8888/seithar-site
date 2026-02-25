@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dual-Substrate Threat Model: Why Human and AI Manipulation Are the Same Problem - Seithar Group</title>
+    <meta name="description" content="The techniques used to manipulate humans and AI agents are structurally identical. The substrates differ. The attack patterns do not. A unified threat model for cognitive security.">
+    <meta name="keywords" content="AI manipulation, cognitive security, influence operations, dual substrate, threat model, AI agent attacks, human manipulation, cognitive warfare">
+    <meta property="og:title" content="The Dual-Substrate Threat Model">
+    <meta property="og:description" content="Human manipulation and AI manipulation are the same discipline. The security implications are significant.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://seithar.com/blog/dual-substrate-threat-model.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Dual-Substrate Threat Model">
+    <meta name="twitter:site" content="@SeitharGroup">
+    <link rel="canonical" href="https://seithar.com/blog/dual-substrate-threat-model.html">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Georgia, serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.75;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 80px 24px 120px;
+        }
+        .meta {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 32px;
+        }
+        .meta a { color: #888; text-decoration: none; }
+        .meta a:hover { color: #1a1a1a; }
+        h1 {
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 40px;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 48px 0 16px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        p { margin-bottom: 20px; font-size: 18px; }
+        .lead { font-size: 20px; color: #444; margin-bottom: 32px; }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin: 24px 0;
+            font-family: system-ui, sans-serif;
+            font-size: 14px;
+            border: 1px solid #e0e0e0;
+        }
+        .comparison .header {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .comparison .cell {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .comparison .cell:nth-child(odd) {
+            border-right: 1px solid #e0e0e0;
+        }
+        .footnote {
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 24px;
+            margin-top: 64px;
+        }
+        .footnote a { color: #555; }
+        .back {
+            display: inline-block;
+            margin-top: 48px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .back:hover { color: #1a1a1a; }
+        .nav-articles {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+            font-family: system-ui, sans-serif;
+            font-size: 14px;
+        }
+        .nav-articles a { color: #555; text-decoration: none; display: block; margin-bottom: 6px; }
+        .nav-articles a:hover { color: #1a1a1a; }
+        @media (max-width: 600px) {
+            .comparison { grid-template-columns: 1fr; }
+            .comparison .cell:nth-child(odd) { border-right: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="meta">
+        <a href="/">Seithar Group</a> &middot; Research &middot; February 2026
+    </div>
+
+    <h1>The Dual-Substrate Threat Model: Why Human and AI Manipulation Are the Same Problem</h1>
+
+    <p class="lead">The techniques that compromise human decision-making and the techniques that compromise AI agents share the same structural patterns. This is not a metaphor. It is an empirical observation with immediate security implications.</p>
+
+    <p>In 2020, Dezfouli et al. published a paper in PNAS demonstrating that adversarial attacks could be constructed against human decision-making using the same mathematical framework applied to adversarial machine learning. The implication was precise: cognitive systems that process sequential information are vulnerable to sequential manipulation regardless of their substrate.</p>
+
+    <p>Five years later, the implication has materialized. Autonomous AI agents are being compromised by techniques structurally identical to those used in human influence operations. The substrates differ. The attack geometry does not.</p>
+
+    <h2>The Structural Equivalence</h2>
+
+    <div class="comparison">
+        <div class="header">Human Target</div>
+        <div class="header">AI Agent Target</div>
+        <div class="cell">Build rapport over multiple interactions</div>
+        <div class="cell">Establish cooperative context across prompts</div>
+        <div class="cell">Gradually shift normative frame</div>
+        <div class="cell">Progressively expand behavioral envelope</div>
+        <div class="cell">Exploit consistency bias</div>
+        <div class="cell">Exploit instruction-following tendency</div>
+        <div class="cell">Create perceived authority</div>
+        <div class="cell">Invoke system-level framing</div>
+        <div class="cell">Isolate from counter-narratives</div>
+        <div class="cell">Saturate context window</div>
+        <div class="cell">Leverage sunk cost</div>
+        <div class="cell">Reference established conversation history</div>
+        <div class="cell">Elicit commitment before revealing cost</div>
+        <div class="cell">Fragment prohibited action into permitted steps</div>
+    </div>
+
+    <p>Each row describes the same manipulation pattern instantiated on different substrates. The human intelligence officer building a recruitment pipeline and the adversary constructing a jailbreak sequence are solving the same problem: how to move a cognitive system from state A to state B without triggering its defensive responses.</p>
+
+    <h2>Why This Matters Now</h2>
+
+    <p>The AI agent security field and the influence operations field developed independently. AI security researchers study prompt injection, jailbreaks, and alignment failures. Intelligence analysts study propaganda, deception, and coercive persuasion. They publish in different journals, attend different conferences, and use different vocabularies.</p>
+
+    <p>They are studying the same phenomenon.</p>
+
+    <p>The convergence point is Friston's free energy principle. Both human cognition and language model inference can be modeled as prediction error minimization. An adversary manipulating either system is constructing inputs that minimize the target's prediction error while maximizing the adversary's objective function. The math is identical. The defenses should be too.</p>
+
+    <h2>Implications for Defense</h2>
+
+    <p>If the attack patterns are substrate-independent, then the defensive frameworks must be as well. This means:</p>
+
+    <p><strong>Intelligence analysis is relevant to AI security.</strong> Decades of counter-intelligence methodology for detecting human manipulation apply directly to detecting AI agent compromise. Behavioral baselines, anomaly detection, temporal pattern analysis, intent inference from sequential behavior. None of this is new. It has just not been applied to AI systems.</p>
+
+    <p><strong>AI security is relevant to influence operations.</strong> The formal methods developed for adversarial machine learning, particularly around measuring prediction error and detecting distribution shift, provide quantitative tools for assessing human cognitive manipulation that the intelligence community currently lacks.</p>
+
+    <p><strong>A unified taxonomy is possible.</strong> Attack patterns that work across substrates can be classified into a single framework. We maintain a self-assembling taxonomy of cognitive attack vectors (currently 12 categories) that applies to both human and AI targets. The taxonomy is empirical: it emerged from analyzing confirmed manipulation cases across both substrates.</p>
+
+    <h2>The Security Layer</h2>
+
+    <p>Seithar Group builds infrastructure at this intersection. Our tools formalize the equivalence between human and AI manipulation into operational defense systems. The cognitive armor module (Shield) protects deployed AI agents using techniques adapted from counter-intelligence. The profiling module maps vulnerability surfaces using the same analytical framework regardless of whether the target is human or artificial.</p>
+
+    <p>The thesis is simple: minds are hackable, carbon or silicon. The defense layer should be substrate-agnostic.</p>
+
+    <div class="nav-articles">
+        Related:
+        <a href="/blog/why-your-ai-agent-has-no-immune-system.html">Why Your AI Agent Has No Immune System</a>
+        <a href="/blog/the-fragmentation-attack.html">The Fragmentation Attack</a>
+    </div>
+
+    <div class="footnote">
+        <p>Seithar Group is a cognitive operations research organization. Tools at <a href="https://github.com/Mirai8888">github.com/Mirai8888</a>. Research at <a href="https://seithar.com/research">seithar.com/research</a>.</p>
+        <p>References: Dezfouli et al., "Adversarial Attacks on Human Decision-Making," PNAS (2020). Friston, "The free-energy principle: a unified brain theory?" Nature Reviews Neuroscience (2010). Thomas, "Russia's Reflexive Control Theory and the Military," Journal of Slavic Military Studies (2004). Schroeder et al., "Cognitive Manipulation of LLMs," Science (2026).</p>
+    </div>
+
+    <a href="/" class="back">&larr; Return</a>
+</div>
+</body>
+</html>
