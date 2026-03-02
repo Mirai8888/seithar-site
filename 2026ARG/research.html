@@ -10,6 +10,9 @@
     <meta property="og:description" content="Seithar Group Intelligence and Research Division. Open publications.">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <style>
         body.research-page { overflow-y: auto; overflow-x: hidden; }
         body.research-page .container {
@@ -259,6 +262,21 @@
         return text;
     }
 
+    function renderMath(el) {
+        if (typeof renderMathInElement === 'function') {
+            renderMathInElement(el, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '\\(', right: '\\)', display: false }
+                ],
+                throwOnError: false,
+                trust: true
+            });
+        }
+    }
+
     function backToTop() {
         var card = document.querySelector('.research-card');
         if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -285,6 +303,7 @@
                 placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
                 var backLink = placeholder.querySelector('[data-back]');
                 if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
+                renderMath(placeholder);
             })
             .catch(function () {
                 placeholder.innerHTML = '<div class="research-error">Unable to load document.</div>';
@@ -311,6 +330,7 @@
                     placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
                     var backLink = placeholder.querySelector('[data-back]');
                     if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
+                    renderMath(placeholder);
                 })
                 .catch(function () {
                     placeholder.innerHTML = '<div class="research-error">Unable to load ' + d.label + '.</div>';
