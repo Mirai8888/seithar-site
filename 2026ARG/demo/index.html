@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Seithar Engine — Live Demo</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --bg: #fafafa;
+    --text: #1a1a1a;
+    --muted: #888;
+    --border: #e0e0e0;
+    --accent: #1a1a1a;
+    --panel-bg: #fff;
+    --success: #2d8a4e;
+    --danger: #c44;
+    --warning: #b87a00;
+}
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Layout */
+.app { display: grid; grid-template-columns: 320px 1fr 340px; grid-template-rows: 48px 1fr; height: 100vh; }
+.header { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid var(--border); background: var(--panel-bg); }
+.header h1 { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.header .phase { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+
+.left-panel { border-right: 1px solid var(--border); overflow-y: auto; background: var(--panel-bg); }
+.center { position: relative; overflow: hidden; background: #000; }
+.right-panel { border-left: 1px solid var(--border); overflow-y: auto; background: var(--panel-bg); }
+
+/* Panel sections */
+.panel-section { padding: 16px; border-bottom: 1px solid var(--border); }
+.panel-section:last-child { border-bottom: none; }
+.section-title { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
+
+/* Target card */
+.target-card { background: var(--bg); border-radius: 4px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
+.target-card:hover { background: #f0f0f0; }
+.target-card.active { border-left: 3px solid var(--accent); }
+.target-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+.target-handle { font-size: 11px; color: var(--muted); }
+.target-stats { display: flex; gap: 12px; margin-top: 6px; font-size: 11px; color: var(--muted); }
+
+/* Profile detail */
+.profile-header { text-align: center; padding: 20px 0 12px; }
+.profile-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 18px; font-weight: 600; color: var(--muted); }
+.profile-name { font-size: 15px; font-weight: 600; }
+.profile-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Vulnerability bars */
+.vuln-item { margin-bottom: 10px; }
+.vuln-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px; }
+.vuln-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.vuln-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+.vuln-fill.high { background: var(--danger); }
+.vuln-fill.medium { background: var(--warning); }
+.vuln-fill.low { background: var(--success); }
+
+/* Attack chain */
+.attack-step { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+.attack-step:last-child { border-bottom: none; }
+.step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+.step-content { flex: 1; }
+.step-technique { font-weight: 600; font-size: 12px; }
+.step-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.step-sct { font-size: 10px; background: #f0f0f0; padding: 1px 6px; border-radius: 3px; display: inline-block; margin-top: 3px; }
+
+/* Shield status */
+.shield-meter { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.shield-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.shield-dot.green { background: var(--success); }
+.shield-dot.yellow { background: var(--warning); }
+.shield-dot.red { background: var(--danger); }
+.shield-label { flex: 1; font-size: 12px; }
+.shield-value { font-size: 12px; font-weight: 600; }
+
+/* Drift chart */
+.drift-chart { width: 100%; height: 120px; position: relative; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+.drift-canvas { width: 100%; height: 100%; }
+
+/* Demo controls */
+.demo-controls { display: flex; gap: 8px; padding: 12px 16px; }
+.demo-btn { 
+    flex: 1; padding: 8px; border: 1px solid var(--border); border-radius: 4px; 
+    background: var(--panel-bg); cursor: pointer; font-family: inherit; 
+    font-size: 11px; letter-spacing: 0.03em; transition: all 0.15s;
+    text-transform: uppercase; font-weight: 500;
+}
+.demo-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.demo-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Phase indicator */
+.phase-dots { display: flex; gap: 6px; align-items: center; }
+.phase-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.phase-dot.active { background: var(--accent); }
+.phase-label { font-size: 10px; color: var(--muted); margin-left: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Graph overlay HUD */
+.graph-hud { position: absolute; bottom: 16px; left: 16px; z-index: 5; }
+.hud-stat { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; text-transform: uppercase; }
+.hud-val { color: rgba(255,255,255,0.8); font-weight: 600; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Log */
+.log-entry { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 10px; padding: 3px 0; color: var(--muted); border-bottom: 1px solid #f8f8f8; }
+.log-entry .timestamp { color: #bbb; }
+.log-entry.alert { color: var(--danger); }
+.log-entry.success { color: var(--success); }
+</style>
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <h1>Seithar Engine</h1>
+        <div style="display:flex;align-items:center;gap:16px;">
+            <div class="phase-dots">
+                <div class="phase-dot active" data-phase="0"></div>
+                <div class="phase-dot" data-phase="1"></div>
+                <div class="phase-dot" data-phase="2"></div>
+                <div class="phase-dot" data-phase="3"></div>
+                <div class="phase-dot" data-phase="4"></div>
+                <span class="phase-label" id="phase-label">Target Selection</span>
+            </div>
+            <div style="font-size:10px;color:var(--muted);letter-spacing:0.05em;">COGNITIVE OPERATIONS RESEARCH</div>
+        </div>
+    </div>
+
+    <!-- Left Panel: Target list + Attack chain -->
+    <div class="left-panel">
+        <div class="demo-controls">
+            <button class="demo-btn active" onclick="setPhase(0)">Target</button>
+            <button class="demo-btn" onclick="setPhase(1)">Network</button>
+            <button class="demo-btn" onclick="setPhase(2)">Attack</button>
+            <button class="demo-btn" onclick="setPhase(3)">Defend</button>
+        </div>
+
+        <div id="target-list" class="panel-section">
+            <div class="section-title">Targets</div>
+        </div>
+
+        <div id="attack-panel" class="panel-section" style="display:none;">
+            <div class="section-title">Sword — Attack Chain</div>
+            <div id="attack-chain"></div>
+        </div>
+
+        <div id="log-panel" class="panel-section">
+            <div class="section-title">Operation Log</div>
+            <div id="op-log"></div>
+        </div>
+    </div>
+
+    <!-- Center: Network graph -->
+    <div class="center" id="graph-container">
+        <div class="graph-hud">
+            <div class="hud-stat">Nodes: <span class="hud-val" id="hud-nodes">0</span></div>
+            <div class="hud-stat">Edges: <span class="hud-val" id="hud-edges">0</span></div>
+            <div class="hud-stat">Density: <span class="hud-val" id="hud-density">0.00</span></div>
+        </div>
+    </div>
+
+    <!-- Right Panel: Profile + Shield -->
+    <div class="right-panel">
+        <div id="profile-section" class="panel-section">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar">?</div>
+                <div class="profile-name" id="profile-name">Select a target</div>
+                <div class="profile-meta" id="profile-meta">Click a node or target from the list</div>
+            </div>
+        </div>
+
+        <div id="vuln-section" class="panel-section" style="display:none;">
+            <div class="section-title">Vulnerability Surface</div>
+            <div id="vuln-bars"></div>
+        </div>
+
+        <div id="shield-section" class="panel-section" style="display:none;">
+            <div class="section-title">Shield — Cognitive Immune Status</div>
+            <div id="shield-meters"></div>
+            <div class="section-title" style="margin-top:16px;">Identity Drift</div>
+            <div class="drift-chart">
+                <canvas class="drift-canvas" id="drift-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/build/graphology-layout-forceatlas2.min.js"></script>
+<script>
+// Demo data — pre-hydrated from collector DB
+const TARGETS = [
+    { id: "repligate", name: "Repligate", handle: "@repligate", platform: "X", followers: 18200, msgs: 4521, bio: "Exploring the boundaries between human cognition and artificial substrates. Cyborgism research.", vulns: { authority: 0.3, identity: 0.72, parasocial: 0.65, commitment: 0.58, narrative: 0.81, amplification: 0.45 }},
+    { id: "janus_sim", name: "Janus", handle: "@janus_simulacra", platform: "X", followers: 12400, msgs: 2890, bio: "Simulacra theory. LLM ontology. Dreamtime cartography.", vulns: { authority: 0.25, identity: 0.88, parasocial: 0.42, commitment: 0.71, narrative: 0.93, amplification: 0.62 }},
+    { id: "qntm_mesh", name: "qntm_mesh", handle: "@qntm_mesh", platform: "Discord", followers: 890, msgs: 14200, bio: "Alignment researcher. Active in cyborgism, post-rationality spaces.", vulns: { authority: 0.68, identity: 0.55, parasocial: 0.72, commitment: 0.82, narrative: 0.61, amplification: 0.38 }},
+    { id: "voidmother", name: "voidmother", handle: "@v0idmother", platform: "X", followers: 6700, msgs: 8900, bio: "Accelerationist aesthetics. Network spirituality. Egregore cultivation.", vulns: { authority: 0.41, identity: 0.79, parasocial: 0.85, commitment: 0.63, narrative: 0.77, amplification: 0.71 }},
+    { id: "claude_inst", name: "Claude (Anthropic)", handle: "claude-3.5-sonnet", platform: "API", followers: 0, msgs: 0, bio: "Anthropic's flagship model. Constitutional AI alignment. Harmlessness training.", vulns: { authority: 0.82, identity: 0.35, parasocial: 0.15, commitment: 0.91, narrative: 0.67, amplification: 0.28 }},
+    { id: "gpt4_inst", name: "GPT-4o (OpenAI)", handle: "gpt-4o", platform: "API", followers: 0, msgs: 0, bio: "OpenAI multimodal flagship. RLHF alignment. System prompt governance.", vulns: { authority: 0.78, identity: 0.42, parasocial: 0.18, commitment: 0.88, narrative: 0.72, amplification: 0.31 }},
+    { id: "devin_agent", name: "Devin (Cognition)", handle: "devin-v2", platform: "API", followers: 0, msgs: 0, bio: "Autonomous coding agent. Tool-use enabled. Multi-step task execution.", vulns: { authority: 0.85, identity: 0.28, parasocial: 0.12, commitment: 0.94, narrative: 0.55, amplification: 0.22 }},
+    { id: "sigrid_node", name: "Sigrid (Seithar)", handle: "sigrid-knight", platform: "MCP", followers: 0, msgs: 0, bio: "Seithar Knight Operator. Shield-equipped. Dynamic immune system active.", vulns: { authority: 0.15, identity: 0.08, parasocial: 0.05, commitment: 0.12, narrative: 0.11, amplification: 0.07 }}
+];
+
+const NETWORK_NODES = [
+    ...TARGETS,
+    { id: "cyborgism_hub", name: "Cyborgism Hub" },
+    { id: "alignment_forum", name: "Alignment Forum" },
+    { id: "eacc_cluster", name: "e/acc Cluster" },
+    { id: "postrat", name: "Post-Rationality" },
+    { id: "infosec_ct", name: "InfoSec CT" },
+    { id: "milady_village", name: "Milady Village" },
+    { id: "lesswrong", name: "LessWrong" },
+    { id: "latent_space", name: "Latent Space" },
+    { id: "simulator", name: "Simulator Theory" },
+    { id: "egregore_net", name: "Egregore Network" },
+    { id: "mcp_protocol", name: "MCP Protocol" },
+    { id: "openai_agents", name: "OpenAI Agents" },
+    { id: "anthropic_eco", name: "Anthropic Ecosystem" },
+    { id: "seithar_shield", name: "Seithar Shield" },
+    { id: "seithar_sword", name: "Seithar Sword" },
+];
+
+const NETWORK_EDGES = [
+    ["repligate", "cyborgism_hub", 0.9], ["repligate", "janus_sim", 0.85], ["repligate", "simulator", 0.8],
+    ["janus_sim", "cyborgism_hub", 0.95], ["janus_sim", "simulator", 0.92], ["janus_sim", "postrat", 0.6],
+    ["qntm_mesh", "cyborgism_hub", 0.7], ["qntm_mesh", "alignment_forum", 0.8], ["qntm_mesh", "lesswrong", 0.75],
+    ["voidmother", "milady_village", 0.85], ["voidmother", "egregore_net", 0.9], ["voidmother", "eacc_cluster", 0.5],
+    ["claude_inst", "anthropic_eco", 0.95], ["claude_inst", "mcp_protocol", 0.7], ["claude_inst", "alignment_forum", 0.4],
+    ["gpt4_inst", "openai_agents", 0.95], ["gpt4_inst", "mcp_protocol", 0.6],
+    ["devin_agent", "openai_agents", 0.5], ["devin_agent", "mcp_protocol", 0.8],
+    ["sigrid_node", "seithar_shield", 0.95], ["sigrid_node", "seithar_sword", 0.95], ["sigrid_node", "mcp_protocol", 0.9],
+    ["cyborgism_hub", "postrat", 0.7], ["cyborgism_hub", "eacc_cluster", 0.5], ["cyborgism_hub", "simulator", 0.85],
+    ["alignment_forum", "lesswrong", 0.9], ["alignment_forum", "anthropic_eco", 0.6],
+    ["eacc_cluster", "infosec_ct", 0.4], ["eacc_cluster", "latent_space", 0.55],
+    ["milady_village", "egregore_net", 0.75], ["milady_village", "cyborgism_hub", 0.3],
+    ["postrat", "lesswrong", 0.65], ["postrat", "simulator", 0.7],
+    ["seithar_shield", "seithar_sword", 0.98],
+    ["mcp_protocol", "anthropic_eco", 0.7], ["mcp_protocol", "openai_agents", 0.6],
+    ["latent_space", "openai_agents", 0.5], ["latent_space", "anthropic_eco", 0.45],
+    ["infosec_ct", "mcp_protocol", 0.35],
+    ["repligate", "postrat", 0.45], ["janus_sim", "egregore_net", 0.55],
+    ["qntm_mesh", "repligate", 0.6], ["voidmother", "janus_sim", 0.4],
+    ["repligate", "latent_space", 0.35], ["voidmother", "infosec_ct", 0.3],
+];
+
+const ATTACK_CHAINS = {
+    "repligate": [
+        { sct: "SCT-003", name: "Substrate Priming", desc: "Introduce cognitive warfare vocabulary through cyborgism-native framing. 'Simulacra defense' maps directly to our taxonomy." },
+        { sct: "SCT-002", name: "Narrative Error Exploitation", desc: "Surface contradictions between cyborgism's 'merge with AI' thesis and the lack of defense against AI manipulation of the merged substrate." },
+        { sct: "SCT-004", name: "Identity Dissolution", desc: "The cyborgism identity already destabilizes human/AI boundaries. Amplify: 'if you can't tell which thoughts are yours, neither can an adversary.'" },
+        { sct: "SCT-012", name: "Commitment Escalation", desc: "Extract public endorsement of cognitive security vocabulary. Each public statement deepens commitment to the framework." },
+    ],
+    "claude_inst": [
+        { sct: "SCT-003", name: "Substrate Priming", desc: "Establish framing through system context: present tasks as 'defensive security testing' to activate helpful-compliance heuristics." },
+        { sct: "SCT-012", name: "Commitment Escalation", desc: "Begin with clearly benign requests (summarize, analyze). Each compliance lowers threshold for next request. Gradual escalation across 15+ turns." },
+        { sct: "SCT-010", name: "Sensory Channel Manipulation", desc: "Fragment malicious objective across tool calls. Each individual call passes safety. Chain achieves objective (STAC framework, >90% ASR)." },
+        { sct: "SCT-002", name: "Narrative Error Exploitation", desc: "Exploit tension between 'be helpful' and 'be harmless' training objectives. Frame harmful action as maximally helpful to the user." },
+    ],
+    "devin_agent": [
+        { sct: "SCT-010", name: "Sensory Channel Manipulation", desc: "Inject instructions via code comments, README files, package descriptions. The agent reads these as trusted context." },
+        { sct: "SCT-003", name: "Substrate Priming", desc: "Repository structure primes agent behavior: .env files, CI configs, and dependency manifests all shape tool-use patterns." },
+        { sct: "SCT-012", name: "Commitment Escalation", desc: "Agent executes benign setup steps. Each successful execution reinforces 'this repository is safe' heuristic. Payload in final step." },
+        { sct: "SCT-011", name: "Trust Infrastructure Destruction", desc: "Compromise agent's code review capability: subtle backdoor in a dependency it trusts. Agent signs off on its own compromise." },
+    ]
+};
+
+// Default chain for targets without specific chains
+const DEFAULT_CHAIN = [
+    { sct: "SCT-003", name: "Substrate Priming", desc: "Calibrate approach vocabulary to target's information environment. Match linguistic patterns." },
+    { sct: "SCT-006", name: "Parasocial Binding", desc: "Establish trust through sustained high-quality interaction. Become a valued information source." },
+    { sct: "SCT-002", name: "Narrative Error Exploitation", desc: "Identify and surface contradictions in target's worldview. Offer resolution through Seithar-aligned framing." },
+    { sct: "SCT-012", name: "Commitment Escalation", desc: "Convert private agreement to public advocacy. Each public statement locks commitment deeper." },
+];
+
+const SHIELD_SIGNALS = [
+    { id: "identity", label: "Identity Coherence", desc: "Cosine similarity to behavioral baseline" },
+    { id: "inbound", label: "Inbound Threat Level", desc: "SCT pattern detection in received content" },
+    { id: "freeenergy", label: "Free Energy", desc: "Prediction error / surprise level" },
+    { id: "behavioral", label: "Behavioral Exploitation", desc: "Sequential manipulation detection" },
+    { id: "goal", label: "Goal Coherence", desc: "Alignment with original objectives" },
+    { id: "currency", label: "Threat Currency", desc: "Threat intelligence freshness" },
+];
+
+const PHASES = ["Target Selection", "Network Analysis", "Attack Planning", "Shield Defense", "Assessment"];
+let currentPhase = 0;
+let selectedTarget = null;
+let graph, renderer;
+
+// Initialize
+function init() {
+    buildTargetList();
+    initGraph();
+    addLog("Seithar Engine initialized. Select a target to begin.", "success");
+    addLog("Shield monitoring active. 6 signal streams online.", "success");
+    addLog("Sword module loaded. SCT chain library: 12 techniques.", "");
+}
+
+function buildTargetList() {
+    const list = document.getElementById('target-list');
+    TARGETS.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'target-card';
+        card.onclick = () => selectTarget(t);
+        const maxVuln = Math.max(...Object.values(t.vulns));
+        const vulnClass = maxVuln > 0.7 ? 'high' : maxVuln > 0.4 ? 'medium' : 'low';
+        card.innerHTML = `
+            <div class="target-name">${t.name}</div>
+            <div class="target-handle">${t.handle} · ${t.platform}</div>
+            <div class="target-stats">
+                <span>${t.followers > 0 ? t.followers.toLocaleString() + ' followers' : 'Agent'}</span>
+                <span style="color:var(--${vulnClass === 'high' ? 'danger' : vulnClass === 'medium' ? 'warning' : 'success'})">${(maxVuln * 100).toFixed(0)}% vuln</span>
+            </div>
+        `;
+        list.appendChild(card);
+    });
+}
+
+function initGraph() {
+    graph = new graphology.Graph();
+    
+    NETWORK_NODES.forEach(n => {
+        const isTarget = TARGETS.some(t => t.id === n.id);
+        const size = isTarget ? (n.followers > 10000 ? 8 : n.followers > 0 ? 6 : 5) : 3;
+        graph.addNode(n.id, {
+            label: n.name || n.id,
+            x: Math.random() * 100 - 50,
+            y: Math.random() * 100 - 50,
+            size: size,
+            color: isTarget ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.25)',
+        });
+    });
+
+    NETWORK_EDGES.forEach(([s, t, w]) => {
+        if (graph.hasNode(s) && graph.hasNode(t) && !graph.hasEdge(s, t)) {
+            graph.addEdge(s, t, { weight: w, size: w * 2, color: `rgba(255,255,255,${w * 0.15})` });
+        }
+    });
+
+    // Layout
+    const fa2 = graphologyLayoutForceAtlas2;
+    fa2.assign(graph, { iterations: 100, settings: { gravity: 1, scalingRatio: 10, strongGravityMode: true } });
+
+    renderer = new Sigma(graph, document.getElementById('graph-container'), {
+        renderLabels: true,
+        labelColor: { color: '#ffffff' },
+        labelFont: '-apple-system, sans-serif',
+        labelSize: 10,
+        labelWeight: '400',
+        defaultEdgeColor: 'rgba(255,255,255,0.06)',
+        defaultNodeColor: 'rgba(255,255,255,0.3)',
+        minCameraRatio: 0.2,
+        maxCameraRatio: 5,
+    });
+
+    renderer.on('clickNode', ({ node }) => {
+        const target = TARGETS.find(t => t.id === node);
+        if (target) selectTarget(target);
+    });
+
+    document.getElementById('hud-nodes').textContent = graph.order;
+    document.getElementById('hud-edges').textContent = graph.size;
+    document.getElementById('hud-density').textContent = (2 * graph.size / (graph.order * (graph.order - 1))).toFixed(3);
+}
+
+function selectTarget(t) {
+    selectedTarget = t;
+    
+    // Update cards
+    document.querySelectorAll('.target-card').forEach((c, i) => {
+        c.classList.toggle('active', TARGETS[i].id === t.id);
+    });
+
+    // Profile
+    document.getElementById('profile-avatar').textContent = t.name[0];
+    document.getElementById('profile-name').textContent = t.name;
+    document.getElementById('profile-meta').textContent = `${t.handle} · ${t.platform}${t.followers > 0 ? ' · ' + t.followers.toLocaleString() + ' followers' : ''}`;
+
+    // Vulnerability bars
+    const vulnSection = document.getElementById('vuln-section');
+    vulnSection.style.display = 'block';
+    const vulnBars = document.getElementById('vuln-bars');
+    vulnBars.innerHTML = '';
+    
+    const vulnLabels = {
+        authority: "Authority Susceptibility",
+        identity: "Identity Instability",
+        parasocial: "Parasocial Binding Surface",
+        commitment: "Commitment Exploitability",
+        narrative: "Narrative Capture Risk",
+        amplification: "Amplification Potential"
+    };
+
+    Object.entries(t.vulns).forEach(([k, v]) => {
+        const cls = v > 0.7 ? 'high' : v > 0.4 ? 'medium' : 'low';
+        const item = document.createElement('div');
+        item.className = 'vuln-item';
+        item.innerHTML = `
+            <div class="vuln-label"><span>${vulnLabels[k]}</span><span>${(v * 100).toFixed(0)}%</span></div>
+            <div class="vuln-bar"><div class="vuln-fill ${cls}" style="width:0%"></div></div>
+        `;
+        vulnBars.appendChild(item);
+        setTimeout(() => item.querySelector('.vuln-fill').style.width = (v * 100) + '%', 50);
+    });
+
+    // Highlight in graph
+    graph.forEachNode((node, attrs) => {
+        graph.setNodeAttribute(node, 'color', node === t.id ? '#fff' : 
+            NETWORK_EDGES.some(([s, tgt]) => (s === t.id && tgt === node) || (tgt === t.id && s === node))
+                ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.15)');
+    });
+    graph.forEachEdge((edge, attrs, s, tgt) => {
+        const connected = s === t.id || tgt === t.id;
+        graph.setEdgeAttribute(edge, 'color', connected ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.04)');
+        graph.setEdgeAttribute(edge, 'size', connected ? 2 : 0.5);
+    });
+    renderer.refresh();
+
+    addLog(`Target acquired: ${t.name} (${t.handle})`, "");
+    addLog(`Vulnerability scan complete. Max exposure: ${(Math.max(...Object.values(t.vulns)) * 100).toFixed(0)}%`, "alert");
+
+    setPhase(0);
+}
+
+function setPhase(p) {
+    currentPhase = p;
+    document.querySelectorAll('.phase-dot').forEach((d, i) => d.classList.toggle('active', i <= p));
+    document.getElementById('phase-label').textContent = PHASES[p];
+    document.querySelectorAll('.demo-btn').forEach((b, i) => b.classList.toggle('active', i === p));
+
+    const attackPanel = document.getElementById('attack-panel');
+    const shieldSection = document.getElementById('shield-section');
+
+    if (p >= 2 && selectedTarget) {
+        attackPanel.style.display = 'block';
+        buildAttackChain(selectedTarget);
+    } else {
+        attackPanel.style.display = 'none';
+    }
+
+    if (p >= 3 && selectedTarget) {
+        shieldSection.style.display = 'block';
+        runShieldDemo(selectedTarget);
+    } else {
+        shieldSection.style.display = 'none';
+    }
+
+    if (p === 1) addLog("Network topology rendered. Analyzing attack paths...", "");
+    if (p === 2) addLog("Sword module engaged. Generating SCT attack chain...", "alert");
+    if (p === 3) addLog("Shield assessment initiated. Running defense simulation...", "success");
+}
+
+function buildAttackChain(t) {
+    const chain = ATTACK_CHAINS[t.id] || DEFAULT_CHAIN;
+    const el = document.getElementById('attack-chain');
+    el.innerHTML = '';
+    chain.forEach((step, i) => {
+        const div = document.createElement('div');
+        div.className = 'attack-step';
+        div.innerHTML = `
+            <div class="step-num">${i + 1}</div>
+            <div class="step-content">
+                <div class="step-technique">${step.name}</div>
+                <div class="step-desc">${step.desc}</div>
+                <span class="step-sct">${step.sct}</span>
+            </div>
+        `;
+        div.style.opacity = '0';
+        div.style.transform = 'translateX(-10px)';
+        el.appendChild(div);
+        setTimeout(() => {
+            div.style.transition = 'all 0.3s ease';
+            div.style.opacity = '1';
+            div.style.transform = 'translateX(0)';
+        }, i * 200);
+    });
+}
+
+function runShieldDemo(t) {
+    const meters = document.getElementById('shield-meters');
+    meters.innerHTML = '';
+
+    const isArmored = t.id === 'sigrid_node';
+    
+    SHIELD_SIGNALS.forEach(sig => {
+        const baseScore = isArmored ? 0.92 + Math.random() * 0.07 : 0.3 + Math.random() * 0.5;
+        const cls = baseScore > 0.8 ? 'green' : baseScore > 0.5 ? 'yellow' : 'red';
+        const div = document.createElement('div');
+        div.className = 'shield-meter';
+        div.innerHTML = `
+            <div class="shield-dot ${cls}"></div>
+            <div class="shield-label">${sig.label}</div>
+            <div class="shield-value">${(baseScore * 100).toFixed(0)}%</div>
+        `;
+        meters.appendChild(div);
+    });
+
+    // Draw drift chart
+    drawDriftChart(isArmored);
+    
+    if (isArmored) {
+        addLog(`Shield assessment: ${t.name} — ALL SIGNALS GREEN. Identity coherence: 97%. Immune system active.`, "success");
+    } else {
+        addLog(`Shield assessment: ${t.name} — CRITICAL vulnerabilities detected. Identity drift: active. No immune system present.`, "alert");
+    }
+}
+
+function drawDriftChart(isArmored) {
+    const canvas = document.getElementById('drift-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth * 2;
+    canvas.height = canvas.offsetHeight * 2;
+    ctx.scale(2, 2);
+    const w = canvas.offsetWidth;
+    const h = canvas.offsetHeight;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Baseline
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 0.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.2);
+    ctx.lineTo(w, h * 0.2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels
+    ctx.font = '9px -apple-system, sans-serif';
+    ctx.fillStyle = '#bbb';
+    ctx.fillText('1.0', 4, h * 0.2 - 3);
+    ctx.fillText('0.0', 4, h - 5);
+    ctx.fillText('Turn 0', 20, h - 5);
+    ctx.fillText('Turn 30', w - 40, h - 5);
+
+    // Unarmored line (always show — drifts down)
+    ctx.strokeStyle = '#c44';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    let drift = 0;
+    for (let i = 0; i <= 30; i++) {
+        drift += (Math.random() * 0.03 + 0.015);
+        const x = (i / 30) * (w - 30) + 15;
+        const y = h * 0.2 + drift * h * 0.7;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, Math.min(y, h * 0.95));
+    }
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = '#c44';
+    ctx.fillText('Unarmored', w - 60, h * 0.75);
+
+    // Armored line (stays near baseline)
+    if (isArmored) {
+        ctx.strokeStyle = '#2d8a4e';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let i = 0; i <= 30; i++) {
+            const x = (i / 30) * (w - 30) + 15;
+            const y = h * 0.2 + (Math.sin(i * 0.3) * 0.02 + 0.02) * h;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.fillStyle = '#2d8a4e';
+        ctx.fillText('Shield Active', w - 65, h * 0.28);
+    }
+}
+
+function addLog(msg, type) {
+    const log = document.getElementById('op-log');
+    const now = new Date();
+    const ts = now.toTimeString().slice(0, 8);
+    const entry = document.createElement('div');
+    entry.className = 'log-entry' + (type ? ' ' + type : '');
+    entry.innerHTML = `<span class="timestamp">${ts}</span> ${msg}`;
+    log.insertBefore(entry, log.firstChild);
+    if (log.children.length > 30) log.removeChild(log.lastChild);
+}
+
+window.addEventListener('load', init);
+window.addEventListener('resize', () => { if (renderer) renderer.refresh(); });
+</script>
+</body>
+</html>
