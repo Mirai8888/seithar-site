@@ -196,9 +196,9 @@ body {
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/graphology/0.25.4/graphology.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2@0.10.1/build/graphology-layout-forceatlas2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2/build/graphology-layout-forceatlas2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/2.4.0/sigma.min.js"></script>
 <script>
 // Demo data — pre-hydrated from collector DB
 const TARGETS = [
@@ -348,8 +348,7 @@ function initGraph() {
     });
 
     // Layout
-    const fa2 = graphologyLayoutForceAtlas2;
-    fa2.assign(graph, { iterations: 100, settings: { gravity: 1, scalingRatio: 10, strongGravityMode: true } });
+    forceAtlas2.assign(graph, { iterations: 100, settings: { gravity: 1, scalingRatio: 10, strongGravityMode: true } });
 
     renderer = new Sigma(graph, document.getElementById('graph-container'), {
         renderLabels: true,
