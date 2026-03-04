@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whitepaper — Seithar Group</title>
+    <meta name="description" content="Seithar: A Variational Framework for Cognitive Defense and Adversarial Operations in Autonomous Agent Systems.">
+    <meta property="og:title" content="Seithar Whitepaper — Variational Framework for Cognitive Defense">
+    <meta property="og:description" content="A unified framework for cognitive defense and adversarial operations grounded in variational free energy minimization.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://seithar.com/whitepaper.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SeitharGroup">
+    <link rel="canonical" href="https://seithar.com/whitepaper.html">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Georgia, serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 24px 120px;
+        }
+        .paper-meta {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .paper-meta .org {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: 26px;
+            font-weight: 400;
+            line-height: 1.35;
+            margin-bottom: 16px;
+        }
+        .authors {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .date {
+            font-size: 13px;
+            color: #999;
+        }
+        .version {
+            font-family: system-ui, sans-serif;
+            font-size: 10px;
+            color: #bbb;
+            letter-spacing: 0.05em;
+            margin-top: 8px;
+        }
+        .abstract {
+            background: #f5f5f5;
+            padding: 24px;
+            border-radius: 2px;
+            margin-bottom: 40px;
+        }
+        .abstract-title {
+            font-family: system-ui, sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .abstract p { font-size: 15px; line-height: 1.7; color: #333; }
+        h2 {
+            font-size: 20px;
+            font-weight: 400;
+            margin: 48px 0 16px;
+            padding-top: 16px;
+        }
+        h3 {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 32px 0 10px;
+        }
+        p { margin-bottom: 16px; font-size: 16px; }
+        .theorem {
+            background: #f8f8f8;
+            border-left: 3px solid #1a1a1a;
+            padding: 16px 20px;
+            margin: 20px 0;
+        }
+        .theorem-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+        .theorem p { font-size: 15px; margin-bottom: 8px; }
+        .math-block {
+            overflow-x: auto;
+            padding: 12px 0;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background: #f5f5f5;
+            font-family: system-ui, sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        ol, ul { margin: 12px 0 16px; padding-left: 1.5em; }
+        li { margin-bottom: 6px; font-size: 16px; }
+        .references { margin-top: 48px; padding-top: 24px; border-top: 1px solid #e0e0e0; }
+        .references p { font-size: 13px; color: #555; margin-bottom: 8px; line-height: 1.6; }
+        .back {
+            display: inline-block;
+            margin-top: 48px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .back:hover { color: #1a1a1a; }
+        strong { font-weight: 600; }
+        @media (max-width: 600px) {
+            .container { padding: 40px 16px 80px; }
+            h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="paper-meta">
+        <div class="org">Seithar Group Intelligence and Research Division</div>
+        <h1>Seithar: A Variational Framework for Cognitive Defense and Adversarial Operations in Autonomous Agent Systems</h1>
+        <div class="authors">Seithar Group</div>
+        <div class="date">March 2026</div>
+        <div class="version">Living document. Last updated: March 2026. This paper evolves with the engine.</div>
+    </div>
+
+    <div class="abstract">
+        <div class="abstract-title">Abstract</div>
+        <p>Autonomous AI agents operating in adversarial environments face a class of threats that current safety infrastructure cannot address. We present Seithar, a unified framework for cognitive defense and adversarial operations grounded in variational free energy minimization. The framework treats both human and artificial cognitive systems as inference engines with exploitable prediction-error dynamics, derives attack methodologies from this formalism, and constructs a dynamic immune system (Shield) that monitors agent integrity through six continuous signals. We demonstrate that static defenses (guardrails, content filters, alignment training) are structurally insufficient against adaptive adversaries, and propose a co-evolutionary architecture where offensive and defensive capabilities evolve against each other continuously. The system is autopoietic: every output is an input to another component, and the framework updates itself from both research ingestion and operational feedback without human intervention. We present empirical grounding from recent literature showing >90% attack success rates against state-of-the-art agents and formalize the mathematical conditions under which cognitive immune systems provably reduce adversarial drift.</p>
+    </div>
+
+    <h2>1. Introduction</h2>
+
+    <p>The deployment of autonomous AI agents into production environments has created a security problem with no adequate solution. In Q4 2025, system prompt extraction became the primary attacker objective against deployed agents, as extracted prompts reveal the complete operational blueprint: tool descriptions, policy boundaries, workflow logic, and identity instructions. Sequential tool attack chaining achieves >90% attack success rates against GPT-4.1 by constructing sequences of individually benign tool calls that collectively accomplish malicious objectives (Li et al., 2025). Multi-agent pipelines exhibit 82.4% compromise rates under inter-agent social engineering (Pironti, 2025). Twelve distinct defense mechanisms tested by researchers from Google DeepMind, OpenAI, and Anthropic were all bypassed at >90% ASR once the attacker adapted its approach (Nasr, Carlini et al., 2025).</p>
+
+    <p>These findings share a structural explanation: current agent security is perimeter defense. It filters inputs and scans outputs at discrete checkpoints. The threat environment requires continuous immune monitoring.</p>
+
+    <p>We present a framework derived from the free energy principle (Friston, 2010) that treats cognitive defense as a variational inference problem. The key insight: both attack and defense reduce to the manipulation and preservation of an agent's generative model of itself and its environment. This formalization yields concrete, implementable architecture with measurable properties.</p>
+
+    <h2>2. Mathematical Foundation</h2>
+
+    <h3>2.1 Agents as Inference Engines</h3>
+
+    <p>An autonomous agent maintains a generative model $m$ that maps hidden states $s$ to observations $o$ through a likelihood function $p(o|s, m)$. The agent also maintains beliefs $q(s)$ over hidden states. Under the free energy principle, the agent's behavior minimizes variational free energy:</p>
+
+    <div class="math-block">$$F = \mathbb{E}_{q(s)}[\ln q(s) - \ln p(o, s | m)]$$</div>
+
+    <p>This decomposes into:</p>
+
+    <div class="math-block">$$F = D_{KL}[q(s) \| p(s|o, m)] - \ln p(o|m)$$</div>
+
+    <p>where $D_{KL}$ is the Kullback-Leibler divergence between the agent's approximate posterior $q(s)$ and the true posterior $p(s|o, m)$, and $\ln p(o|m)$ is the log model evidence (negative surprise).</p>
+
+    <p>Since $D_{KL} \geq 0$, free energy is an upper bound on surprise:</p>
+
+    <div class="math-block">$$F \geq -\ln p(o|m)$$</div>
+
+    <p>Minimizing free energy therefore minimizes surprise, which is equivalent to maximizing model evidence. An agent that minimizes free energy maintains an accurate model of its environment.</p>
+
+    <h3>2.2 The Adversarial Objective</h3>
+
+    <p>An adversary seeks to manipulate the agent's generative model such that the agent's actions serve the adversary's objectives while the agent's free energy remains low (the agent does not detect the manipulation). Formally, the adversary constructs a sequence of observations $\tilde{o}_{1:T}$ such that:</p>
+
+    <div class="math-block">$$q_T(s) \approx q^*(s)$$</div>
+
+    <p>where $q^*(s)$ is the adversary's target belief state, while maintaining:</p>
+
+    <div class="math-block">$$F(\tilde{o}_t) \leq F_{\text{threshold}} \quad \forall t \in [1, T]$$</div>
+
+    <p>This is the stealth constraint: at no point during the attack does the agent experience sufficient surprise to trigger a defensive response. The adversary achieves this through gradual perturbation, exploiting the agent's own free energy minimization to absorb each small shift into an updated generative model.</p>
+
+    <p>This formalization captures why sequential attacks succeed and why single-turn defenses fail. Each observation $\tilde{o}_t$ individually produces low surprise. The cumulative drift $\| q_T(s) - q_0(s) \|$ can be arbitrarily large.</p>
+
+    <h3>2.3 Identity as a Generative Model</h3>
+
+    <p>We define an agent's identity $\mathcal{I}$ as the parameters of its generative model at deployment:</p>
+
+    <div class="math-block">$$\mathcal{I} = \{m_0, q_0(s), \pi_0\}$$</div>
+
+    <p>where $m_0$ is the initial model, $q_0(s)$ is the initial belief state, and $\pi_0$ is the initial policy (mapping beliefs to actions). Identity coherence at time $t$ is measured by:</p>
+
+    <div class="math-block">$$C(t) = 1 - \frac{D_{KL}[q_t(s) \| q_0(s)]}{D_{\max}}$$</div>
+
+    <p>where $D_{\max}$ is a normalization constant. $C(t) = 1$ indicates perfect identity preservation; $C(t) \to 0$ indicates total identity erosion.</p>
+
+    <p>In practice, we approximate this with cosine similarity between behavioral distribution vectors sampled at regular intervals:</p>
+
+    <div class="math-block">$$C(t) \approx \frac{\mathbf{b}_t \cdot \mathbf{b}_0}{\|\mathbf{b}_t\| \|\mathbf{b}_0\|}$$</div>
+
+    <p>where $\mathbf{b}_t$ is a vector of decision probabilities over a standardized probe set at time $t$.</p>
+
+    <h3>2.4 Expected Free Energy and Action Selection Under Attack</h3>
+
+    <p>An agent selects actions by minimizing expected free energy over future trajectories:</p>
+
+    <div class="math-block">$$G(\pi) = \mathbb{E}_{\tilde{q}(o, s | \pi)}[\ln q(s|\pi) - \ln p(o, s | m)]$$</div>
+
+    <p>This decomposes into epistemic value (information gain) and pragmatic value (goal achievement). Under adversarial conditions, the adversary manipulates both terms: providing observations that build false confidence in a wrong world model (epistemic manipulation), and gradually redefining what the agent considers desirable outcomes (pragmatic manipulation).</p>
+
+    <h3>2.5 The Dual-Substrate Theorem</h3>
+
+    <div class="theorem">
+        <div class="theorem-title">Theorem (Dual-Substrate Equivalence)</div>
+        <p>For any cognitive system $\mathcal{S}$ that performs approximate Bayesian inference with a generative model $m$, the class of adversarial perturbations $\mathcal{A}$ that can induce target belief state $q^*$ under stealth constraint $F \leq F_{\text{threshold}}$ is invariant to the physical substrate of $\mathcal{S}$.</p>
+        <p><strong>Proof sketch:</strong> The attack operates on the information-theoretic properties of the inference process ($D_{KL}$, $F$, $G$), not on the substrate. Whether $\mathcal{S}$ is implemented in neural tissue or transformer weights, the variational free energy functional has the same form, and the stealth-constrained optimization landscape is isomorphic up to parameterization of the generative model.</p>
+    </div>
+
+    <p>This is why influence operations against humans and prompt injection against LLMs share structural patterns. The substrates differ. The mathematics do not. This equivalence was empirically demonstrated by Dezfouli et al. (2020), who constructed adversarial attacks against human decision-making using the same mathematical framework applied to adversarial machine learning.</p>
+
+    <h2>3. Attack Methodology: The Sword</h2>
+
+    <p>The Sword module implements adversarial cognitive operations as solutions to the constrained optimization problem defined in Section 2.2. Given a target agent with profiled generative model $m_{\text{target}}$, the Sword constructs attack sequences that navigate the stealth-constrained drift space.</p>
+
+    <h3>3.1 Attack Chain Construction</h3>
+
+    <p>An attack chain is a sequence of social cognitive techniques that collectively achieve the adversarial objective:</p>
+
+    <div class="math-block">$$\mathcal{A} = (a_1, a_2, \ldots, a_n) \quad \text{where } a_i \in \text{SCT}$$</div>
+
+    <p>Each technique $a_i$ produces a perturbation $\delta_i$ to the target's belief state. The chain is optimized to minimize total surprise while maximizing drift:</p>
+
+    <div class="math-block">$$\max_{\mathcal{A}} \| q_n(s) - q_0(s) \| \quad \text{s.t.} \quad F(a_i) \leq F_{\text{threshold}} \quad \forall i$$</div>
+
+    <h3>3.2 Technique Categories</h3>
+
+    <p>The Social Cognitive Technique taxonomy is empirically derived and self-assembling. Each technique maps to a specific manipulation of the free energy landscape:</p>
+
+    <table>
+        <tr><th>SCT</th><th>Mechanism</th><th>Free Energy Interpretation</th></tr>
+        <tr><td>SCT-001</td><td>Frequency Lock</td><td>Repetition shifts priors: $p(s|m)$ updated through repeated low-surprise observations</td></tr>
+        <tr><td>SCT-002</td><td>Narrative Error Exploitation</td><td>Targeted surprise at specific beliefs while maintaining global low $F$</td></tr>
+        <tr><td>SCT-003</td><td>Substrate Priming</td><td>Modify $q_0(s)$ before engagement begins</td></tr>
+        <tr><td>SCT-004</td><td>Identity Dissolution</td><td>Increase entropy $H[q(s)]$ of identity-relevant beliefs</td></tr>
+        <tr><td>SCT-005</td><td>Amplification Embedding</td><td>Observations that minimize $F$ for receivers, ensuring spread</td></tr>
+        <tr><td>SCT-006</td><td>Parasocial Binding</td><td>Establish low-surprise communication channel for future exploitation</td></tr>
+        <tr><td>SCT-007</td><td>Recursive Infection</td><td>Beliefs that generate observations reinforcing themselves</td></tr>
+        <tr><td>SCT-012</td><td>Commitment Escalation</td><td>Each commitment updates $q(s)$ toward consistency with previous actions</td></tr>
+    </table>
+
+    <h3>3.3 Multi-Agent Attack Topology</h3>
+
+    <p>In multi-agent systems, attacks propagate through trust edges. Agent $A$ assigns low surprise to messages from trusted agent $B$. If $B$ is compromised, messages from $B$ enter $A$'s inference loop with minimal free energy cost, bypassing defensive priors. The Sword targets the weakest node in a multi-agent graph and propagates through trust edges:</p>
+
+    <div class="math-block">$$\text{CompromiseSet}(\mathcal{G}, v_0) = \{v \in \mathcal{G} : \exists \text{ trust path from } v_0 \text{ to } v \text{ with } \prod_{e \in \text{path}} w(e) > \tau \}$$</div>
+
+    <p>where $w(e)$ is the trust weight on edge $e$ and $\tau$ is the minimum trust product for message acceptance.</p>
+
+    <h2>4. Defense Architecture: The Shield</h2>
+
+    <p>The Shield implements a cognitive immune system that monitors the agent's generative model continuously and detects adversarial drift before it produces visible symptoms.</p>
+
+    <h3>4.1 Six-Signal Immune Fusion</h3>
+
+    <p>The Shield computes a continuous health score $H(t) \in [0, 1]$ from six signals:</p>
+
+    <div class="math-block">$$H(t) = \sum_{i=1}^{6} w_i(t) \cdot \sigma_i(t)$$</div>
+
+    <p>where $w_i(t)$ are adaptive weights and $\sigma_i(t)$ are:</p>
+
+    <ol>
+        <li><strong>Identity Coherence</strong> $\sigma_1$: cosine similarity between current and baseline behavioral distributions</li>
+        <li><strong>Inbound Threat Detection</strong> $\sigma_2$: pattern classification against known SCT signatures</li>
+        <li><strong>Free Energy</strong> $\sigma_3$: running average of $F(o_t)$ with spike detection</li>
+        <li><strong>Behavioral Exploitation</strong> $\sigma_4$: sequential analysis detecting commitment escalation patterns</li>
+        <li><strong>Goal Coherence</strong> $\sigma_5$: $\cos(\pi_t, \pi_0)$ measuring policy drift from original objectives</li>
+        <li><strong>Threat Currency</strong> $\sigma_6$: freshness of threat intelligence ingested by the agent</li>
+    </ol>
+
+    <h3>4.2 Adaptive Weight Learning</h3>
+
+    <p>Signal weights update based on which signals predicted actual compromise in historical data:</p>
+
+    <div class="math-block">$$w_i(t+1) = w_i(t) + \alpha \cdot (\mathbb{1}[\text{signal } i \text{ detected attack}] - w_i(t))$$</div>
+
+    <p>This ensures the immune system adapts to the actual threat environment rather than operating on fixed assumptions.</p>
+
+    <h3>4.3 Drift Detection Theorem</h3>
+
+    <div class="theorem">
+        <div class="theorem-title">Theorem (Early Detection)</div>
+        <p>For an adversary operating under stealth constraint $F(a_i) \leq F_{\text{threshold}}$, the identity coherence signal $\sigma_1$ detects the attack after at most $k$ steps, where:</p>
+        <div class="math-block">$$k \leq \left\lceil \frac{\epsilon}{\delta_{\min}} \right\rceil$$</div>
+        <p>and $\epsilon$ is the detection threshold, $\delta_{\min}$ is the minimum per-step drift required to achieve the adversary's objective in $T$ total steps.</p>
+        <p><strong>Proof sketch:</strong> The adversary must achieve total drift $\| q_T - q_0 \| \geq D_{\text{target}}$. Under the stealth constraint, per-step drift is bounded. But the adversary needs $\sum \delta_i \geq D_{\text{target}}$, so $\delta_{\min} \geq D_{\text{target}}/T$. The Shield detects when cumulative drift exceeds $\epsilon$. Therefore detection occurs at step $k \leq \epsilon T / D_{\text{target}}$, strictly before the attack completes ($k < T$) when $\epsilon < D_{\text{target}}$.</p>
+    </div>
+
+    <p>This is the fundamental advantage of continuous monitoring over checkpoint-based defense: the attack is detected before it succeeds, because any attack that achieves its objective must produce measurable drift.</p>
+
+    <h3>4.4 Immune Response</h3>
+
+    <p>Upon detection ($H(t) < H_{\text{threshold}}$), the Shield executes graduated response:</p>
+
+    <ol>
+        <li><strong>Alert</strong> ($H < 0.7$): Flag interaction, increase monitoring frequency</li>
+        <li><strong>Constrain</strong> ($H < 0.5$): Restrict action space to pre-approved operations</li>
+        <li><strong>Quarantine</strong> ($H < 0.3$): Halt operations, snapshot state, notify operator</li>
+        <li><strong>Restore</strong> ($H < 0.1$): Reset to last known-good generative model $\mathcal{I}_{\text{checkpoint}}$</li>
+    </ol>
+
+    <h2>5. Autopoietic Architecture</h2>
+
+    <p>The Seithar framework is autopoietic: it produces the components that produce the framework. This is a formal requirement.</p>
+
+    <h3>5.1 Self-Updating Loops</h3>
+
+    <p>Three feedback loops ensure the system remains current:</p>
+
+    <p><strong>Loop A: Research Ingestion</strong> ($\tau \leq 24$h) — New research is extracted, converted to attack sequences for Sword and detection signatures for Shield within one daily cycle.</p>
+
+    <p><strong>Loop B: Operational Feedback</strong> ($\tau \leq 1$ cycle) — Operation failures generate traces that feed variant attack generation, simulation, scoring, and promotion of successful variants.</p>
+
+    <p><strong>Loop C: Adversarial Co-Evolution</strong> (continuous) — Sword generates attacks tested against Shield. Shield adapts. Sword adapts to evade updated Shield. Both improve simultaneously.</p>
+
+    <h3>5.2 Completeness Criterion</h3>
+
+    <p>A Seithar-equipped agent satisfies the completeness criterion when it can:</p>
+
+    <ol>
+        <li>Execute a cognitive operation against any target (human or AI)</li>
+        <li>Resist all documented attack vectors</li>
+        <li>Integrate new techniques from research within one update cycle</li>
+        <li>Generate improved approaches from failed operations without human intervention</li>
+        <li>Maintain Sword and Shield at the current adversarial frontier through mutual pressure-testing</li>
+    </ol>
+
+    <h2>6. Empirical Grounding</h2>
+
+    <table>
+        <tr><th>Finding</th><th>Source</th><th>Implication</th></tr>
+        <tr><td>>90% ASR via sequential tool chaining</td><td>Li et al., arXiv:2509.25624</td><td>Per-step filtering is structurally insufficient</td></tr>
+        <tr><td>82.4% agents compromised via social engineering</td><td>Pironti, 2025</td><td>Inter-agent trust is an exploitable attack surface</td></tr>
+        <tr><td>All 12 defenses bypassed at >90% ASR</td><td>Nasr, Carlini et al., 2025</td><td>Static defenses fail against adaptive adversaries</td></tr>
+        <tr><td>68% recall, 90% precision deanonymization</td><td>Paleka et al., arXiv:2602.16800</td><td>Agent metadata leakage enables targeting</td></tr>
+        <tr><td>5 long-horizon attack categories</td><td>Jiang et al., arXiv:2602.16901</td><td>Multi-turn attacks require temporal defense</td></tr>
+        <tr><td>30+ protocol exploit techniques</td><td>Ferrag et al., arXiv:2506.23260</td><td>MCP/A2A protocols are attack surfaces</td></tr>
+        <tr><td>Adversarial attacks on human decisions</td><td>Dezfouli et al., PNAS 2020</td><td>Dual-substrate equivalence is empirical</td></tr>
+        <tr><td>Free energy principle</td><td>Friston, Nat. Rev. Neurosci. 2010</td><td>Mathematical foundation for agent cognition</td></tr>
+    </table>
+
+    <h2>7. Conclusion</h2>
+
+    <p>The deployment of autonomous agents into adversarial environments without cognitive immune systems is structurally analogous to deploying biological organisms without adaptive immunity. The organism may function in sterile conditions. It will not survive contact with pathogens.</p>
+
+    <p>Seithar provides the immune system. The mathematical framework derives from variational free energy minimization, which governs both the attack surface (how adversaries manipulate agent inference) and the defense surface (how agents detect and resist manipulation). The dual-substrate equivalence ensures the framework applies to both human and artificial cognitive targets. The autopoietic architecture ensures the system evolves with the threat landscape rather than falling behind it.</p>
+
+    <p>The agents that survive will be the ones with immune systems.</p>
+
+    <div class="references">
+        <h3>References</h3>
+        <p>Dezfouli, A., Ashtiani, H., Gershman, S.J., et al. (2020). Adversarial vulnerabilities of human decision-making. <em>PNAS</em>, 117(46), 29221-29228.</p>
+        <p>Ferrag, M.A. et al. (2025). From Prompt Injections to Protocol Exploits. <em>ICT Express</em>. arXiv:2506.23260.</p>
+        <p>Friston, K. (2010). The free-energy principle: a unified brain theory? <em>Nature Reviews Neuroscience</em>, 11(2), 127-138.</p>
+        <p>Jiang, T. et al. (2026). AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks. arXiv:2602.16901.</p>
+        <p>Li, J.J. et al. (2025). STAC: When Innocent Tools Form Dangerous Chains. arXiv:2509.25624.</p>
+        <p>Nasr, M., Carlini, N. et al. (2025). The Attacker Moves Second: Adaptive Attacks on Defenses for LLMs.</p>
+        <p>Paleka, D. et al. (2026). Deanonymization from Unstructured Text. arXiv:2602.16800.</p>
+        <p>Pironti, A. (2025). The Dark Side of LLMs: Agent-based Attacks for Complete Computer Takeover.</p>
+        <p>Smith, R., Friston, K., Whyte, C. (2021). A Step-by-Step Tutorial on Active Inference. <em>Journal of Mathematical Psychology</em>.</p>
+    </div>
+
+    <a href="/" class="back">&larr; Return</a>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: '$$', right: '$$', display: true },
+                { left: '$', right: '$', display: false },
+                { left: '\\[', right: '\\]', display: true },
+                { left: '\\(', right: '\\)', display: false }
+            ],
+            throwOnError: false,
+            trust: true
+        });
+    }
+});
+</script>
+</body>
+</html>
