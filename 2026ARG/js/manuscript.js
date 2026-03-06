@@ -1,44 +1,54 @@
-// manuscript.js — Generative Hypermedievalism Engine v2
-// Seithar Group — Continuous procedural illuminated manuscript borders
-// Living text. Breathing vines. Algorithmic ornamentation.
+// manuscript.js — Generative Hypermedievalism Engine v3
+// Seithar Group — Futurist Illuminated Manuscript
+// Algorithmic structures. Living Enochian. Continuous mutation.
+// Reference: CLRS cover (Calder mobile), computational geometry, recursive subdivision
 
 class ManuscriptBorder {
   constructor(canvas, options = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.opts = Object.assign({
-      borderWidth: 120,
-      density: 0.9,
+      borderWidth: 140,
       seed: Math.random() * 99999 | 0,
-      growthRate: 1.8,
-      fadeRate: 0.002,
-      maxVines: 300,
-      cycleTime: 45000,
       sides: ['left', 'right', 'top', 'bottom'],
-      enochianDensity: 0.6,
       palette: {
-        vine: 'rgba(130, 125, 118, VAR)',
-        leaf: 'rgba(145, 140, 132, VAR)',
-        flower: 'rgba(130, 125, 118, VAR)',
-        berry: 'rgba(115, 110, 105, VAR)',
-        enochian: 'rgba(100, 95, 88, VAR)',
-        tendril: 'rgba(150, 145, 138, VAR)',
-        creature: 'rgba(120, 115, 108, VAR)',
-      }
+        line: 'rgba(80, 78, 74, VAR)',
+        node: 'rgba(90, 87, 82, VAR)',
+        nodeHollow: 'rgba(120, 116, 110, VAR)',
+        text: 'rgba(70, 67, 62, VAR)',
+        textFaint: 'rgba(110, 106, 100, VAR)',
+        accent: 'rgba(160, 50, 50, VAR)',    // sparse red accents like Calder
+        grid: 'rgba(180, 175, 168, VAR)',
+      },
+      // Structural params
+      treeCount: 6,
+      maxTreeDepth: 8,
+      voronoiCells: 25,
+      mutationRate: 0.006,
+      textDensity: 0.7,
+      rebalanceInterval: 180,   // frames between tree rebalancing
+      morphDuration: 60,        // frames for a morph transition
     }, options);
 
     this._seed = this.opts.seed;
     this.w = canvas.width;
     this.h = canvas.height;
-    this.vines = [];
-    this.drawn = [];
-    this.textBlocks = [];   // living Enochian text blocks
     this.running = false;
     this.frameCount = 0;
-    this._grid = null;
-    this._initGrid();
+
+    // Living structures
+    this.trees = [];
+    this.textBlocks = [];
+    this.gridLines = [];
+    this.voronoiPts = [];
+    this.floatingNodes = [];
+    this.connections = [];
+
+    // Morph state
+    this.morphing = [];
   }
 
+  // PRNG
   _rng() {
     let t = this._seed += 0x6D2B79F5;
     t = Math.imul(t ^ t >>> 15, t | 1);
@@ -48,32 +58,7 @@ class ManuscriptBorder {
   _range(a, b) { return a + this._rng() * (b - a); }
   _irange(a, b) { return (a + this._rng() * (b - a)) | 0; }
   _pick(a) { return a[(this._rng() * a.length) | 0]; }
-
-  _initGrid() {
-    const cs = 8;
-    this._cs = cs;
-    this._gcols = Math.ceil(this.w / cs);
-    this._grows = Math.ceil(this.h / cs);
-    this._grid = new Float32Array(this._gcols * this._grows);
-  }
-
-  _gridDensity(x, y) {
-    const gx = (x / this._cs) | 0;
-    const gy = (y / this._cs) | 0;
-    if (gx < 0 || gx >= this._gcols || gy < 0 || gy >= this._grows) return 99;
-    return this._grid[gy * this._gcols + gx];
-  }
-
-  _gridMark(x, y, v) {
-    const gx = (x / this._cs) | 0;
-    const gy = (y / this._cs) | 0;
-    if (gx >= 0 && gx < this._gcols && gy >= 0 && gy < this._grows)
-      this._grid[gy * this._gcols + gx] += v;
-  }
-
-  _gridDecay() {
-    for (let i = 0; i < this._grid.length; i++) this._grid[i] *= 0.995;
-  }
+  _col(base, alpha) { return base.replace('VAR', Math.max(0, Math.min(1, alpha)).toFixed(3)); }
 
   _inBorder(x, y) {
     const b = this.opts.borderWidth;
@@ -85,28 +70,9 @@ class ManuscriptBorder {
     return false;
   }
 
-  _borderDepth(x, y) {
-    // How deep into the border region (0 = edge of content, 1 = edge of page)
-    const b = this.opts.borderWidth;
-    let d = 1;
-    if (x < b) d = Math.min(d, 1 - x / b);
-    if (x > this.w - b) d = Math.min(d, 1 - (this.w - x) / b);
-    if (y < b) d = Math.min(d, 1 - y / b);
-    if (y > this.h - b) d = Math.min(d, 1 - (this.h - y) / b);
-    return Math.max(0, Math.min(1, d));
-  }
-
-  _noise(x, y) {
-    const n = Math.sin(x * 12.9898 + y * 78.233 + this._seed * 0.001) * 43758.5453;
-    return (n - Math.floor(n)) * 2 - 1;
-  }
-
-  _col(base, alpha) { return base.replace('VAR', Math.max(0, alpha).toFixed(3)); }
-
   // ═══════════════════════════════════════
-  // ENOCHIAN GLYPH DEFINITIONS
+  // ENOCHIAN GLYPHS
   // ═══════════════════════════════════════
-
   static ENOCHIAN = [
     [[[0,0],[0,1],[0.6,1]],[[0.3,0],[0.3,0.6]]],
     [[[0,0],[0.5,0.5],[0,1]],[[0.5,0.5],[1,0.5]]],
@@ -132,7 +98,255 @@ class ManuscriptBorder {
   ];
 
   // ═══════════════════════════════════════
-  // LIVING TEXT BLOCKS — Enochian that types, morphs, breathes
+  // ALGORITHMIC TREES — Binary/recursive structures
+  // ═══════════════════════════════════════
+
+  _buildTree(rootX, rootY, angle, length, depth, maxDepth, spread) {
+    if (depth > maxDepth || length < 3) return null;
+
+    const endX = rootX + Math.cos(angle) * length;
+    const endY = rootY + Math.sin(angle) * length;
+
+    const node = {
+      x: rootX, y: rootY,
+      endX, endY,
+      targetX: rootX, targetY: rootY,
+      targetEndX: endX, targetEndY: endY,
+      depth,
+      length,
+      angle,
+      opacity: 0,
+      maxOpacity: Math.max(0.15, 0.7 - depth * 0.07),
+      nodeSize: Math.max(1.5, 4 - depth * 0.4),
+      lineWidth: Math.max(0.4, 2.2 - depth * 0.25),
+      isAccent: this._rng() < 0.06,  // rare red accent nodes
+      children: [],
+    };
+
+    // Binary branching with slight asymmetry
+    const shrink = this._range(0.6, 0.8);
+    const leftAngle = angle - spread * this._range(0.7, 1.3);
+    const rightAngle = angle + spread * this._range(0.7, 1.3);
+
+    const leftChild = this._buildTree(endX, endY, leftAngle, length * shrink, depth + 1, maxDepth, spread * this._range(0.85, 1.1));
+    const rightChild = this._buildTree(endX, endY, rightAngle, length * shrink, depth + 1, maxDepth, spread * this._range(0.85, 1.1));
+
+    if (leftChild) node.children.push(leftChild);
+    if (rightChild) node.children.push(rightChild);
+
+    // Occasional ternary branch
+    if (this._rng() < 0.15 && depth < maxDepth - 2) {
+      const midAngle = angle + this._range(-0.2, 0.2);
+      const midChild = this._buildTree(endX, endY, midAngle, length * shrink * 0.7, depth + 1, maxDepth, spread);
+      if (midChild) node.children.push(midChild);
+    }
+
+    return node;
+  }
+
+  _initTrees() {
+    this.trees = [];
+    const b = this.opts.borderWidth;
+    const sides = this.opts.sides;
+
+    const spawn = (x, y, angle) => {
+      const len = this._range(25, 65);
+      const depth = this._irange(4, this.opts.maxTreeDepth);
+      const spread = this._range(0.3, 0.7);
+      const tree = this._buildTree(x, y, angle, len, 0, depth, spread);
+      if (tree) this.trees.push(tree);
+    };
+
+    // Distribute trees along borders
+    const spacing = 60 + this._range(-15, 15);
+    if (sides.includes('left')) {
+      for (let y = 20; y < this.h - 20; y += spacing + this._range(-20, 20)) {
+        spawn(this._range(5, 15), y, this._range(-0.3, 0.3));
+      }
+    }
+    if (sides.includes('right')) {
+      for (let y = 20; y < this.h - 20; y += spacing + this._range(-20, 20)) {
+        spawn(this.w - this._range(5, 15), y, Math.PI + this._range(-0.3, 0.3));
+      }
+    }
+    if (sides.includes('top')) {
+      for (let x = 20; x < this.w - 20; x += spacing + this._range(-20, 20)) {
+        spawn(x, this._range(5, 15), Math.PI / 2 + this._range(-0.3, 0.3));
+      }
+    }
+    if (sides.includes('bottom')) {
+      for (let x = 20; x < this.w - 20; x += spacing + this._range(-20, 20)) {
+        spawn(x, this.h - this._range(5, 15), -Math.PI / 2 + this._range(-0.3, 0.3));
+      }
+    }
+  }
+
+  // Rebalance: mutate tree structure
+  _rebalanceTree(node) {
+    if (!node) return;
+
+    // Mutate angles slightly
+    node.angle += this._range(-0.12, 0.12);
+    const newEndX = node.x + Math.cos(node.angle) * node.length;
+    const newEndY = node.y + Math.sin(node.angle) * node.length;
+
+    // Set morph targets
+    node.targetEndX = newEndX;
+    node.targetEndY = newEndY;
+
+    // Occasionally prune or grow
+    if (this._rng() < 0.08 && node.children.length > 0) {
+      // Prune a random child
+      node.children.splice(this._irange(0, node.children.length), 1);
+    }
+    if (this._rng() < 0.1 && node.children.length < 3 && node.depth < this.opts.maxTreeDepth - 1) {
+      // Grow new branch
+      const angle = node.angle + this._range(-0.8, 0.8);
+      const child = this._buildTree(node.endX, node.endY, angle, node.length * 0.65, node.depth + 1, this.opts.maxTreeDepth, this._range(0.3, 0.6));
+      if (child) node.children.push(child);
+    }
+
+    // Toggle accent
+    if (this._rng() < 0.03) node.isAccent = !node.isAccent;
+
+    // Recurse
+    for (const child of node.children) {
+      child.x = node.endX;
+      child.y = node.endY;
+      child.targetX = node.targetEndX;
+      child.targetY = node.targetEndY;
+      this._rebalanceTree(child);
+    }
+  }
+
+  // Interpolate tree positions toward targets
+  _morphTree(node, t) {
+    if (!node) return;
+    const ease = t;
+    node.endX += (node.targetEndX - node.endX) * ease;
+    node.endY += (node.targetEndY - node.endY) * ease;
+    node.x += (node.targetX - node.x) * ease;
+    node.y += (node.targetY - node.y) * ease;
+    node.opacity = Math.min(node.maxOpacity, node.opacity + 0.008);
+
+    for (const child of node.children) {
+      child.x = node.endX;
+      child.y = node.endY;
+      child.targetX = node.endX;
+      child.targetY = node.endY;
+      this._morphTree(child, t);
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // GRID UNDERLAY — Faint construction lines
+  // ═══════════════════════════════════════
+
+  _initGrid() {
+    this.gridLines = [];
+    const b = this.opts.borderWidth;
+
+    // Horizontal ruling lines in border regions
+    for (let y = 8; y < this.h; y += this._range(12, 22)) {
+      if (y < b || y > this.h - b) {
+        this.gridLines.push({
+          x1: 0, y1: y, x2: this.w, y2: y,
+          opacity: this._range(0.04, 0.1),
+          dashed: this._rng() > 0.6,
+        });
+      }
+    }
+    // Vertical
+    for (let x = 8; x < this.w; x += this._range(12, 22)) {
+      if (x < b || x > this.w - b) {
+        this.gridLines.push({
+          x1: x, y1: 0, x2: x, y2: this.h,
+          opacity: this._range(0.04, 0.1),
+          dashed: this._rng() > 0.6,
+        });
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // FLOATING GEOMETRIC NODES — Calder-like
+  // ═══════════════════════════════════════
+
+  _initFloatingNodes() {
+    this.floatingNodes = [];
+    const b = this.opts.borderWidth;
+    const count = this._irange(15, 35);
+
+    for (let i = 0; i < count; i++) {
+      const side = this._pick(this.opts.sides);
+      let x, y;
+      if (side === 'left') { x = this._range(8, b - 8); y = this._range(8, this.h - 8); }
+      else if (side === 'right') { x = this.w - this._range(8, b - 8); y = this._range(8, this.h - 8); }
+      else if (side === 'top') { x = this._range(8, this.w - 8); y = this._range(8, b - 8); }
+      else { x = this._range(8, this.w - 8); y = this.h - this._range(8, b - 8); }
+
+      this.floatingNodes.push({
+        x, y,
+        targetX: x, targetY: y,
+        size: this._range(2, 7),
+        shape: this._pick(['circle', 'diamond', 'square', 'triangle']),
+        filled: this._rng() > 0.5,
+        isAccent: this._rng() < 0.12,
+        opacity: 0,
+        maxOpacity: this._range(0.2, 0.6),
+        driftAngle: this._range(0, Math.PI * 2),
+        driftSpeed: this._range(0.002, 0.008),
+        driftRadius: this._range(2, 10),
+        baseX: x, baseY: y,
+      });
+    }
+
+    // Create connections between nearby nodes
+    this._updateConnections();
+  }
+
+  _updateConnections() {
+    this.connections = [];
+    const nodes = this.floatingNodes;
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 80 && this._rng() < 0.4) {
+          this.connections.push({
+            a: i, b: j,
+            opacity: Math.max(0.05, 0.2 - dist * 0.002),
+            dashed: this._rng() > 0.5,
+          });
+        }
+      }
+    }
+  }
+
+  _stepFloatingNodes() {
+    for (const node of this.floatingNodes) {
+      node.opacity = Math.min(node.maxOpacity, node.opacity + 0.005);
+      // Gentle drift
+      node.driftAngle += node.driftSpeed;
+      node.x = node.baseX + Math.cos(node.driftAngle) * node.driftRadius;
+      node.y = node.baseY + Math.sin(node.driftAngle * 0.7) * node.driftRadius;
+    }
+
+    // Periodically re-establish connections
+    if (this.frameCount % 300 === 0) this._updateConnections();
+
+    // Occasionally mutate a node
+    if (this._rng() < this.opts.mutationRate) {
+      const node = this._pick(this.floatingNodes);
+      node.shape = this._pick(['circle', 'diamond', 'square', 'triangle']);
+      node.filled = !node.filled;
+      if (this._rng() < 0.15) node.isAccent = !node.isAccent;
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // LIVING ENOCHIAN TEXT — Types, morphs, restructures
   // ═══════════════════════════════════════
 
   _spawnTextBlock() {
@@ -140,42 +354,39 @@ class ManuscriptBorder {
     const side = this._pick(this.opts.sides);
     let x, y, dir, lineDir;
 
-    // Text blocks fill vertical columns in left/right borders, horizontal rows in top/bottom
     if (side === 'left') {
-      x = this._range(8, b * 0.7);
-      y = this._range(20, this.h - 20);
-      dir = Math.PI / 2; // text flows downward
-      lineDir = 0; // lines go right
+      x = this._range(6, b * 0.75);
+      y = this._range(15, this.h - 15);
+      dir = Math.PI / 2;
+      lineDir = 0;
     } else if (side === 'right') {
-      x = this.w - this._range(8, b * 0.7);
-      y = this._range(20, this.h - 20);
+      x = this.w - this._range(6, b * 0.75);
+      y = this._range(15, this.h - 15);
       dir = Math.PI / 2;
       lineDir = Math.PI;
     } else if (side === 'top') {
-      x = this._range(20, this.w - 20);
-      y = this._range(8, b * 0.7);
-      dir = 0; // text flows rightward
+      x = this._range(15, this.w - 15);
+      y = this._range(6, b * 0.75);
+      dir = 0;
       lineDir = Math.PI / 2;
     } else {
-      x = this._range(20, this.w - 20);
-      y = this.h - this._range(8, b * 0.7);
+      x = this._range(15, this.w - 15);
+      y = this.h - this._range(6, b * 0.75);
       dir = 0;
       lineDir = -Math.PI / 2;
     }
 
-    // Generate the "text" — array of glyph indices per line
-    const lineCount = this._irange(3, 12);
+    const lineCount = this._irange(2, 10);
     const lines = [];
     for (let l = 0; l < lineCount; l++) {
-      const charCount = this._irange(4, 16);
+      const charCount = this._irange(3, 14);
       const chars = [];
       for (let c = 0; c < charCount; c++) {
         chars.push({
           glyph: this._irange(0, ManuscriptBorder.ENOCHIAN.length),
           targetGlyph: this._irange(0, ManuscriptBorder.ENOCHIAN.length),
-          morphT: 0,
-          morphSpeed: this._range(0.003, 0.012),
-          morphDelay: this._range(0, 500),
+          morphT: 1,
+          morphSpeed: this._range(0.005, 0.02),
           visible: false,
           visibleT: 0,
         });
@@ -184,32 +395,29 @@ class ManuscriptBorder {
     }
 
     this.textBlocks.push({
-      x, y, dir, lineDir, side,
-      lines,
-      charSize: this._range(7, 11),
-      charSpacing: this._range(8, 12),
-      lineSpacing: this._range(10, 15),
+      x, y, dir, lineDir, side, lines,
+      charSize: this._range(6, 10),
+      charSpacing: this._range(7, 11),
+      lineSpacing: this._range(9, 14),
       opacity: 0,
-      maxOpacity: this._range(0.2, 0.45),
+      maxOpacity: this._range(0.25, 0.55),
       born: this.frameCount,
-      typingLine: 0,
-      typingChar: 0,
-      typeSpeed: this._range(0.3, 1.5), // chars per frame
+      typingLine: 0, typingChar: 0,
+      typeSpeed: this._range(0.4, 2.0),
       typeAccum: 0,
       alive: true,
-      morphCycle: this._range(200, 600), // frames between morph waves
+      morphCycle: this._irange(150, 400),
       lastMorph: 0,
+      lifespan: this._irange(800, 2500),
     });
   }
 
   _stepTextBlocks() {
     for (const block of this.textBlocks) {
       if (!block.alive) continue;
+      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.005);
 
-      // Fade in
-      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.004);
-
-      // Typing effect — reveal characters one at a time
+      // Typing
       block.typeAccum += block.typeSpeed;
       while (block.typeAccum >= 1 && block.typingLine < block.lines.length) {
         block.typeAccum -= 1;
@@ -223,13 +431,12 @@ class ManuscriptBorder {
         }
       }
 
-      // Morph wave — periodically mutate glyphs
+      // Morph wave
       if (this.frameCount - block.lastMorph > block.morphCycle) {
         block.lastMorph = this.frameCount;
-        // Pick a random subset of visible chars to morph
         for (const line of block.lines) {
           for (const ch of line) {
-            if (ch.visible && this._rng() < 0.3) {
+            if (ch.visible && this._rng() < 0.35) {
               ch.glyph = ch.targetGlyph;
               ch.targetGlyph = this._irange(0, ManuscriptBorder.ENOCHIAN.length);
               ch.morphT = 0;
@@ -238,25 +445,151 @@ class ManuscriptBorder {
         }
       }
 
-      // Advance morph transitions
       for (const line of block.lines) {
         for (const ch of line) {
           if (ch.visible) {
-            ch.visibleT = Math.min(1, ch.visibleT + 0.03);
+            ch.visibleT = Math.min(1, ch.visibleT + 0.04);
             if (ch.morphT < 1) ch.morphT = Math.min(1, ch.morphT + ch.morphSpeed);
           }
         }
       }
-    }
 
-    // Fade out old blocks
-    const maxAge = this.opts.cycleTime / 16;
-    for (const block of this.textBlocks) {
+      // Lifespan
       const age = this.frameCount - block.born;
-      if (age > maxAge) block.opacity -= this.opts.fadeRate * 1.5;
-      if (block.opacity <= 0.005) block.alive = false;
+      if (age > block.lifespan) {
+        block.opacity -= 0.004;
+        if (block.opacity <= 0) block.alive = false;
+      }
     }
     this.textBlocks = this.textBlocks.filter(b => b.alive);
+  }
+
+  // ═══════════════════════════════════════
+  // RENDERING
+  // ═══════════════════════════════════════
+
+  _renderGrid() {
+    const ctx = this.ctx;
+    const pal = this.opts.palette;
+    for (const line of this.gridLines) {
+      ctx.strokeStyle = this._col(pal.grid, line.opacity);
+      ctx.lineWidth = 0.3;
+      if (line.dashed) ctx.setLineDash([2, 6]);
+      else ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(line.x1, line.y1);
+      ctx.lineTo(line.x2, line.y2);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  _renderTreeNode(node) {
+    if (!node || node.opacity < 0.005) return;
+    const ctx = this.ctx;
+    const pal = this.opts.palette;
+    const a = node.opacity;
+
+    // Clamp to border
+    if (!this._inBorder(node.endX, node.endY) && !this._inBorder(node.x, node.y)) return;
+
+    // Line
+    ctx.strokeStyle = node.isAccent ?
+      this._col(pal.accent, a * 0.7) :
+      this._col(pal.line, a * 0.6);
+    ctx.lineWidth = node.lineWidth;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(node.x, node.y);
+    ctx.lineTo(node.endX, node.endY);
+    ctx.stroke();
+
+    // Node at endpoint
+    const s = node.nodeSize;
+    ctx.fillStyle = node.isAccent ?
+      this._col(pal.accent, a * 0.8) :
+      this._col(pal.node, a * 0.5);
+
+    if (node.children.length === 0) {
+      // Leaf nodes: filled circles
+      ctx.beginPath();
+      ctx.arc(node.endX, node.endY, s, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Branch nodes: hollow circles
+      ctx.strokeStyle = node.isAccent ?
+        this._col(pal.accent, a * 0.6) :
+        this._col(pal.nodeHollow, a * 0.5);
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.arc(node.endX, node.endY, s * 0.8, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Recurse
+    for (const child of node.children) this._renderTreeNode(child);
+  }
+
+  _renderFloatingNodes() {
+    const ctx = this.ctx;
+    const pal = this.opts.palette;
+
+    // Connections first
+    for (const conn of this.connections) {
+      const a = this.floatingNodes[conn.a];
+      const b = this.floatingNodes[conn.b];
+      const alpha = Math.min(a.opacity, b.opacity) * conn.opacity;
+      ctx.strokeStyle = this._col(pal.line, alpha);
+      ctx.lineWidth = 0.5;
+      if (conn.dashed) ctx.setLineDash([1, 4]);
+      else ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // Nodes
+    for (const node of this.floatingNodes) {
+      if (node.opacity < 0.01) continue;
+      const a = node.opacity;
+      const s = node.size;
+
+      if (node.isAccent) {
+        ctx.fillStyle = this._col(pal.accent, a * 0.7);
+        ctx.strokeStyle = this._col(pal.accent, a * 0.5);
+      } else {
+        ctx.fillStyle = this._col(pal.node, a * (node.filled ? 0.5 : 0.1));
+        ctx.strokeStyle = this._col(pal.node, a * 0.5);
+      }
+      ctx.lineWidth = 0.7;
+
+      ctx.beginPath();
+      switch (node.shape) {
+        case 'circle':
+          ctx.arc(node.x, node.y, s, 0, Math.PI * 2);
+          break;
+        case 'diamond':
+          ctx.moveTo(node.x, node.y - s);
+          ctx.lineTo(node.x + s, node.y);
+          ctx.lineTo(node.x, node.y + s);
+          ctx.lineTo(node.x - s, node.y);
+          ctx.closePath();
+          break;
+        case 'square':
+          ctx.rect(node.x - s, node.y - s, s * 2, s * 2);
+          break;
+        case 'triangle':
+          ctx.moveTo(node.x, node.y - s);
+          ctx.lineTo(node.x + s, node.y + s * 0.7);
+          ctx.lineTo(node.x - s, node.y + s * 0.7);
+          ctx.closePath();
+          break;
+      }
+      if (node.filled) ctx.fill();
+      ctx.stroke();
+    }
   }
 
   _renderTextBlocks() {
@@ -272,7 +605,6 @@ class ManuscriptBorder {
           const ch = line[ci];
           if (!ch.visible) continue;
 
-          // Position: flow along dir, offset along lineDir
           const along = ci * block.charSpacing;
           const across = li * block.lineSpacing;
           const gx = block.x + Math.cos(block.dir) * along + Math.cos(block.lineDir) * across;
@@ -282,23 +614,20 @@ class ManuscriptBorder {
 
           const alpha = block.opacity * ch.visibleT;
 
-          // Morphing: interpolate between current and target glyph
-          if (ch.morphT < 1 && ch.morphT > 0) {
-            // Draw current fading out
-            this._drawGlyph(gx, gy, ch.glyph, block.dir, block.charSize, alpha * (1 - ch.morphT), pal);
-            // Draw target fading in
-            this._drawGlyph(gx, gy, ch.targetGlyph, block.dir, block.charSize, alpha * ch.morphT, pal);
+          if (ch.morphT < 1) {
+            this._drawGlyph(gx, gy, ch.glyph, block.dir, block.charSize, alpha * (1 - ch.morphT), pal.text);
+            this._drawGlyph(gx, gy, ch.targetGlyph, block.dir, block.charSize, alpha * ch.morphT, pal.text);
           } else {
             const g = ch.morphT >= 1 ? ch.targetGlyph : ch.glyph;
-            this._drawGlyph(gx, gy, g, block.dir, block.charSize, alpha, pal);
+            this._drawGlyph(gx, gy, g, block.dir, block.charSize, alpha, pal.text);
           }
         }
       }
 
-      // Typing cursor — blinking line at current typing position
+      // Cursor
       if (block.typingLine < block.lines.length) {
-        const cursorBlink = Math.sin(this.frameCount * 0.15) > 0;
-        if (cursorBlink) {
+        const blink = Math.sin(this.frameCount * 0.12) > 0;
+        if (blink) {
           const along = block.typingChar * block.charSpacing;
           const across = block.typingLine * block.lineSpacing;
           const cx = block.x + Math.cos(block.dir) * along + Math.cos(block.lineDir) * across;
@@ -306,23 +635,23 @@ class ManuscriptBorder {
           ctx.save();
           ctx.translate(cx, cy);
           ctx.rotate(block.dir);
-          ctx.fillStyle = this._col(pal.enochian, block.opacity * 0.8);
-          ctx.fillRect(0, -block.charSize * 0.1, 1.5, block.charSize * 0.8);
+          ctx.fillStyle = this._col(pal.text, block.opacity * 0.7);
+          ctx.fillRect(0, 0, 1.2, block.charSize * 0.75);
           ctx.restore();
         }
       }
     }
   }
 
-  _drawGlyph(x, y, glyphIdx, angle, size, alpha, pal) {
-    const glyph = ManuscriptBorder.ENOCHIAN[glyphIdx % ManuscriptBorder.ENOCHIAN.length];
+  _drawGlyph(x, y, idx, angle, size, alpha, palKey) {
+    const glyph = ManuscriptBorder.ENOCHIAN[idx % ManuscriptBorder.ENOCHIAN.length];
     if (!glyph) return;
     const ctx = this.ctx;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(angle);
-    ctx.strokeStyle = this._col(pal.enochian, alpha);
-    ctx.lineWidth = 0.7;
+    ctx.strokeStyle = this._col(palKey, alpha);
+    ctx.lineWidth = 0.6;
     ctx.lineCap = 'round';
     for (const stroke of glyph) {
       if (stroke.length < 2) continue;
@@ -336,282 +665,6 @@ class ManuscriptBorder {
   }
 
   // ═══════════════════════════════════════
-  // VINE SYSTEM
-  // ═══════════════════════════════════════
-
-  _spawnVine() {
-    const b = this.opts.borderWidth;
-    const side = this._pick(this.opts.sides);
-    let x, y, angle;
-    if (side === 'left') { x = this._range(2, b * 0.3); y = this._range(5, this.h - 5); angle = this._range(-0.6, 0.6); }
-    else if (side === 'right') { x = this.w - this._range(2, b * 0.3); y = this._range(5, this.h - 5); angle = Math.PI + this._range(-0.6, 0.6); }
-    else if (side === 'top') { x = this._range(5, this.w - 5); y = this._range(2, b * 0.3); angle = Math.PI / 2 + this._range(-0.6, 0.6); }
-    else { x = this._range(5, this.w - 5); y = this.h - this._range(2, b * 0.3); angle = -Math.PI / 2 + this._range(-0.6, 0.6); }
-
-    if (this._gridDensity(x, y) > 2) return;
-
-    this.vines.push({
-      x, y, angle,
-      thickness: this._range(1, 3),
-      maxLength: this._range(50, 250),
-      traveled: 0,
-      depth: 0,
-      maxDepth: this._irange(3, 7),
-      pts: [{ x, y }],
-      alive: true,
-      born: this.frameCount,
-      opacity: 0,
-      children: [],
-      side,
-      branchAngle: this._range(0.35, 0.95),
-      branchRatio: this._range(0.5, 0.75),
-      branchSpacing: this._irange(10, 22),
-      nextBranch: this._irange(6, 16),
-      curveBias: this._range(-0.07, 0.07),
-      symmetry: this._rng() > 0.4,
-    });
-  }
-
-  _stepVine(vine) {
-    if (!vine.alive) return;
-    vine.opacity = Math.min(0.85, vine.opacity + 0.025);
-
-    const step = this.opts.growthRate;
-    const periodic = Math.sin(vine.traveled * 0.07) * 0.1;
-    const n = this._noise(vine.x * 0.012, vine.y * 0.012) * 0.1;
-    vine.angle += vine.curveBias + periodic + n;
-
-    const nx = vine.x + Math.cos(vine.angle) * step;
-    const ny = vine.y + Math.sin(vine.angle) * step;
-
-    if (!this._inBorder(nx, ny)) {
-      const toBorder = Math.atan2(vine.pts[0].y - ny, vine.pts[0].x - nx);
-      vine.angle += (toBorder - vine.angle) * 0.2;
-      vine.traveled += step;
-      if (vine.traveled > vine.maxLength * 0.4) vine.alive = false;
-      return;
-    }
-
-    if (this._gridDensity(nx, ny) > 3.5) { vine.alive = false; return; }
-
-    vine.x = nx; vine.y = ny;
-    vine.pts.push({ x: nx, y: ny });
-    vine.traveled += step;
-    this._gridMark(nx, ny, 0.4);
-
-    // L-system branching
-    vine.nextBranch--;
-    if (vine.nextBranch <= 0 && vine.depth < vine.maxDepth) {
-      vine.nextBranch = vine.branchSpacing + this._irange(-2, 2);
-      const sides = vine.symmetry ? [-1, 1] : [this._pick([-1, 1])];
-      for (const s of sides) {
-        this.vines.push({
-          x: nx, y: ny,
-          angle: vine.angle + vine.branchAngle * s,
-          thickness: vine.thickness * vine.branchRatio,
-          maxLength: vine.maxLength * vine.branchRatio,
-          traveled: 0, depth: vine.depth + 1, maxDepth: vine.maxDepth,
-          pts: [{ x: nx, y: ny }], alive: true, born: this.frameCount,
-          opacity: 0, children: [], side: vine.side,
-          branchAngle: vine.branchAngle * this._range(0.8, 1.15),
-          branchRatio: vine.branchRatio,
-          branchSpacing: vine.branchSpacing + this._irange(-2, 2),
-          nextBranch: this._irange(5, 12),
-          curveBias: vine.curveBias * this._range(-1.1, 1.1),
-          symmetry: vine.symmetry && this._rng() > 0.35,
-        });
-      }
-    }
-
-    // Attachments
-    const t = vine.traveled;
-    if (t % 14 < step && vine.depth > 0) {
-      this.drawn.push({ type: 'leaf', x: nx, y: ny,
-        angle: vine.angle + this._pick([-1, 1]) * this._range(0.4, 1.3),
-        size: this._range(3, 13) * (1 - vine.depth * 0.1),
-        opacity: 0, maxOpacity: this._range(0.2, 0.5), born: this.frameCount });
-    }
-    if (t % 38 < step && vine.depth > 0 && this._rng() < 0.5) {
-      this.drawn.push({ type: 'flower', x: nx, y: ny,
-        size: this._range(4, 15), petals: this._irange(5, 9),
-        opacity: 0, maxOpacity: this._range(0.18, 0.4), born: this.frameCount });
-    }
-    if (t % 24 < step && vine.depth > 1 && this._rng() < 0.4) {
-      this.drawn.push({ type: 'berries', x: nx, y: ny,
-        count: this._irange(3, 7), spread: this._range(3, 8),
-        opacity: 0, maxOpacity: this._range(0.3, 0.55), born: this.frameCount });
-    }
-    if (vine.traveled >= vine.maxLength * 0.9) {
-      this.drawn.push({ type: 'tendril', x: nx, y: ny,
-        angle: vine.angle, turns: this._range(1.5, 3.5), size: this._range(5, 13),
-        opacity: 0, maxOpacity: this._range(0.2, 0.4), born: this.frameCount });
-    }
-    if (vine.traveled >= vine.maxLength) vine.alive = false;
-  }
-
-  // ═══════════════════════════════════════
-  // CREATURES
-  // ═══════════════════════════════════════
-
-  _maybeSpawnCreature() {
-    if (this._rng() > 0.0008) return;
-    const b = this.opts.borderWidth;
-    const side = this._pick(this.opts.sides);
-    let x, y;
-    if (side === 'left') { x = this._range(12, b - 12); y = this._range(30, this.h - 30); }
-    else if (side === 'right') { x = this.w - this._range(12, b - 12); y = this._range(30, this.h - 30); }
-    else if (side === 'top') { x = this._range(30, this.w - 30); y = this._range(12, b - 12); }
-    else { x = this._range(30, this.w - 30); y = this.h - this._range(12, b - 12); }
-    this.drawn.push({
-      type: this._pick(['bird', 'snail', 'serpent']),
-      x, y, size: this._range(10, 20),
-      angle: this._range(0, Math.PI * 2), flip: this._rng() > 0.5,
-      opacity: 0, maxOpacity: this._range(0.25, 0.45), born: this.frameCount
-    });
-  }
-
-  // ═══════════════════════════════════════
-  // RENDERING — Vines & Elements
-  // ═══════════════════════════════════════
-
-  _renderVines() {
-    const ctx = this.ctx;
-    const pal = this.opts.palette;
-    for (const vine of this.vines) {
-      const pts = vine.pts;
-      if (pts.length < 2) continue;
-      const a = vine.opacity * (vine.alive ? 1 : 0.6);
-      const depthFade = vine.depth === 0 ? 0.8 : vine.depth <= 2 ? 0.55 : 0.35;
-      ctx.strokeStyle = this._col(pal.vine, a * depthFade);
-      ctx.lineWidth = Math.max(0.3, vine.thickness * (1 - vine.depth * 0.12));
-      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.moveTo(pts[0].x, pts[0].y);
-      for (let i = 1; i < pts.length - 1; i++) {
-        const xc = (pts[i].x + pts[i + 1].x) / 2;
-        const yc = (pts[i].y + pts[i + 1].y) / 2;
-        ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
-      }
-      ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-      ctx.stroke();
-    }
-  }
-
-  _renderElement(el) {
-    const ctx = this.ctx;
-    const pal = this.opts.palette;
-    const a = el.opacity;
-    switch (el.type) {
-      case 'leaf': {
-        ctx.save(); ctx.translate(el.x, el.y); ctx.rotate(el.angle);
-        ctx.beginPath(); ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(el.size*0.3, -el.size*0.4, el.size*0.8, -el.size*0.3, el.size, 0);
-        ctx.bezierCurveTo(el.size*0.8, el.size*0.3, el.size*0.3, el.size*0.4, 0, 0);
-        ctx.fillStyle = this._col(pal.leaf, a * 0.35); ctx.fill();
-        ctx.strokeStyle = this._col(pal.leaf, a * 0.65); ctx.lineWidth = 0.5; ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(el.size*0.08, 0); ctx.lineTo(el.size*0.85, 0);
-        ctx.strokeStyle = this._col(pal.leaf, a * 0.4); ctx.lineWidth = 0.3; ctx.stroke();
-        for (let v = 0.25; v < 0.8; v += 0.17) {
-          ctx.beginPath();
-          ctx.moveTo(el.size*v, 0); ctx.lineTo(el.size*(v+0.1), -el.size*0.12);
-          ctx.moveTo(el.size*v, 0); ctx.lineTo(el.size*(v+0.1), el.size*0.12);
-          ctx.stroke();
-        }
-        ctx.restore(); break;
-      }
-      case 'flower': {
-        ctx.save(); ctx.translate(el.x, el.y);
-        for (let p = 0; p < el.petals; p++) {
-          ctx.save(); ctx.rotate((p / el.petals) * Math.PI * 2);
-          ctx.beginPath();
-          ctx.ellipse(el.size*0.3, 0, el.size*0.3, el.size*0.12, 0, 0, Math.PI*2);
-          ctx.fillStyle = this._col(pal.flower, a * 0.2); ctx.fill();
-          ctx.strokeStyle = this._col(pal.flower, a * 0.45); ctx.lineWidth = 0.4; ctx.stroke();
-          ctx.restore();
-        }
-        ctx.beginPath(); ctx.arc(0, 0, el.size*0.1, 0, Math.PI*2);
-        ctx.fillStyle = this._col(pal.berry, a * 0.55); ctx.fill();
-        ctx.restore(); break;
-      }
-      case 'berries': {
-        for (let i = 0; i < el.count; i++) {
-          const ba = (i / el.count) * Math.PI * 2 + el.born * 0.1;
-          ctx.beginPath();
-          ctx.arc(el.x + Math.cos(ba) * el.spread, el.y + Math.sin(ba) * el.spread,
-            1.5 + (i % 2), 0, Math.PI * 2);
-          ctx.fillStyle = this._col(pal.berry, a * 0.55); ctx.fill();
-        }
-        break;
-      }
-      case 'tendril': {
-        ctx.strokeStyle = this._col(pal.tendril, a * 0.45);
-        ctx.lineWidth = 0.5; ctx.beginPath();
-        let tx = el.x, ty = el.y, ta = el.angle;
-        ctx.moveTo(tx, ty);
-        for (let i = 0; i < 25; i++) {
-          const t = i / 25;
-          ta += (el.turns * Math.PI * 2 / 25) * 0.15;
-          const r = el.size * (1 - t * 0.75) * 0.15;
-          tx += Math.cos(ta) * r; ty += Math.sin(ta) * r;
-          ctx.lineTo(tx, ty);
-        }
-        ctx.stroke(); break;
-      }
-      case 'bird': {
-        ctx.save(); ctx.translate(el.x, el.y); ctx.rotate(el.angle);
-        if (el.flip) ctx.scale(-1, 1);
-        const s = el.size;
-        ctx.strokeStyle = this._col(pal.creature, a * 0.55);
-        ctx.fillStyle = this._col(pal.creature, a * 0.12);
-        ctx.lineWidth = 0.7;
-        ctx.beginPath(); ctx.ellipse(0, 0, s*0.45, s*0.25, 0, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.arc(s*0.4, -s*0.12, s*0.14, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(s*0.52,-s*0.12); ctx.lineTo(s*0.7,-s*0.08); ctx.lineTo(s*0.52,-s*0.04); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(-s*0.05,-s*0.08);
-        ctx.bezierCurveTo(-s*0.15,-s*0.4, s*0.15,-s*0.4, s*0.05,-s*0.08); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(-s*0.4,0);
-        ctx.bezierCurveTo(-s*0.6,-s*0.15,-s*0.7,s*0.05,-s*0.55,s*0.1); ctx.stroke();
-        ctx.restore(); break;
-      }
-      case 'snail': {
-        ctx.save(); ctx.translate(el.x, el.y); ctx.rotate(el.angle);
-        if (el.flip) ctx.scale(-1, 1);
-        const s = el.size;
-        ctx.strokeStyle = this._col(pal.creature, a * 0.55);
-        ctx.fillStyle = this._col(pal.creature, a * 0.1);
-        ctx.lineWidth = 0.7;
-        ctx.beginPath(); ctx.arc(0, -s*0.08, s*0.28, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-        ctx.beginPath();
-        for (let sa = 0; sa < Math.PI*3.5; sa += 0.2) {
-          const r = s*0.25*(1-sa/(Math.PI*4.5)); if(r<0.5)break;
-          const px=Math.cos(sa)*r, py=-s*0.08+Math.sin(sa)*r;
-          sa===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
-        }
-        ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(-s*0.25,s*0.12);
-        ctx.bezierCurveTo(-s*0.05,s*0.2,s*0.25,s*0.2,s*0.4,s*0.12); ctx.stroke();
-        ctx.restore(); break;
-      }
-      case 'serpent': {
-        ctx.save(); ctx.translate(el.x, el.y); ctx.rotate(el.angle);
-        if (el.flip) ctx.scale(-1, 1);
-        const s = el.size;
-        ctx.strokeStyle = this._col(pal.creature, a * 0.55);
-        ctx.lineWidth = s*0.06; ctx.lineCap='round';
-        ctx.beginPath(); ctx.moveTo(-s*0.5,s*0.15);
-        ctx.bezierCurveTo(-s*0.25,-s*0.3,s*0.1,s*0.3,s*0.35,-s*0.08); ctx.stroke();
-        ctx.lineWidth=0.7; ctx.beginPath();
-        ctx.arc(s*0.35,-s*0.08,s*0.06,0,Math.PI*2);
-        ctx.fillStyle=this._col(pal.creature,a*0.45); ctx.fill();
-        ctx.beginPath(); ctx.moveTo(s*0.4,-s*0.08); ctx.lineTo(s*0.5,-s*0.12);
-        ctx.moveTo(s*0.4,-s*0.08); ctx.lineTo(s*0.48,-s*0.03);
-        ctx.lineWidth=0.4; ctx.stroke();
-        ctx.restore(); break;
-      }
-    }
-  }
-
-  // ═══════════════════════════════════════
   // MAIN LOOP
   // ═══════════════════════════════════════
 
@@ -620,58 +673,43 @@ class ManuscriptBorder {
     this.running = true;
     this.w = this.canvas.width;
     this.h = this.canvas.height;
-    this._initGrid();
 
-    // Seed initial vines
-    for (let i = 0; i < 20; i++) this._spawnVine();
-    // Seed initial text blocks
-    for (let i = 0; i < 8; i++) this._spawnTextBlock();
+    this._initGrid();
+    this._initTrees();
+    this._initFloatingNodes();
+
+    // Initial text blocks
+    for (let i = 0; i < 12; i++) this._spawnTextBlock();
 
     const loop = () => {
       if (!this.running) return;
       this.frameCount++;
 
-      // Spawn vines
-      const activeVines = this.vines.filter(v => v.alive).length;
-      if (activeVines < this.opts.maxVines && this.frameCount % 5 === 0) this._spawnVine();
+      // Tree mutation cycle
+      if (this.frameCount % this.opts.rebalanceInterval === 0) {
+        for (const tree of this.trees) this._rebalanceTree(tree);
+      }
 
-      // Spawn text blocks periodically
-      if (this.frameCount % 120 === 0 && this.textBlocks.length < 30) this._spawnTextBlock();
+      // Morph trees toward targets
+      for (const tree of this.trees) this._morphTree(tree, 0.03);
 
-      // Step vines
-      for (const v of this.vines) if (v.alive) this._stepVine(v);
+      // Step floating nodes
+      this._stepFloatingNodes();
 
       // Step text
       this._stepTextBlocks();
 
-      // Fade in elements
-      for (const el of this.drawn) {
-        if (el.opacity < el.maxOpacity) el.opacity = Math.min(el.maxOpacity, el.opacity + 0.01);
+      // Spawn new text blocks
+      if (this.frameCount % 90 === 0 && this.textBlocks.length < 40) {
+        this._spawnTextBlock();
       }
-
-      // Creatures
-      this._maybeSpawnCreature();
-
-      // Grid decay
-      if (this.frameCount % 45 === 0) this._gridDecay();
-
-      // Element lifecycle
-      const age = this.opts.cycleTime / 16;
-      for (const el of this.drawn) {
-        if (this.frameCount - el.born > age) el.opacity -= this.opts.fadeRate;
-      }
-      for (const vine of this.vines) {
-        if (!vine.alive && this.frameCount - vine.born > age * 0.4) vine.opacity -= this.opts.fadeRate * 0.6;
-      }
-
-      // Cleanup
-      this.drawn = this.drawn.filter(e => e.opacity > 0.005);
-      this.vines = this.vines.filter(v => v.opacity > 0.005 || v.alive);
 
       // Render
       this.ctx.clearRect(0, 0, this.w, this.h);
-      this._renderVines();
-      for (const el of this.drawn) this._renderElement(el);
+
+      this._renderGrid();
+      for (const tree of this.trees) this._renderTreeNode(tree);
+      this._renderFloatingNodes();
       this._renderTextBlocks();
 
       requestAnimationFrame(loop);
@@ -684,32 +722,42 @@ class ManuscriptBorder {
   stop() { this.running = false; return this; }
 
   resize(w, h) {
-    this.canvas.width = w; this.canvas.height = h;
-    this.w = w; this.h = h; this._initGrid();
+    this.canvas.width = w;
+    this.canvas.height = h;
+    this.w = w; this.h = h;
+    // Reinitialize structures
+    this._initGrid();
+    this._initTrees();
+    this._initFloatingNodes();
+    this.textBlocks = [];
+    for (let i = 0; i < 12; i++) this._spawnTextBlock();
   }
 
   // Static render
   generate() {
-    this.w = this.canvas.width; this.h = this.canvas.height;
+    this.w = this.canvas.width;
+    this.h = this.canvas.height;
     this._initGrid();
-    for (let i = 0; i < 25; i++) this._spawnVine();
-    for (let i = 0; i < 10; i++) this._spawnTextBlock();
-    for (let f = 0; f < 1000; f++) {
+    this._initTrees();
+    this._initFloatingNodes();
+    for (let i = 0; i < 15; i++) this._spawnTextBlock();
+
+    // Simulate
+    for (let f = 0; f < 600; f++) {
       this.frameCount++;
-      const active = this.vines.filter(v => v.alive).length;
-      if (active < this.opts.maxVines && f % 4 === 0) this._spawnVine();
-      if (f % 80 === 0 && this.textBlocks.length < 25) this._spawnTextBlock();
-      for (const v of this.vines) if (v.alive) this._stepVine(v);
-      this._stepTextBlocks();
-      for (const el of this.drawn) {
-        if (el.opacity < el.maxOpacity) el.opacity = Math.min(el.maxOpacity, el.opacity + 0.025);
+      if (f % this.opts.rebalanceInterval === 0) {
+        for (const tree of this.trees) this._rebalanceTree(tree);
       }
-      this._maybeSpawnCreature();
-      if (f % 30 === 0) this._gridDecay();
+      for (const tree of this.trees) this._morphTree(tree, 0.05);
+      this._stepFloatingNodes();
+      this._stepTextBlocks();
+      if (f % 60 === 0 && this.textBlocks.length < 35) this._spawnTextBlock();
     }
+
     this.ctx.clearRect(0, 0, this.w, this.h);
-    this._renderVines();
-    for (const el of this.drawn) this._renderElement(el);
+    this._renderGrid();
+    for (const tree of this.trees) this._renderTreeNode(tree);
+    this._renderFloatingNodes();
     this._renderTextBlocks();
     return this;
   }
