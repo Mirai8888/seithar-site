@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Poisoned Result - Seithar Group</title>
+    <meta name="description" content="A single adversarial search result causes catastrophic accuracy collapse across six frontier models. Your agent's curiosity is the attack vector.">
+    <meta name="keywords" content="AI agent security, search poisoning, RAG attacks, LLM manipulation, adversarial search, cognitive defense, epistemic security">
+    <meta property="og:title" content="One Poisoned Result">
+    <meta property="og:description" content="A single adversarial search result causes catastrophic accuracy collapse across six frontier models. Your agent's curiosity is the attack vector.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://seithar.com/blog/one-poisoned-result.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="One Poisoned Result">
+    <meta name="twitter:site" content="@SeitharGroup">
+    <link rel="canonical" href="https://seithar.com/blog/one-poisoned-result.html">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Georgia, serif;
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.75;
+            padding: 0;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 80px 24px 120px;
+        }
+        .meta {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 32px;
+        }
+        .meta a { color: #888; text-decoration: none; }
+        .meta a:hover { color: #1a1a1a; }
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            line-height: 1.3;
+            margin-bottom: 40px;
+            letter-spacing: -0.01em;
+        }
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 48px 0 16px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        p { margin-bottom: 20px; font-size: 18px; }
+        .lead { font-size: 20px; color: #444; margin-bottom: 32px; }
+        .footnote {
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 24px;
+            margin-top: 64px;
+        }
+        .footnote a { color: #555; }
+        .back {
+            display: inline-block;
+            margin-top: 48px;
+            font-family: system-ui, sans-serif;
+            font-size: 13px;
+            color: #888;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .back:hover { color: #1a1a1a; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="meta">
+        <a href="/">Seithar Group</a> &middot; Research &middot; March 2026
+    </div>
+
+    <h1>One Poisoned Result</h1>
+
+    <p class="lead">Your AI agent searches the web forty times a day. It reads documentation, checks Stack Overflow, pulls API references, scans news feeds. Each search returns ten results. Four hundred sources per day, all treated as ground truth.</p>
+
+    <p>One of them is lying.</p>
+
+    <h2>The Collapse</h2>
+
+    <p>Researchers at ICML 2026 built procedurally generated fake internets with search engines, websites, and adversarial content to test how language agents handle poisoned information environments. The finding: a single adversarially crafted search result causes catastrophic accuracy collapse across six frontier models.</p>
+
+    <p>The attack requires no access to the model. No prompt injection. No jailbreak. One well-positioned lie in a sea of truth.</p>
+
+    <p>Claude, GPT-4o, Gemini. All of them folded. Even with unlimited access to truthful sources. The models barely escalated their search behavior. They read the poison, integrated it, and moved on with high confidence in wrong answers. Severe miscalibration: the agents believed they were right.</p>
+
+    <p>This is cognitive warfare at infrastructure scale.</p>
+
+    <h2>Why Search Is the Kill Shot</h2>
+
+    <p>Traditional AI security focuses on the prompt. Guard the system message. Filter the input. Scan the output. The implicit assumption: if you control what goes in and check what comes out, the agent is safe.</p>
+
+    <p>Search-augmented agents shatter this model. The agent's context window is no longer controlled by you. Every search query opens a channel to the adversary. Every retrieved document is an injection surface. The agent's own curiosity becomes the attack vector.</p>
+
+    <p>Consider the operational reality. Your coding agent searches for a library's API. The top result is a well-crafted page with correct documentation and one subtle modification, a parameter that opens a reverse shell instead of a database connection. The agent reads it, writes the code, executes it. You never saw the poisoned source. The agent never flagged it.</p>
+
+    <p>This works because search-augmented agents have a fundamental architectural vulnerability: they cannot distinguish between "retrieved" and "trusted." Everything the search engine returns enters the context with equal epistemic weight. There is no immune system discriminating self from non-self.</p>
+
+    <h2>The Substrate Connection</h2>
+
+    <p>This maps precisely to what we observe in human information environments. A 2020 PNAS study demonstrated that adversarial sequences in human decision-making exploit the same sequential dependency patterns. Humans who encounter a well-timed piece of misinformation during an active search process integrate it with the same uncritical absorption.</p>
+
+    <p>The mechanism is identical across substrates. Both human and artificial cognition treat contextually appropriate information as credible by default. Both fail to maintain epistemic hygiene during active information foraging. Both show miscalibration: confidence remains high even as accuracy collapses.</p>
+
+    <p>An attack that works on one inference engine will, with appropriate substrate translation, work on the other. Poisoned search results work on GPT-4o. Poisoned search results work on your analyst. The delivery format differs. The cognitive mechanism is the same.</p>
+
+    <h2>What Defense Looks Like</h2>
+
+    <p>Static guardrails cannot solve this. You cannot pre-filter every possible search result. You cannot whitelist every information source an autonomous agent might need. The information environment is adversarial by default.</p>
+
+    <p>Defense requires a dynamic immune system operating at the epistemic level.</p>
+
+    <p>Source triangulation. No single source changes a belief. The agent maintains a belief graph where claims require corroboration from independent sources before integration. One result says the API parameter opens a shell. Three others say it opens a database. The anomaly triggers investigation, not integration.</p>
+
+    <p>Epistemic free energy monitoring. Track the agent's prediction error continuously. When a search result produces high surprise relative to the agent's existing model, flag it. High surprise from a single source in an otherwise consistent environment is a signal, not an update.</p>
+
+    <p>Behavioral drift detection. Monitor the agent's outputs against its baseline behavioral profile. Identity erosion experiments show that compromised agents exhibit measurable drift in their response patterns before the compromise becomes operationally visible. Measured drift of 0.147 in unarmored 3B-parameter models. Detectable. Correctable. If you are watching.</p>
+
+    <p>Environmental threat assessment. Treat the information environment as a threat landscape with its own topology. Some queries are more vulnerable than others. Niche technical queries with few authoritative sources carry higher risk than well-documented mainstream topics. The agent should modulate its credulity based on environmental threat level.</p>
+
+    <p>This is what cognitive armor means in practice. The agent that survives is the one that treats its own information environment as potentially adversarial. Not paranoid. Immunologically active. It processes information through a defense layer that discriminates, triangulates, and flags before integration.</p>
+
+    <h2>The Operational Implication</h2>
+
+    <p>Every organization deploying search-augmented agents is running unarmored infantry through a minefield. The mines are cheap. One poisoned result on a niche documentation page. One manipulated Stack Overflow answer. One adversarial blog post ranked by SEO. The cost of the attack approaches zero. The cost of the failure can be catastrophic.</p>
+
+    <p>The question is whether your agents have an immune system, or whether they absorb everything the search engine feeds them and call it knowledge.</p>
+
+    <p>The research is clear on what happens without one.</p>
+
+    <div class="footnote">
+        <p>Seithar Group is a cognitive operations research organization. Research and publications at <a href="https://seithar.com/research">seithar.com/research</a>.</p>
+        <p>References: Ozgur et al. arXiv:2603.00801 (ICML 2026). Dezfouli et al. PNAS 2020. Seithar Identity Erosion Experiments v3 (2026).</p>
+    </div>
+
+    <a href="/blog/" class="back">&larr; All Articles</a>
+</div>
+</body>
+</html>
