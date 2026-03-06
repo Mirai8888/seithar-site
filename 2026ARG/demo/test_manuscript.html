@@ -6,98 +6,37 @@
 <title>SEITHAR</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1816; overflow: hidden; }
+canvas { display: block; }
 
-body {
-  background: #ece8e0;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-}
-
-/* Silver frame — layered like manuscript ruling */
-.frame-outer {
-  position: fixed;
-  inset: 0;
-  border: 8px solid #a8a49c;
-  z-index: 30;
-  pointer-events: none;
-}
-.frame-inner {
-  position: fixed;
-  top: 8px; left: 8px; right: 8px; bottom: 8px;
-  border: 1.5px solid rgba(165, 162, 155, 0.5);
-  z-index: 30;
-  pointer-events: none;
-}
-.frame-inner2 {
-  position: fixed;
-  top: 12px; left: 12px; right: 12px; bottom: 12px;
-  border: 0.5px solid rgba(165, 162, 155, 0.25);
-  z-index: 30;
-  pointer-events: none;
-}
-
-canvas#ms {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 5;
-  pointer-events: none;
-}
-
-/* Content card — luminous white, vertical */
+/* Content card overlay — centered vertical */
 .content-card {
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: min(30vw, 340px);
-  min-height: min(65vh, 520px);
-  background: #fff;
+  width: 320px;
+  min-height: 440px;
+  background: rgba(255, 255, 255, 0.95);
   z-index: 20;
   padding: 48px 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #b8b5ae;
+  border: 1.5px solid rgba(160, 155, 148, 0.6);
+  backdrop-filter: blur(8px);
   box-shadow:
-    0 0 0 3px #ece8e0,
-    0 0 0 4.5px rgba(145, 140, 132, 0.4),
-    0 0 0 7px #ece8e0,
-    0 0 0 8px rgba(145, 140, 132, 0.2);
+    0 0 0 3px rgba(30, 28, 24, 0.3),
+    0 0 0 6px rgba(255, 255, 255, 0.1),
+    0 0 60px rgba(0,0,0,0.4);
 }
 
 .card-inner { text-align: center; }
-
-.mark {
-  font-size: 11px;
-  letter-spacing: 8px;
-  color: #aaa;
-  margin-bottom: 40px;
-}
-
-.title {
-  font-size: 24px;
-  font-weight: 300;
-  color: #1a1a1a;
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
-.sub {
-  font-size: 12px;
-  color: #aaa;
-  font-family: ui-monospace, 'SF Mono', monospace;
-  letter-spacing: 2px;
-}
+.mark { font-size: 11px; letter-spacing: 8px; color: #999; margin-bottom: 40px; font-family: serif; }
+.title { font-size: 22px; font-weight: 300; color: #1a1a1a; line-height: 1.7; margin-bottom: 16px; font-family: serif; }
+.sub { font-size: 11px; color: #aaa; font-family: ui-monospace, monospace; letter-spacing: 2px; }
 </style>
 </head>
 <body>
-
-<div class="frame-outer"></div>
-<div class="frame-inner"></div>
-<div class="frame-inner2"></div>
-
-<canvas id="ms"></canvas>
 
 <div class="content-card">
   <div class="card-inner">
@@ -107,40 +46,423 @@ canvas#ms {
   </div>
 </div>
 
-<script src="manuscript.js"></script>
-<script>
-const c = document.getElementById('ms');
-const card = document.querySelector('.content-card');
-const dpr = window.devicePixelRatio || 1;
-
-function sizeCanvas() {
-  c.width = window.innerWidth * dpr;
-  c.height = window.innerHeight * dpr;
-  c.style.width = window.innerWidth + 'px';
-  c.style.height = window.innerHeight + 'px';
-  c.getContext('2d').scale(dpr, dpr);
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+  }
 }
-sizeCanvas();
+</script>
 
-const cardRect = card.getBoundingClientRect();
-const mb = new ManuscriptBorder(c, {
-  exclusion: {
-    x: cardRect.left,
-    y: cardRect.top,
-    w: cardRect.width,
-    h: cardRect.height,
-    padding: 14,
-  },
-  growthRate: 6,
+<script type="module">
+import * as THREE from 'three';
+
+// ═══════════════════════════════════════
+// SCENE SETUP
+// ═══════════════════════════════════════
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#d8d2c8'); // warm limestone
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 2, 14);
+camera.lookAt(0, 2, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+document.body.prepend(renderer.domElement);
+
+// ═══════════════════════════════════════
+// LIGHTING — Cathedral interior feel
+// ═══════════════════════════════════════
+
+const ambient = new THREE.AmbientLight(0xd8d0c4, 0.6);
+scene.add(ambient);
+
+const mainLight = new THREE.DirectionalLight(0xfff8ee, 1.2);
+mainLight.position.set(3, 8, 10);
+mainLight.castShadow = true;
+mainLight.shadow.mapSize.set(2048, 2048);
+mainLight.shadow.camera.near = 0.5;
+mainLight.shadow.camera.far = 30;
+mainLight.shadow.camera.left = -10;
+mainLight.shadow.camera.right = 10;
+mainLight.shadow.camera.top = 10;
+mainLight.shadow.camera.bottom = -4;
+scene.add(mainLight);
+
+// Soft fill from left
+const fill = new THREE.DirectionalLight(0xc8c0b8, 0.3);
+fill.position.set(-5, 4, 6);
+scene.add(fill);
+
+// ═══════════════════════════════════════
+// MATERIALS — Limestone/Stone
+// ═══════════════════════════════════════
+
+const stoneMat = new THREE.MeshStandardMaterial({
+  color: 0xccc6ba,
+  roughness: 0.85,
+  metalness: 0.02,
 });
-mb.start();
+
+const stoneLight = new THREE.MeshStandardMaterial({
+  color: 0xd8d2c8,
+  roughness: 0.8,
+  metalness: 0.01,
+});
+
+const stoneDark = new THREE.MeshStandardMaterial({
+  color: 0xb0aa9e,
+  roughness: 0.9,
+  metalness: 0.03,
+});
+
+// ═══════════════════════════════════════
+// GOTHIC PRIMITIVES IN 3D
+// ═══════════════════════════════════════
+
+function createPointedArch(innerWidth, height, depth, thickness) {
+  const shape = new THREE.Shape();
+  const hw = innerWidth / 2;
+  const r = hw * 1.15; // pointedness
+
+  // Build arch profile
+  shape.moveTo(-hw, 0);
+  shape.lineTo(-hw, 0);
+
+  // Left arc
+  const leftCx = hw;
+  const steps = 24;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const angle = Math.PI + t * (Math.acos(hw / r));
+    const x = leftCx + Math.cos(angle) * r;
+    const y = Math.sin(angle) * r;
+    shape.lineTo(x, y);
+  }
+
+  // Right arc
+  const rightCx = -hw;
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const angle = (2 * Math.PI - Math.acos(hw / r)) + t * Math.acos(hw / r);
+    const x = rightCx + Math.cos(angle) * r;
+    const y = Math.sin(angle) * r;
+    shape.lineTo(x, y);
+  }
+
+  shape.lineTo(hw, 0);
+
+  const extrudeSettings = { depth, bevelEnabled: false };
+  const geom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  return geom;
+}
+
+function createColonnette(radius, height, segments = 8) {
+  const group = new THREE.Group();
+
+  // Shaft
+  const shaft = new THREE.Mesh(
+    new THREE.CylinderGeometry(radius, radius * 1.05, height * 0.85, segments),
+    stoneMat
+  );
+  shaft.position.y = height * 0.425;
+  shaft.castShadow = true;
+  group.add(shaft);
+
+  // Capital
+  const cap = new THREE.Mesh(
+    new THREE.CylinderGeometry(radius * 1.8, radius, height * 0.08, segments),
+    stoneLight
+  );
+  cap.position.y = height * 0.85 + height * 0.04;
+  group.add(cap);
+
+  // Abacus
+  const abacus = new THREE.Mesh(
+    new THREE.BoxGeometry(radius * 4, height * 0.03, radius * 4),
+    stoneMat
+  );
+  abacus.position.y = height * 0.85 + height * 0.08 + 0.015;
+  group.add(abacus);
+
+  // Base
+  const base = new THREE.Mesh(
+    new THREE.CylinderGeometry(radius * 1.5, radius * 1.8, height * 0.05, segments),
+    stoneMat
+  );
+  base.position.y = height * 0.025;
+  group.add(base);
+
+  return group;
+}
+
+function createPinnacle(width, height) {
+  const group = new THREE.Group();
+
+  // Base block
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(width, height * 0.25, width),
+    stoneMat
+  );
+  base.position.y = height * 0.125;
+  base.castShadow = true;
+  group.add(base);
+
+  // Spire
+  const spire = new THREE.Mesh(
+    new THREE.ConeGeometry(width * 0.45, height * 0.65, 4),
+    stoneLight
+  );
+  spire.position.y = height * 0.25 + height * 0.325;
+  spire.rotation.y = Math.PI / 4;
+  spire.castShadow = true;
+  group.add(spire);
+
+  // Finial
+  const finial = new THREE.Mesh(
+    new THREE.SphereGeometry(width * 0.2, 8, 8),
+    stoneMat
+  );
+  finial.position.y = height * 0.25 + height * 0.65 + width * 0.15;
+  group.add(finial);
+
+  // Crockets
+  for (let i = 0; i < 3; i++) {
+    const t = (i + 1) / 4;
+    const cy = height * 0.25 + height * 0.65 * t;
+    const offset = width * 0.45 * (1 - t) + width * 0.15;
+    for (let side = 0; side < 4; side++) {
+      const angle = (Math.PI / 4) + (Math.PI / 2) * side;
+      const crocket = new THREE.Mesh(
+        new THREE.SphereGeometry(width * 0.1, 6, 6),
+        stoneMat
+      );
+      crocket.position.set(Math.cos(angle) * offset, cy, Math.sin(angle) * offset);
+      group.add(crocket);
+    }
+  }
+
+  return group;
+}
+
+function createTrefoilPanel(width, height, depth) {
+  // Flat panel with trefoil cutout appearance
+  const group = new THREE.Group();
+
+  // Background panel
+  const panel = new THREE.Mesh(
+    new THREE.BoxGeometry(width, height, depth),
+    stoneDark
+  );
+  group.add(panel);
+
+  // Three lobes as recessed circles
+  const lobeR = width * 0.22;
+  const lobeOffset = width * 0.18;
+  const angles = [-Math.PI/2, -Math.PI/2 + 2.09, -Math.PI/2 + 4.19];
+  for (const a of angles) {
+    const lobe = new THREE.Mesh(
+      new THREE.CircleGeometry(lobeR, 16),
+      stoneLight
+    );
+    lobe.position.set(Math.cos(a) * lobeOffset, Math.sin(a) * lobeOffset, depth/2 + 0.01);
+    group.add(lobe);
+  }
+
+  return group;
+}
+
+// ═══════════════════════════════════════
+// SAINT IMAGES — Texture planes in niches
+// ═══════════════════════════════════════
+
+const textureLoader = new THREE.TextureLoader();
+const saintImages = [
+  'saints/saint1.png', 'saints/saint2.png', 'saints/saint3.png',
+  'saints/saint4.png', 'saints/saint5.png', 'saints/saint6.png', 'saints/saint7.png',
+];
+
+function createSaintFigure(imagePath, figHeight) {
+  const tex = textureLoader.load(imagePath);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const aspect = 0.38; // approximate w/h of cropped saints
+  const w = figHeight * aspect;
+
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    side: THREE.DoubleSide,
+  });
+
+  const geom = new THREE.PlaneGeometry(w, figHeight);
+  const mesh = new THREE.Mesh(geom, mat);
+  return mesh;
+}
+
+// ═══════════════════════════════════════
+// BUILD THE PORTAL
+// ═══════════════════════════════════════
+
+const portal = new THREE.Group();
+scene.add(portal);
+
+// Back wall
+const wall = new THREE.Mesh(
+  new THREE.BoxGeometry(20, 12, 0.3),
+  new THREE.MeshStandardMaterial({ color: 0xc8c2b6, roughness: 0.9, metalness: 0.01 })
+);
+wall.position.set(0, 4, -1.5);
+wall.receiveShadow = true;
+portal.add(wall);
+
+// Floor
+const floor = new THREE.Mesh(
+  new THREE.BoxGeometry(20, 0.3, 6),
+  new THREE.MeshStandardMaterial({ color: 0xb8b2a6, roughness: 0.95, metalness: 0.01 })
+);
+floor.position.set(0, -1.15, 0);
+floor.receiveShadow = true;
+portal.add(floor);
+
+// ── ARCHIVOLTS — Concentric pointed arches ──
+const archCount = 5;
+for (let i = 0; i < archCount; i++) {
+  const span = 3 + i * 1.4;
+  const archGeom = createPointedArch(span, span * 0.9, 0.15, 0.1);
+  const arch = new THREE.Mesh(archGeom, i % 2 === 0 ? stoneMat : stoneLight);
+  arch.position.set(0, -1, -1.2 + i * 0.18);
+  arch.castShadow = true;
+  portal.add(arch);
+
+  // Molding torus between arches
+  if (i < archCount - 1) {
+    const moldSpan = span + 0.7;
+    const moldGeom = createPointedArch(moldSpan, moldSpan * 0.9, 0.06, 0.05);
+    const mold = new THREE.Mesh(moldGeom, stoneDark);
+    mold.position.set(0, -1, -1.2 + i * 0.18 + 0.08);
+    portal.add(mold);
+  }
+}
+
+// ── COLONNETTES — Flanking the portal ──
+const colPositions = [-4.8, -4.2, -3.6, 3.6, 4.2, 4.8];
+for (const xp of colPositions) {
+  const col = createColonnette(0.08, 5.5);
+  col.position.set(xp, -1, -0.5);
+  portal.add(col);
+}
+
+// ── SAINT FIGURES in niches ──
+const saintPositions = [-4.5, -3.0, -1.8, 1.8, 3.0, 4.5];
+for (let i = 0; i < Math.min(saintPositions.length, saintImages.length); i++) {
+  const saint = createSaintFigure(saintImages[i], 3.5);
+  saint.position.set(saintPositions[i], 0.8, -1.0);
+  portal.add(saint);
+
+  // Canopy above each saint
+  const canopyArch = createPointedArch(1.0, 1.0, 0.1, 0.05);
+  const canopyMesh = new THREE.Mesh(canopyArch, stoneLight);
+  canopyMesh.position.set(saintPositions[i], 2.2, -0.8);
+  portal.add(canopyMesh);
+
+  // Pinnacle above canopy
+  const pin = createPinnacle(0.15, 0.8);
+  pin.position.set(saintPositions[i], 3.2, -0.7);
+  portal.add(pin);
+
+  // Pedestal
+  const pedestal = new THREE.Mesh(
+    new THREE.BoxGeometry(0.6, 0.3, 0.4),
+    stoneMat
+  );
+  pedestal.position.set(saintPositions[i], -0.95, -0.8);
+  pedestal.castShadow = true;
+  portal.add(pedestal);
+}
+
+// ── BLIND ARCADE along top ──
+const arcadeY = 5.5;
+const arcadeCount = 12;
+const arcadeSpan = 16;
+const bayWidth = arcadeSpan / arcadeCount;
+for (let i = 0; i < arcadeCount; i++) {
+  const cx = -arcadeSpan/2 + bayWidth * (i + 0.5);
+  const arch = createPointedArch(bayWidth * 0.7, bayWidth * 0.8, 0.08, 0.04);
+  const mesh = new THREE.Mesh(arch, i % 2 === 0 ? stoneLight : stoneMat);
+  mesh.position.set(cx, arcadeY, -1.1);
+  portal.add(mesh);
+
+  // Trefoil panel in arcade
+  const trefoil = createTrefoilPanel(bayWidth * 0.5, bayWidth * 0.5, 0.05);
+  trefoil.position.set(cx, arcadeY + bayWidth * 0.35, -1.05);
+  portal.add(trefoil);
+
+  // Small colonnette between bays
+  if (i < arcadeCount - 1) {
+    const miniCol = createColonnette(0.04, 1.2);
+    miniCol.position.set(cx + bayWidth/2, arcadeY, -1.0);
+    portal.add(miniCol);
+  }
+}
+
+// ── PINNACLES along top ──
+for (let i = 0; i < 8; i++) {
+  const px = -7 + i * 2;
+  const pin = createPinnacle(0.2, 1.2);
+  pin.position.set(px, 7, -1.2);
+  portal.add(pin);
+}
+
+// ── LOWER BLIND ARCADE ──
+const lowerY = -0.7;
+const lowerCount = 16;
+const lowerSpan = 18;
+const lowerBay = lowerSpan / lowerCount;
+for (let i = 0; i < lowerCount; i++) {
+  const cx = -lowerSpan/2 + lowerBay * (i + 0.5);
+  const arch = createPointedArch(lowerBay * 0.75, lowerBay * 0.6, 0.06, 0.03);
+  const mesh = new THREE.Mesh(arch, stoneDark);
+  mesh.position.set(cx, lowerY, -0.9);
+  portal.add(mesh);
+}
+
+// ═══════════════════════════════════════
+// ANIMATION — Slow contemplative rotation
+// ═══════════════════════════════════════
+
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Subtle camera movement following mouse
+  camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.02;
+  camera.position.y += (2 - mouseY * 0.8 - camera.position.y) * 0.02;
+  camera.lookAt(0, 2, 0);
+
+  renderer.render(scene, camera);
+}
+
+animate();
 
 window.addEventListener('resize', () => {
-  sizeCanvas();
-  const r = card.getBoundingClientRect();
-  mb.opts.exclusion = { x: r.left, y: r.top, w: r.width, h: r.height, padding: 14 };
-  mb.resize(c.width, c.height);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
 </script>
 </body>
 </html>
