@@ -1,6 +1,6 @@
-// manuscript.js — Generative Hypermedievalism Engine v10
-// Horror Vacui L-system marginalia. Intaglio etching. Ink on parchment.
-// Real L-system grammars. Dendritic growth. Every pixel filled.
+// manuscript.js — Generative Hypermedievalism Engine v11
+// Illuminated manuscript vine scrollwork. Silver filigree. Luminous.
+// Structured organic marginalia building in real time.
 
 class ManuscriptBorder {
   constructor(canvas, options = {}) {
@@ -9,8 +9,16 @@ class ManuscriptBorder {
     this.opts = Object.assign({
       seed: Math.random() * 99999 | 0,
       exclusion: null,
-      growthRate: 6,
-      segmentSpeed: 0.08,
+      growthRate: 4,
+      palette: {
+        vine: 'rgba(160, 158, 152, VAR)',       // silver vine stems
+        vineDark: 'rgba(130, 128, 122, VAR)',    // darker stems
+        leaf: 'rgba(175, 172, 166, VAR)',         // silver leaves
+        leafLight: 'rgba(195, 192, 188, VAR)',   // lighter leaf fill
+        tendril: 'rgba(180, 178, 172, VAR)',     // thin curling tendrils
+        dot: 'rgba(150, 148, 142, VAR)',         // berry/bud dots
+        frame: 'rgba(170, 168, 162, VAR)',       // frame lines
+      },
     }, options);
 
     this._seed = this.opts.seed;
@@ -19,13 +27,14 @@ class ManuscriptBorder {
     this.running = false;
     this.frameCount = 0;
 
-    // Spatial grid for density checking
-    this.gridSize = 3;
+    this.gridSize = 5;
     this.grid = null;
 
-    this.segments = [];
-    this.activeSegs = [];
-    this.growQueue = [];
+    this.drawnSegs = [];       // completed
+    this.activeSegs = [];      // animating
+    this.growQueue = [];       // pending vine growth
+    this.leaves = [];          // leaf/flower decorations to draw
+    this.drawnLeaves = [];
   }
 
   _rng() {
@@ -36,8 +45,8 @@ class ManuscriptBorder {
   }
   _range(a, b) { return a + this._rng() * (b - a); }
   _irange(a, b) { return (a + this._rng() * (b - a)) | 0; }
+  _col(base, a) { return base.replace('VAR', Math.max(0, Math.min(1, a)).toFixed(3)); }
 
-  // Spatial hash for fast density queries
   _initGrid() {
     const gs = this.gridSize;
     this.gridW = Math.ceil(this.w / gs);
@@ -74,133 +83,165 @@ class ManuscriptBorder {
   }
 
   // ═══════════════════════════════════════
-  // L-SYSTEM GRAMMARS
+  // VINE SCROLLWORK GENERATION
   // ═══════════════════════════════════════
 
-  // Each grammar: { axiom, rules, angle, iterations, lengthScale }
-  static GRAMMARS = [
-    // 0: Classic plant
-    { axiom: 'X', rules: { X: 'F+[[X]-X]-F[-FX]+X', F: 'FF' }, angle: 25, iterations: 5, lengthScale: 0.5 },
-    // 1: Bush
-    { axiom: 'F', rules: { F: 'FF+[+F-F-F]-[-F+F+F]' }, angle: 22, iterations: 4, lengthScale: 0.5 },
-    // 2: Fern
-    { axiom: 'X', rules: { X: 'F-[[X]+X]+F[+FX]-X', F: 'FF' }, angle: 22, iterations: 5, lengthScale: 0.45 },
-    // 3: Weed
-    { axiom: 'F', rules: { F: 'F[+F]F[-F]F' }, angle: 25.7, iterations: 4, lengthScale: 0.35 },
-    // 4: Stochastic tree
-    { axiom: 'F', rules: { F: 'F[+F][-F]' }, angle: 30, iterations: 6, lengthScale: 0.55 },
-    // 5: Dendritic / coral
-    { axiom: 'X', rules: { X: 'F[+X][-X]FX', F: 'FF' }, angle: 28, iterations: 5, lengthScale: 0.42 },
-    // 6: Skeletal
-    { axiom: 'X', rules: { X: 'F[-X][+X]', F: 'FF' }, angle: 35, iterations: 6, lengthScale: 0.48 },
-    // 7: Dense fractal
-    { axiom: 'X', rules: { X: 'F+[X+F]-[X-F]', F: 'FF' }, angle: 20, iterations: 5, lengthScale: 0.5 },
-  ];
+  // A vine is a main curving stem that produces:
+  // - Branches (smaller vines, recursive)
+  // - Leaves (acanthus-style at branch points)
+  // - Tendrils (thin spiraling curls)
+  // - Buds/berries (small dots at terminals)
 
-  // Expand L-system string
-  _expandLSystem(grammar, stochastic) {
-    let str = grammar.axiom;
-    for (let i = 0; i < grammar.iterations; i++) {
-      let next = '';
-      for (const ch of str) {
-        if (grammar.rules[ch]) {
-          // Stochastic variation
-          if (stochastic && this._rng() < 0.15) {
-            // Occasionally skip or modify
-            next += this._rng() < 0.5 ? grammar.rules[ch] : ch;
-          } else {
-            next += grammar.rules[ch];
-          }
-        } else {
-          next += ch;
+  _generateVine(startX, startY, startAngle, length, depth, maxDepth) {
+    if (depth > maxDepth || length < 4) return;
+
+    // Main stem: a smooth curve via multiple short segments
+    const segsCount = Math.max(2, Math.ceil(length / 6));
+    const segLen = length / segsCount;
+    let x = startX, y = startY, angle = startAngle;
+    let prevX = x, prevY = y;
+
+    for (let i = 0; i < segsCount; i++) {
+      // Gentle curve — vine-like organic flow
+      angle += this._range(-0.25, 0.25);
+
+      const endX = x + Math.cos(angle) * segLen;
+      const endY = y + Math.sin(angle) * segLen;
+
+      if (!this._canPlace(endX, endY)) break;
+
+      this.growQueue.push({
+        type: 'vine',
+        x, y, endX, endY, depth,
+        lineWidth: Math.max(0.4, 2.2 - depth * 0.3),
+      });
+
+      // Mark grid
+      const steps = Math.max(1, Math.ceil(segLen / this.gridSize));
+      for (let s = 0; s <= steps; s++) {
+        const t = s / steps;
+        this._markCell(x + (endX - x) * t, y + (endY - y) * t);
+      }
+
+      prevX = x; prevY = y;
+      x = endX; y = endY;
+
+      // Branch points — spawn sub-vines, leaves, tendrils
+      if (i > 0 && this._rng() < 0.45 && depth < maxDepth) {
+        // Sub-vine branch
+        const branchAngle = angle + (this._rng() > 0.5 ? 1 : -1) * this._range(0.5, 1.2);
+        const branchLen = length * this._range(0.3, 0.6);
+        this._generateVine(x, y, branchAngle, branchLen, depth + 1, maxDepth);
+      }
+
+      // Leaf at branch point
+      if (this._rng() < 0.35) {
+        const leafAngle = angle + (this._rng() > 0.5 ? 1 : -1) * this._range(0.4, 1.0);
+        const leafSize = this._range(4, 12) * (1 - depth * 0.1);
+        if (leafSize > 2) {
+          this.leaves.push({
+            x, y, angle: leafAngle, size: leafSize, depth,
+            type: this._rng() < 0.7 ? 'acanthus' : 'round',
+          });
         }
       }
-      str = next;
-      if (str.length > 5000) break; // safety
-    }
-    return str;
-  }
 
-  // Convert L-system string into growth queue entries
-  _lsystemToSegments(str, startX, startY, startAngle, baseLength, grammar) {
-    const angleRad = grammar.angle * Math.PI / 180;
-    const entries = [];
-    const stack = [];
-    let x = startX, y = startY, a = startAngle, len = baseLength;
-    let depth = 0;
+      // Tendril
+      if (this._rng() < 0.2) {
+        const tAngle = angle + (this._rng() > 0.5 ? 1 : -1) * this._range(0.6, 1.4);
+        this._generateTendril(x, y, tAngle, this._range(8, 20), depth);
+      }
 
-    for (const ch of str) {
-      switch (ch) {
-        case 'F': {
-          const endX = x + Math.cos(a) * len;
-          const endY = y + Math.sin(a) * len;
-          entries.push({ x, y, endX, endY, depth, len });
-          x = endX;
-          y = endY;
-          break;
+      // Berry/bud at some nodes
+      if (this._rng() < 0.15) {
+        const bAngle = angle + (this._rng() > 0.5 ? 1 : -1) * this._range(0.3, 0.8);
+        const bx = x + Math.cos(bAngle) * this._range(3, 6);
+        const by = y + Math.sin(bAngle) * this._range(3, 6);
+        if (this._canPlace(bx, by)) {
+          this._markCell(bx, by);
+          this.growQueue.push({
+            type: 'bud', x: bx, y: by, radius: this._range(1, 2.5), depth,
+          });
         }
-        case '+':
-          a += angleRad + this._range(-0.05, 0.05);
-          break;
-        case '-':
-          a -= angleRad + this._range(-0.05, 0.05);
-          break;
-        case '[':
-          stack.push({ x, y, a, len, depth });
-          depth++;
-          len *= grammar.lengthScale + this._range(-0.05, 0.05);
-          break;
-        case ']':
-          if (stack.length) {
-            const s = stack.pop();
-            x = s.x; y = s.y; a = s.a; len = s.len; depth = s.depth;
-          }
-          break;
-        // X is just a placeholder, no drawing
       }
     }
 
-    return entries;
+    // Terminal bud
+    if (depth > 0) {
+      this.growQueue.push({
+        type: 'bud', x, y, radius: this._range(1, 2), depth,
+      });
+    }
+  }
+
+  _generateTendril(x, y, angle, length, depth) {
+    // Spiraling thin curl
+    const segs = Math.ceil(length / 3);
+    let cx = x, cy = y, ca = angle;
+    const curlDir = this._rng() > 0.5 ? 1 : -1;
+
+    for (let i = 0; i < segs; i++) {
+      ca += curlDir * this._range(0.15, 0.35);
+      const segLen = (length / segs) * (1 - i * 0.08);
+      if (segLen < 1) break;
+
+      const ex = cx + Math.cos(ca) * segLen;
+      const ey = cy + Math.sin(ca) * segLen;
+
+      if (!this._canPlace(ex, ey)) break;
+      this._markCell(ex, ey);
+
+      this.growQueue.push({
+        type: 'tendril',
+        x: cx, y: cy, endX: ex, endY: ey, depth: depth + 2,
+        lineWidth: Math.max(0.15, 0.6 - i * 0.05),
+      });
+
+      cx = ex; cy = ey;
+    }
   }
 
   // ═══════════════════════════════════════
-  // SEED GROWTH
+  // SEEDING
   // ═══════════════════════════════════════
 
-  _seedTrees() {
+  _seedVines() {
     this.growQueue = [];
-    const grammars = ManuscriptBorder.GRAMMARS;
+    this.leaves = [];
+    const sp = 20;
 
-    const seed = (x, y, angle, baseLen) => {
-      const g = grammars[this._irange(0, grammars.length)];
-      const str = this._expandLSystem(g, true);
-      const segs = this._lsystemToSegments(str, x, y, angle, baseLen, g);
-      // Filter and enqueue
-      for (const s of segs) {
-        this.growQueue.push(s);
-      }
-    };
-
-    // Dense edge seeding
-    const sp = 6;
-    for (let y = 2; y < this.h - 2; y += sp + this._range(-2, 2)) {
-      seed(this._range(0, 3), y, this._range(-0.5, 0.5), this._range(3, 8));
-      seed(this.w - this._range(0, 3), y, Math.PI + this._range(-0.5, 0.5), this._range(3, 8));
+    // Edge vines — main stems growing inward
+    for (let y = 10; y < this.h - 10; y += sp + this._range(-6, 6)) {
+      this._generateVine(this._range(2, 8), y, this._range(-0.4, 0.4), this._range(40, 120), 0, this._irange(3, 6));
+      this._generateVine(this.w - this._range(2, 8), y, Math.PI + this._range(-0.4, 0.4), this._range(40, 120), 0, this._irange(3, 6));
     }
-    for (let x = 2; x < this.w - 2; x += sp + this._range(-2, 2)) {
-      seed(x, this._range(0, 3), Math.PI/2 + this._range(-0.5, 0.5), this._range(3, 7));
-      seed(x, this.h - this._range(0, 3), -Math.PI/2 + this._range(-0.5, 0.5), this._range(3, 7));
+    for (let x = 10; x < this.w - 10; x += sp + this._range(-6, 6)) {
+      this._generateVine(x, this._range(2, 8), Math.PI/2 + this._range(-0.4, 0.4), this._range(30, 100), 0, this._irange(3, 6));
+      this._generateVine(x, this.h - this._range(2, 8), -Math.PI/2 + this._range(-0.4, 0.4), this._range(30, 100), 0, this._irange(3, 6));
     }
 
-    // Interior seeds — scattered
-    const count = Math.floor((this.w * this.h) / 3000);
+    // Interior vines
+    const count = Math.floor((this.w * this.h) / 8000);
     for (let i = 0; i < count; i++) {
-      const x = this._range(this.w * 0.05, this.w * 0.95);
-      const y = this._range(this.h * 0.05, this.h * 0.95);
-      seed(x, y, this._range(0, Math.PI * 2), this._range(2, 5));
+      const x = this._range(this.w * 0.1, this.w * 0.9);
+      const y = this._range(this.h * 0.1, this.h * 0.9);
+      if (this._canPlace(x, y)) {
+        this._generateVine(x, y, this._range(0, Math.PI * 2), this._range(20, 60), 1, this._irange(2, 5));
+      }
     }
 
-    // Shuffle for even visual distribution
+    // Fill gaps with small tendrils and buds
+    for (let pass = 0; pass < 3; pass++) {
+      for (let y = 8; y < this.h - 8; y += 12 + this._range(-3, 3)) {
+        for (let x = 8; x < this.w - 8; x += 12 + this._range(-3, 3)) {
+          if (this._canPlace(x, y) && this._rng() < 0.5) {
+            this._generateTendril(x, y, this._range(0, Math.PI * 2), this._range(5, 15), 2);
+          }
+        }
+      }
+    }
+
+    // Shuffle for distributed visual growth
     for (let i = this.growQueue.length - 1; i > 0; i--) {
       const j = (this._rng() * (i + 1)) | 0;
       [this.growQueue[i], this.growQueue[j]] = [this.growQueue[j], this.growQueue[i]];
@@ -216,71 +257,147 @@ class ManuscriptBorder {
 
     while (budget > 0 && this.growQueue.length > 0) {
       const job = this.growQueue.shift();
-      const { x, y, endX, endY, depth, len } = job;
 
-      if (!this._canPlace(endX, endY)) continue;
-
-      // Mark spatial grid along the segment
-      const steps = Math.max(1, Math.ceil(len / this.gridSize));
-      for (let i = 0; i <= steps; i++) {
-        const t = i / steps;
-        this._markCell(x + (endX - x) * t, y + (endY - y) * t);
+      if (job.type === 'bud') {
+        this.drawnSegs.push({ ...job, progress: 1 });
+        budget--;
+        continue;
       }
 
-      this.activeSegs.push({
-        x, y, endX, endY, depth,
-        progress: 0,
-        lineWidth: Math.max(0.15, 1.2 - depth * 0.08),
-      });
-
+      // vine or tendril
+      this.activeSegs.push({ ...job, progress: 0 });
       budget--;
     }
 
-    // Continuous: when queue empties, reseed
-    if (this.growQueue.length === 0 && this.activeSegs.every(s => s.progress >= 1)) {
-      this._seed = (this._seed + 13) | 0;
-      this.segments = [];
+    // Also queue leaves once their vine segments are drawn
+    if (this.leaves.length > 0 && this.growQueue.length < 50) {
+      const batch = Math.min(2, this.leaves.length);
+      for (let i = 0; i < batch; i++) {
+        const leaf = this.leaves.shift();
+        this.drawnLeaves.push({ ...leaf, progress: 0 });
+      }
+    }
+
+    // Reseed when done
+    if (this.growQueue.length === 0 && this.leaves.length === 0 &&
+        this.activeSegs.length === 0 &&
+        this.drawnLeaves.every(l => l.progress >= 1)) {
+      this._seed = (this._seed + 7) | 0;
+      this.drawnSegs = [];
       this.activeSegs = [];
+      this.drawnLeaves = [];
       this._initGrid();
-      this._seedTrees();
+      this._seedVines();
     }
   }
 
   _stepSegments() {
-    const speed = this.opts.segmentSpeed;
-    const done = [];
     const still = [];
     for (const seg of this.activeSegs) {
-      if (seg.progress < 1) {
-        seg.progress = Math.min(1, seg.progress + speed);
-        if (seg.progress >= 1) done.push(seg); else still.push(seg);
+      seg.progress = Math.min(1, seg.progress + 0.08);
+      if (seg.progress >= 1) {
+        this.drawnSegs.push(seg);
       } else {
-        done.push(seg);
+        still.push(seg);
       }
     }
-    this.segments.push(...done);
     this.activeSegs = still;
+
+    // Step leaf animations
+    for (const leaf of this.drawnLeaves) {
+      if (leaf.progress < 1) leaf.progress = Math.min(1, leaf.progress + 0.04);
+    }
   }
 
   // ═══════════════════════════════════════
-  // RENDERING — Intaglio etching aesthetic
+  // RENDERING — Silver filigree on luminous white
   // ═══════════════════════════════════════
 
-  _drawSeg(seg) {
+  _drawVineSeg(seg) {
     const ctx = this.ctx;
+    const pal = this.opts.palette;
     const p = seg.progress;
+
+    if (seg.type === 'bud') {
+      ctx.fillStyle = this._col(pal.dot, 0.6);
+      ctx.beginPath();
+      ctx.arc(seg.x, seg.y, seg.radius, 0, Math.PI * 2);
+      ctx.fill();
+      // Tiny highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.beginPath();
+      ctx.arc(seg.x - seg.radius * 0.3, seg.y - seg.radius * 0.3, seg.radius * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+
     const curX = seg.x + (seg.endX - seg.x) * p;
     const curY = seg.y + (seg.endY - seg.y) * p;
 
-    // Primary stroke — ink black
-    const alpha = seg.depth < 2 ? 0.85 : seg.depth < 5 ? 0.65 : 0.45;
-    ctx.strokeStyle = `rgba(20, 18, 15, ${alpha})`;
+    const alpha = seg.type === 'tendril' ? 0.45 : (seg.depth < 2 ? 0.7 : 0.55);
+    const col = seg.type === 'tendril' ? pal.tendril : (seg.depth < 1 ? pal.vineDark : pal.vine);
+
+    ctx.strokeStyle = this._col(col, alpha);
     ctx.lineWidth = seg.lineWidth;
     ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     ctx.beginPath();
     ctx.moveTo(seg.x, seg.y);
     ctx.lineTo(curX, curY);
     ctx.stroke();
+  }
+
+  _drawLeaf(leaf) {
+    if (leaf.progress < 0.01) return;
+    const ctx = this.ctx;
+    const pal = this.opts.palette;
+    const s = leaf.size * leaf.progress;
+    const { x, y, angle } = leaf;
+
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+
+    if (leaf.type === 'acanthus') {
+      // Acanthus leaf — elongated with lobes
+      ctx.fillStyle = this._col(pal.leafLight, 0.35);
+      ctx.strokeStyle = this._col(pal.leaf, 0.5);
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      // Main leaf shape
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(s * 0.3, -s * 0.4, s * 0.7, -s * 0.35, s, 0);
+      ctx.bezierCurveTo(s * 0.7, s * 0.35, s * 0.3, s * 0.4, 0, 0);
+      ctx.fill();
+      ctx.stroke();
+      // Center vein
+      ctx.strokeStyle = this._col(pal.vine, 0.4);
+      ctx.lineWidth = 0.3;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(s * 0.9, 0);
+      ctx.stroke();
+      // Side veins
+      for (let v = 0.25; v < 0.85; v += 0.2) {
+        ctx.beginPath();
+        ctx.moveTo(s * v, 0);
+        ctx.lineTo(s * (v + 0.1), -s * 0.15);
+        ctx.moveTo(s * v, 0);
+        ctx.lineTo(s * (v + 0.1), s * 0.15);
+        ctx.stroke();
+      }
+    } else {
+      // Round leaf / flower bud
+      ctx.fillStyle = this._col(pal.leafLight, 0.3);
+      ctx.strokeStyle = this._col(pal.leaf, 0.45);
+      ctx.lineWidth = 0.4;
+      ctx.beginPath();
+      ctx.arc(s * 0.5, 0, s * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    ctx.restore();
   }
 
   // ═══════════════════════════════════════
@@ -294,7 +411,7 @@ class ManuscriptBorder {
     this.h = this.canvas.height;
 
     this._initGrid();
-    this._seedTrees();
+    this._seedVines();
 
     const loop = () => {
       if (!this.running) return;
@@ -305,8 +422,9 @@ class ManuscriptBorder {
 
       this.ctx.clearRect(0, 0, this.w, this.h);
 
-      for (const seg of this.segments) this._drawSeg(seg);
-      for (const seg of this.activeSegs) this._drawSeg(seg);
+      for (const seg of this.drawnSegs) this._drawVineSeg(seg);
+      for (const seg of this.activeSegs) this._drawVineSeg(seg);
+      for (const leaf of this.drawnLeaves) this._drawLeaf(leaf);
 
       requestAnimationFrame(loop);
     };
@@ -319,10 +437,12 @@ class ManuscriptBorder {
   resize(w, h) {
     this.canvas.width = w; this.canvas.height = h;
     this.w = w; this.h = h;
-    this.segments = [];
+    this.drawnSegs = [];
     this.activeSegs = [];
+    this.drawnLeaves = [];
+    this.leaves = [];
     this._initGrid();
-    this._seedTrees();
+    this._seedVines();
   }
 }
 
