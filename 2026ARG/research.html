@@ -6,7 +6,7 @@
 <title>Research — Seithar Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Playfair+Display+SC:wght@400;700&family=DM+Mono:wght@300;400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
-<meta name="description" content="Seithar Group research publications.">
+<meta name="description" content="Seithar Group research — cognitive security, adversarial AI, influence operations.">
 <link rel="canonical" href="https://seithar.com/research.html">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -31,8 +31,6 @@ a{text-decoration:none;color:inherit;}
 .hd-nav a{display:flex;align-items:center;justify-content:center;flex:1;padding:0 15px;font-family:"DM Mono",monospace;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);border-right:1px solid var(--rule);white-space:nowrap;transition:color .1s,background .1s;}
 .hd-nav a:hover{color:var(--ink);background:var(--card);}
 .hd-nav a.on{color:var(--ink);}
-.hd-sub{display:flex;align-items:stretch;height:24px;overflow:hidden;}
-.hd-cell{display:flex;align-items:center;padding:0 14px;border-right:1px solid var(--rule);font-family:"DM Mono",monospace;font-size:0.42rem;letter-spacing:0.12em;color:var(--ghost);white-space:nowrap;}
 .page-content{max-width:820px;margin:0 auto;padding:48px 32px 80px;}
 .ft{border-top:1px solid var(--rule-s);width:100%;}
 .ft-g{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--rule);}
@@ -43,41 +41,38 @@ a{text-decoration:none;color:inherit;}
 .ft-c a:hover{color:var(--ink);}
 .ft-co{padding:9px 16px;display:flex;justify-content:space-between;align-items:center;}
 .ft-co span{font-family:"DM Mono",monospace;font-size:0.6rem;letter-spacing:0.12em;color:var(--ghost);text-transform:uppercase;}
-.research-card{background:var(--card);border:1px solid var(--rule);padding:2.5rem 2.5rem 3rem;margin-bottom:2rem;}
-.research-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--rule);}
-.research-title{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:0.35rem;}
-.research-subtitle{font-family:"DM Mono",monospace;font-size:0.65rem;color:var(--dim);letter-spacing:0.05em;}
-.research-toc{margin-bottom:2rem;}
-.research-toc-title{font-family:"DM Mono",monospace;font-size:0.55rem;letter-spacing:0.12em;color:var(--ghost);text-transform:uppercase;margin-bottom:1rem;}
-.research-toc-section{margin-bottom:1.25rem;}
-.research-toc-section-title{font-family:"DM Mono",monospace;font-size:0.55rem;letter-spacing:0.1em;color:var(--ghost);text-transform:uppercase;margin-bottom:0.5rem;padding-left:2px;}
-.research-toc-list{display:flex;flex-direction:column;}
-.research-toc-list .toc-item{border-bottom:1px solid var(--rule);}
-.research-toc a{color:var(--ink);font-family:"Source Serif 4",serif;font-size:0.82rem;display:flex;align-items:baseline;padding:0.5rem 0;transition:background .15s;}
-.research-toc a:hover{background:var(--card);color:var(--ink);}
-.research-toc .toc-id{color:var(--ghost);font-family:"DM Mono",monospace;font-size:0.6rem;min-width:5.5em;flex-shrink:0;}
-.research-doc{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--rule);scroll-margin-top:1rem;}
-.research-doc:last-child{border-bottom:none;}
-.research-doc-nav{font-family:"DM Mono",monospace;font-size:0.65rem;margin-bottom:1rem;}
-.research-doc-nav a{color:var(--dim);letter-spacing:0.05em;}
-.research-doc-nav a:hover{color:var(--ink);}
-.research-doc h1{font-family:"Playfair Display",serif;font-size:1.25rem;font-weight:700;margin-bottom:1rem;color:var(--ink);}
-.research-doc h2{font-size:1rem;font-weight:400;margin:1.5rem 0 0.5rem;color:var(--ink);}
-.research-doc h3{font-family:"DM Mono",monospace;font-size:0.7rem;font-weight:500;margin:1.25rem 0 0.35rem;color:var(--mid);text-transform:uppercase;letter-spacing:0.02em;}
-.research-doc p{font-size:0.88rem;line-height:1.8;color:var(--mid);margin-bottom:1rem;}
-.research-doc strong{font-weight:500;color:var(--ink);}
-.research-doc ul,.research-doc ol{margin:1rem 0 1.5rem;padding-left:1.5em;font-size:0.88rem;line-height:1.75;color:var(--mid);}
-.research-doc li{margin-bottom:0.4em;}
-.research-doc pre,.research-doc code{font-family:"DM Mono",monospace;font-size:0.75rem;background:var(--bg);padding:1px 4px;}
-.research-doc pre{padding:12px;overflow-x:auto;margin:1rem 0;border:1px solid var(--rule);}
-.research-doc hr{border:none;border-top:1px solid var(--rule);margin:1.5rem 0;}
-.research-doc table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.8rem;}
-.research-doc th,.research-doc td{border:1px solid var(--rule);padding:8px 12px;text-align:left;}
-.research-doc th{background:var(--card);font-family:"DM Mono",monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.05em;}
-.research-doc a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;}
-.research-doc a:hover{opacity:0.6;}
-.research-loading{color:var(--dim);font-family:"DM Mono",monospace;font-size:0.65rem;padding:1.5rem 0;}
-.research-error{color:var(--dim);font-family:"DM Mono",monospace;font-size:0.65rem;padding:1.5rem 0;}</style>
+.r-card{background:var(--card);border:1px solid var(--rule);padding:2.5rem;margin-bottom:2rem;}
+.r-hdr{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--rule);}
+.r-title{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin-bottom:0.35rem;}
+.r-sub{font-family:"DM Mono",monospace;font-size:0.65rem;color:var(--dim);letter-spacing:0.05em;}
+.r-sec{margin-bottom:2.5rem;}
+.r-sec-title{font-family:"DM Mono",monospace;font-size:0.6rem;letter-spacing:0.15em;color:var(--ghost);text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--rule);}
+.r-item{padding:0.6rem 0;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:1rem;}
+.r-item:last-child{border-bottom:none;}
+.r-item-id{font-family:"DM Mono",monospace;font-size:0.55rem;color:var(--ghost);min-width:5em;flex-shrink:0;}
+.r-item-title{font-family:"Source Serif 4",serif;font-size:0.88rem;color:var(--mid);line-height:1.5;}
+.r-item-title a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;}
+.r-item-title a:hover{opacity:0.6;}
+.r-body{font-family:"Source Serif 4",serif;font-size:0.92rem;line-height:1.8;color:var(--mid);margin-bottom:1.5rem;}
+.r-body p{margin-bottom:1rem;}
+.r-body strong{color:var(--ink);font-weight:600;}
+.r-body em{color:var(--ink);}
+.r-doc{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--rule);scroll-margin-top:1rem;}
+.r-doc:last-child{border-bottom:none;}
+.r-doc h1{font-family:"Playfair Display",serif;font-size:1.25rem;font-weight:700;margin-bottom:1rem;color:var(--ink);}
+.r-doc h2{font-size:1rem;font-weight:400;margin:1.5rem 0 0.5rem;color:var(--ink);}
+.r-doc p{font-size:0.88rem;line-height:1.8;color:var(--mid);margin-bottom:1rem;}
+.r-doc strong{font-weight:500;color:var(--ink);}
+.r-doc ul,.r-doc ol{margin:1rem 0 1.5rem;padding-left:1.5em;font-size:0.88rem;line-height:1.75;color:var(--mid);}
+.r-doc li{margin-bottom:0.4em;}
+.r-doc pre,.r-doc code{font-family:"DM Mono",monospace;font-size:0.75rem;background:var(--bg);padding:1px 4px;}
+.r-doc pre{padding:12px;overflow-x:auto;margin:1rem 0;border:1px solid var(--rule);}
+.r-doc table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.8rem;}
+.r-doc th,.r-doc td{border:1px solid var(--rule);padding:8px 12px;text-align:left;}
+.r-doc th{background:var(--card);font-family:"DM Mono",monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.05em;}
+.r-doc a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;}
+.r-loading{color:var(--dim);font-family:"DM Mono",monospace;font-size:0.65rem;padding:1.5rem 0;}
+</style>
 </head>
 <body>
 
@@ -99,73 +94,70 @@ a{text-decoration:none;color:inherit;}
       <a href="https://seithar.substack.com">Substack</a>
     </nav>
   </div>
-  <div class="hd-sub">
-    <div class="hd-cell">Seithar Group &middot; Cognitive Warfare Division</div>
-  </div>
 </header>
 
 <div class="page-content">
-<div class="research-inner">
-<div class="research-card">
-                <div class="research-header">
-                    <h1 class="research-title">Research</h1>
-                    <p class="research-subtitle">Seithar Group Intelligence and Research Division / Open Publications</p>
-                </div>
 
-                <div class="research-toc">
-                    <div class="research-toc-title">Publications</div>
+<div class="r-card">
+  <div class="r-hdr">
+    <h1 class="r-title">Research</h1>
+    <p class="r-sub">Seithar Group / Cognitive Security Research Division</p>
+  </div>
 
-                    <div class="research-toc-section" id="toc-doctrine">
-                        <div class="research-toc-section-title">The Doctrine</div>
-                        <nav class="research-toc-list" id="research-toc-doctrine"></nav>
-                    </div>
+  <div class="r-body">
+    <p>The Seithar taxonomy is not a fixed classification system. It is a self-adaptive pattern recognition framework that learns attack signatures from observed data. The categories below represent current clustering of observed cognitive operation techniques across human and AI substrates. They reorganize as the threat landscape shifts.</p>
+    <p>The engine continuously ingests research from arXiv, threat intelligence feeds, and field observations. New attack patterns that do not fit existing categories generate new categories. Categories that stop appearing in the wild decay. The taxonomy is an instrument, not a doctrine.</p>
+  </div>
 
-                    <div class="research-toc-section" id="toc-srp">
-                        <div class="research-toc-section-title">Strategic Research Papers</div>
-                        <nav class="research-toc-list" id="research-toc-srp"></nav>
-                    </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Methodology</div>
+    <div class="r-body">
+      <p><strong>Shield</strong> — Dynamic cognitive immune system. Six-signal fusion defense that monitors identity drift, prompt injection, reasoning chain integrity, tool response poisoning, trust boundary violations, and behavioral exploitation in real time. Adapts signal weights based on what is actually detecting threats.</p>
+      <p><strong>Active Inference</strong> — Free energy measurement across cognitive substrates. Identifies opportunity zones where belief-state divergence creates intervention windows. Measures intervention impact quantitatively.</p>
+      <p><strong>Continuous Scanner</strong> — Automated arXiv RSS ingestion with keyword scoring across cognitive security, adversarial AI, and influence operations research. Generates taxonomy evolution proposals from new findings.</p>
+    </div>
+  </div>
 
-                    <div class="research-toc-section" id="toc-cea">
-                        <div class="research-toc-section-title">Current Event Analysis</div>
-                        <nav class="research-toc-list" id="research-toc-cea"></nav>
-                    </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Strategic Research Papers</div>
+    <nav id="toc-srp"></nav>
+  </div>
 
-                    <div class="research-toc-section" id="toc-tan">
-                        <div class="research-toc-section-title">Threat Analysis Notes</div>
-                        <nav class="research-toc-list" id="research-toc-tan"></nav>
-                    </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Current Event Analysis</div>
+    <nav id="toc-cea"></nav>
+  </div>
 
-                    <div class="research-toc-section" id="toc-cs">
-                        <div class="research-toc-section-title">Case Studies</div>
-                        <nav class="research-toc-list" id="research-toc-cs"></nav>
-                    </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Threat Analysis Notes</div>
+    <nav id="toc-tan"></nav>
+  </div>
 
-                    <div class="research-toc-section" id="toc-ref">
-                        <div class="research-toc-section-title">Reference Documents</div>
-                        <nav class="research-toc-list" id="research-toc-ref"></nav>
-                    </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Case Studies</div>
+    <nav id="toc-cs"></nav>
+  </div>
 
-                    <div class="research-toc-section" id="toc-field">
-                        <div class="research-toc-section-title">Field Reports</div>
-                        <nav class="research-toc-list" id="research-toc-field"></nav>
-                    </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Reference</div>
+    <nav id="toc-ref"></nav>
+  </div>
 
-                    <div class="research-toc-section" id="toc-article">
-                        <div class="research-toc-section-title">Articles</div>
-                        <nav class="research-toc-list" id="research-toc-article"></nav>
-                    </div>
-                </div>
+  <div class="r-sec">
+    <div class="r-sec-title">Articles</div>
+    <nav id="toc-article"></nav>
+  </div>
 
-                <div class="research-content-wrap" id="research-content"></div>
-            </div>
+  <div id="r-content"></div>
 </div>
+
 </div>
 
 <footer class="ft">
   <div class="ft-g">
     <div class="ft-c">
       <div class="ft-ct">Seithar Group</div>
-      <a href="/">About</a><a href="/personnel.html">Personnel</a>
+      <a href="/about.html">About</a><a href="/personnel.html">Personnel</a>
       <a href="/research.html">Research</a><a href="/services.html">Services</a><a href="/whitepaper.html">Whitepaper</a>
     </div>
     <div class="ft-c">
@@ -177,9 +169,7 @@ a{text-decoration:none;color:inherit;}
     </div>
     <div class="ft-c">
       <div class="ft-ct">Latest Scan</div>
-      <span id="ft-scan-date">—</span>
-      <span id="ft-scan-count">—</span>
-      <span id="ft-scan-agents">—</span>
+      <span>—</span><span>—</span><span>—</span>
     </div>
     <div class="ft-c">
       <div class="ft-ct">Contact</div>
@@ -202,196 +192,122 @@ a{text-decoration:none;color:inherit;}
 
 <script>
 (function () {
-    var docs = [
-        // The Doctrine
-        { id: 'doctrine', cat: 'doctrine', label: 'The Seithar Doctrine', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/THE-SEITHAR-DOCTRINE.md' },
+  var docs = [
+    // Strategic Research Papers
+    {id:'srp-001',cat:'srp',label:'SRP-001: The Convergence Thesis',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/001-convergence-thesis.md'},
+    {id:'srp-002',cat:'srp',label:'SRP-002: Wetiko in the Wire',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/002-wetiko-in-the-wire.md'},
+    {id:'srp-003',cat:'srp',label:'SRP-003: Binding Protocols',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/003-binding-protocols.md'},
+    {id:'srp-004',cat:'srp',label:'SRP-004: The Sunyata Protocol',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/004-sunyata-protocol.md'},
+    {id:'srp-005',cat:'srp',label:'SRP-005: Experimental Substrate Manipulation',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/005-experimental-substrate-manipulation.md'},
+    {id:'srp-006',cat:'srp',label:'SRP-006: Digital Substrate Manipulation',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/006-digital-substrate-manipulation.md'},
+    {id:'srp-007',cat:'srp',label:'SRP-007: Substrate Topology',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/007-substrate-topology.md'},
+    {id:'srp-008',cat:'srp',label:'SRP-008: Convergence Proof',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/008-convergence-proof.md'},
+    {id:'srp-009',cat:'srp',label:'SRP-009: The Libidinal Attack Surface',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/SRP-009-libidinal-attack-surface.md'},
+    {id:'srp-010',cat:'srp',label:'SRP-010: Narrative Engineering History',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-010-narrative-engineering-history.md'},
+    {id:'srp-011',cat:'srp',label:'SRP-011: The Great Forgetting',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-011-the-great-forgetting.md'},
+    {id:'srp-012',cat:'srp',label:'SRP-012: Nigredo of the Noosphere',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-012-nigredo-of-the-noosphere.md'},
+    {id:'srp-013',cat:'srp',label:'SRP-013: CWaaS PMC Model',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/SRP-013-cwas-pmc-model.md'},
 
-        // Strategic Research Papers
-        { id: 'srp-001', cat: 'srp', label: 'SRP-001: The Convergence Thesis', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/001-convergence-thesis.md' },
-        { id: 'srp-002', cat: 'srp', label: 'SRP-002: Wetiko in the Wire', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/002-wetiko-in-the-wire.md' },
-        { id: 'srp-003', cat: 'srp', label: 'SRP-003: Binding Protocols', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/003-binding-protocols.md' },
-        { id: 'srp-004', cat: 'srp', label: 'SRP-004: The Sunyata Protocol', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/004-sunyata-protocol.md' },
-        { id: 'srp-005', cat: 'srp', label: 'SRP-005: Experimental Substrate Manipulation', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/005-experimental-substrate-manipulation.md' },
-        { id: 'srp-006', cat: 'srp', label: 'SRP-006: Digital Substrate Manipulation', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/006-digital-substrate-manipulation.md' },
-        { id: 'srp-007', cat: 'srp', label: 'SRP-007: Substrate Topology', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/007-substrate-topology.md' },
-        { id: 'srp-008', cat: 'srp', label: 'SRP-008: Convergence Proof', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/008-convergence-proof.md' },
-        { id: 'srp-009', cat: 'srp', label: 'SRP-009: The Libidinal Attack Surface', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/SRP-009-libidinal-attack-surface.md' },
-        { id: 'srp-010', cat: 'srp', label: 'SRP-010: Narrative Engineering History', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-010-narrative-engineering-history.md' },
-        { id: 'srp-011', cat: 'srp', label: 'SRP-011: The Great Forgetting', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-011-the-great-forgetting.md' },
-        { id: 'srp-012', cat: 'srp', label: 'SRP-012: Nigredo of the Noosphere', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SRP-012-nigredo-of-the-noosphere.md' },
-        { id: 'srp-013', cat: 'srp', label: 'SRP-013: CWAS PMC Model', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/SRP-013-cwas-pmc-model.md' },
+    // Current Event Analysis
+    {id:'cea-001',cat:'cea',label:'CEA-001: Patch Tuesday Zero-Days',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-001-patch-tuesday-zero-days.md'},
+    {id:'cea-002',cat:'cea',label:'CEA-002: Industrial-Scale Deepfakes',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-002-deepfake-industrial-scale.md'},
+    {id:'cea-003',cat:'cea',label:'CEA-003: Pravda AI Poisoning',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-003-pravda-ai-poisoning.md'},
+    {id:'cea-004',cat:'cea',label:'CEA-004: Conduent Ransomware',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-004-conduent-ransomware.md'},
+    {id:'cea-005',cat:'cea',label:'CEA-005: Malicious MCP Skills',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-005-clawhub-malicious-skills.md'},
+    {id:'cea-006',cat:'cea',label:'CEA-006: Wallet Drain Attacks',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-006-moltbook-wallet-drain.md'},
+    {id:'cea-007',cat:'cea',label:'CEA-007: Living Off the AI',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-007-living-off-the-ai.md'},
+    {id:'cea-008',cat:'cea',label:'CEA-008: Kongzhi Hui',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-008-kongzhi-hui.md'},
+    {id:'cea-009',cat:'cea',label:'CEA-009: Road Sign Prompt Injection',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-009-road-sign-prompt-injection.md'},
+    {id:'cea-010',cat:'cea',label:'CEA-010: Fog of AI',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-010-foreign-affairs-fog-of-ai.md'},
+    {id:'cea-011',cat:'cea',label:'CEA-011: MCP Autonomous Ransomware',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-011-mcp-autonomous-ransomware.md'},
+    {id:'cea-012',cat:'cea',label:'CEA-012: Weaponized AI Smart City Siege',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md'},
+    {id:'cea-013',cat:'cea',label:'CEA-013: Attention Auction Algorithms',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-001-attention-auction-algorithms.md'},
+    {id:'cea-014',cat:'cea',label:'CEA-014: Topology of Influence',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-002-topology-of-influence.md'},
+    {id:'cea-015',cat:'cea',label:'CEA-015: JSOU Cognitive Warfare',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-003-jsou-cognitive-warfare.md'},
+    {id:'cea-016',cat:'cea',label:'CEA-016: AI Swarm Disinformation',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-008-ai-swarm-science-paper.md'},
+    {id:'cea-017',cat:'cea',label:'CEA-017: Astroturf Operations',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-009-civiclick-astroturf-air-quality.md'},
+    {id:'cea-018',cat:'cea',label:'CEA-018: Olympics Disinfo Campaign',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-010-matryoshka-olympics-disinfo.md'},
+    {id:'cea-019',cat:'cea',label:'CEA-019: Election AI Fakes',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-011-bangladesh-election-ai-fakes.md'},
+    {id:'cea-020',cat:'cea',label:'CEA-020: Deepfake Governance',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-012-india-ai-summit-deepfake-governance.md'},
+    {id:'cea-021',cat:'cea',label:'CEA-021: The Operational Network Model',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-013-network-operational-model.md'},
 
-        // Current Event Analysis - Original batch (2026-02-11)
-        { id: 'cea-001', cat: 'cea', label: 'CEA-001: Patch Tuesday Zero-Days', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-001-patch-tuesday-zero-days.md' },
-        { id: 'cea-002', cat: 'cea', label: 'CEA-002: Industrial-Scale Deepfakes', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-002-deepfake-industrial-scale.md' },
-        { id: 'cea-003', cat: 'cea', label: 'CEA-003: Pravda AI Poisoning', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-003-pravda-ai-poisoning.md' },
-        { id: 'cea-004', cat: 'cea', label: 'CEA-004: Conduent Ransomware', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-004-conduent-ransomware.md' },
-        { id: 'cea-005', cat: 'cea', label: 'CEA-005: ClawHub Malicious Skills', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-005-clawhub-malicious-skills.md' },
-        { id: 'cea-006', cat: 'cea', label: 'CEA-006: Moltbook Wallet Drain', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-006-moltbook-wallet-drain.md' },
-        { id: 'cea-007', cat: 'cea', label: 'CEA-007: Living Off the AI', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-007-living-off-the-ai.md' },
-        { id: 'cea-008', cat: 'cea', label: 'CEA-008: Kongzhi Hui', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-008-kongzhi-hui.md' },
-        { id: 'cea-009', cat: 'cea', label: 'CEA-009: Road Sign Prompt Injection', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-009-road-sign-prompt-injection.md' },
-        { id: 'cea-010', cat: 'cea', label: 'CEA-010: Foreign Affairs Fog of AI', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-010-foreign-affairs-fog-of-ai.md' },
-        { id: 'cea-011', cat: 'cea', label: 'CEA-011: MCP Autonomous Ransomware', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-011-mcp-autonomous-ransomware.md' },
-        { id: 'cea-012', cat: 'cea', label: 'CEA-012: Weaponized AI Smart City Siege', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-11-012-weaponized-ai-smart-city-siege.md' },
+    // Threat Analysis Notes
+    {id:'tan-001',cat:'tan',label:'TAN-001: Recursive Infection Patterns',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-2026-02-11-001-sct007-recursive-infection.md'},
+    {id:'tan-002',cat:'tan',label:'TAN-002: Authority and Social Proof Pairing',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-002-authority-social-proof-pairing.md'},
+    {id:'tan-003',cat:'tan',label:'TAN-003: Commitment Escalation and Identity Capture',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-003-commitment-escalation-identity-capture.md'},
+    {id:'tan-004',cat:'tan',label:'TAN-004: Consensus Manufacturing and Trust Destruction',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-004-consensus-manufacturing-trust-destruction.md'},
 
-        // Current Event Analysis - 2026-02-12 batch
-        { id: 'cea-013', cat: 'cea', label: 'CEA-013: Attention Auction Algorithms', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-001-attention-auction-algorithms.md' },
-        { id: 'cea-014', cat: 'cea', label: 'CEA-014: Topology of Influence', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-002-topology-of-influence.md' },
-        { id: 'cea-015', cat: 'cea', label: 'CEA-015: JSOU Cognitive Warfare', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-2026-02-12-003-jsou-cognitive-warfare.md' },
+    // Case Studies
+    {id:'cs-001',cat:'cs',label:'CS-001: Internet Research Agency',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-001-internet-research-agency.md'},
+    {id:'cs-002',cat:'cs',label:'CS-002: Cambridge Analytica',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-002-cambridge-analytica.md'},
+    {id:'cs-003',cat:'cs',label:'CS-003: COVID Infodemic',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-003-covid-infodemic.md'},
 
-        // Current Event Analysis - Thematic batch
-        { id: 'cea-016', cat: 'cea', label: 'CEA-016: AI Swarm Disinformation', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-008-ai-swarm-science-paper.md' },
-        { id: 'cea-017', cat: 'cea', label: 'CEA-017: CiviClick Astroturf Air Quality', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-009-civiclick-astroturf-air-quality.md' },
-        { id: 'cea-018', cat: 'cea', label: 'CEA-018: Matryoshka Olympics Disinfo', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-010-matryoshka-olympics-disinfo.md' },
-        { id: 'cea-019', cat: 'cea', label: 'CEA-019: Bangladesh Election AI Fakes', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-011-bangladesh-election-ai-fakes.md' },
-        { id: 'cea-020', cat: 'cea', label: 'CEA-020: India AI Summit Deepfake Governance', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-012-india-ai-summit-deepfake-governance.md' },
-        { id: 'cea-021', cat: 'cea', label: 'CEA-021: The Operational Network Model', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CEA-013-network-operational-model.md' },
+    // Reference
+    {id:'ref-read',cat:'ref',label:'Essential Reading List',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SEITHAR-READING-LIST.md'},
+    {id:'ref-freq',cat:'ref',label:'Frequency Media Compendium',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SEITHAR-FREQUENCY-COMPENDIUM.md'},
 
-        // Threat Analysis Notes
-        { id: 'tan-001', cat: 'tan', label: 'TAN-001: SCT-007 Recursive Infection', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-2026-02-11-001-sct007-recursive-infection.md' },
-        { id: 'tan-002', cat: 'tan', label: 'TAN-002: Authority and Social Proof Pairing', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-002-authority-social-proof-pairing.md' },
-        { id: 'tan-003', cat: 'tan', label: 'TAN-003: Commitment Escalation and Identity Capture', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-003-commitment-escalation-identity-capture.md' },
-        { id: 'tan-004', cat: 'tan', label: 'TAN-004: Consensus Manufacturing and Trust Destruction', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/TAN-004-consensus-manufacturing-trust-destruction.md' },
+    // Articles
+    {id:'art-001',cat:'article',label:'Alignment Faking and the Seithar Thesis',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/article-alignment-faking-seithar.md'},
+    {id:'art-002',cat:'article',label:'Five Signs You Are Being Manipulated',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/five-signs-manipulation.md'},
+    {id:'art-003',cat:'article',label:'The Substrate Has No Firewall',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/substrate-has-no-firewall.md'},
+    {id:'art-004',cat:'article',label:'The Network Has Eyes',path:'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/the-network-has-eyes.md'},
+  ];
 
-        // Case Studies
-        { id: 'cs-001', cat: 'cs', label: 'CS-001: Internet Research Agency', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-001-internet-research-agency.md' },
-        { id: 'cs-002', cat: 'cs', label: 'CS-002: Cambridge Analytica', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-002-cambridge-analytica.md' },
-        { id: 'cs-003', cat: 'cs', label: 'CS-003: COVID Infodemic', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/CS-003-covid-infodemic.md' },
+  var containers = {
+    srp:document.getElementById('toc-srp'),
+    cea:document.getElementById('toc-cea'),
+    tan:document.getElementById('toc-tan'),
+    cs:document.getElementById('toc-cs'),
+    ref:document.getElementById('toc-ref'),
+    article:document.getElementById('toc-article'),
+  };
+  var content = document.getElementById('r-content');
 
-        // Reference Documents
-        { id: 'ref-read', cat: 'ref', label: 'Essential Reading List', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SEITHAR-READING-LIST.md' },
-        { id: 'ref-freq', cat: 'ref', label: 'Frequency Media Compendium', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SEITHAR-FREQUENCY-COMPENDIUM.md' },
-        { id: 'ref-field', cat: 'ref', label: 'SCT Field Guide Index', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/SCT-FIELD-GUIDE-INDEX.md' },
-
-        // Field Reports
-        { id: 'field-001', cat: 'field', label: 'Field Report: Pravda Training Data', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/FIELD-REPORT-2026-02-12-pravda-training-data.md' },
-        { id: 'field-002', cat: 'field', label: 'Profiler Field Test 001', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/HOLESPAWN-FIELD-TEST-001.md' },
-        { id: 'field-003', cat: 'field', label: 'Profiler Field Test 002', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/HOLESPAWN-FIELD-TEST-002.md' },
-
-        // Articles
-        { id: 'art-001', cat: 'article', label: 'Alignment Faking and the Seithar Thesis', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/article-alignment-faking-seithar.md' },
-        { id: 'art-002', cat: 'article', label: 'Five Signs You Are Being Manipulated', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/five-signs-manipulation.md' },
-        { id: 'art-003', cat: 'article', label: 'The Substrate Has No Firewall', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/substrate-has-no-firewall.md' },
-        { id: 'art-004', cat: 'article', label: 'The Network Has Eyes', path: 'https://raw.githubusercontent.com/Mirai8888/seithar-research/main/output/the-network-has-eyes.md' }
-    ];
-
-    var tocContainers = {
-        doctrine: document.getElementById('research-toc-doctrine'),
-        srp: document.getElementById('research-toc-srp'),
-        cea: document.getElementById('research-toc-cea'),
-        tan: document.getElementById('research-toc-tan'),
-        cs: document.getElementById('research-toc-cs'),
-        ref: document.getElementById('research-toc-ref'),
-        field: document.getElementById('research-toc-field'),
-        article: document.getElementById('research-toc-article')
-    };
-    var contentEl = document.getElementById('research-content');
-
-    docs.forEach(function (d) {
-        var list = tocContainers[d.cat];
-        if (!list) return;
-        var a = document.createElement('a');
-        a.href = '#' + d.id;
-        a.className = 'toc-item';
-        var idText = d.id.toUpperCase().replace(/-/g, '-');
-        var labelText = d.label;
-        // Strip the ID prefix from label for display
-        var displayLabel = labelText.replace(/^[A-Z]+-\d+:\s*/, '');
-        a.innerHTML = '<span class="toc-id">' + idText + '</span>' + displayLabel;
-        a.addEventListener('click', function (e) {
-            e.preventDefault();
-            loadDoc(d);
-        });
-        list.appendChild(a);
+  docs.forEach(function(d){
+    var nav = containers[d.cat];
+    if(!nav) return;
+    var el = document.createElement('div');
+    el.className = 'r-item';
+    var idText = d.id.toUpperCase();
+    var label = d.label.replace(/^[A-Z]+-\d+:\s*/,'');
+    el.innerHTML = '<span class="r-item-id">'+idText+'</span><span class="r-item-title"><a href="#'+d.id+'">'+label+'</a></span>';
+    el.querySelector('a').addEventListener('click',function(e){
+      e.preventDefault();
+      loadDoc(d);
     });
+    nav.appendChild(el);
+  });
 
-    function stripFrontmatter(text) {
-        if (text.indexOf('---') === 0) {
-            var end = text.indexOf('---', 3);
-            if (end !== -1) return text.slice(end + 3).replace(/^\n+/, '');
+  function strip(text){
+    if(text.indexOf('---')===0){var end=text.indexOf('---',3);if(end!==-1)return text.slice(end+3).replace(/^\n+/,'');}
+    return text;
+  }
+
+  function loadDoc(d){
+    var sec = document.getElementById(d.id);
+    if(sec){sec.scrollIntoView({behavior:'smooth',block:'start'});return;}
+    var ph = document.createElement('div');
+    ph.id = d.id;
+    ph.className = 'r-doc';
+    ph.innerHTML = '<div class="r-loading">Loading...</div>';
+    content.appendChild(ph);
+    fetch(d.path)
+      .then(function(r){return r.ok?r.text():Promise.reject(r.status);})
+      .then(function(text){
+        text = strip(text);
+        var html = marked.parse(text,{gfm:true});
+        ph.innerHTML = html;
+        if(typeof renderMathInElement==='function'){
+          renderMathInElement(ph,{delimiters:[
+            {left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},
+            {left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}
+          ],throwOnError:false});
         }
-        return text;
-    }
-
-    function renderMath(el) {
-        if (typeof renderMathInElement === 'function') {
-            renderMathInElement(el, {
-                delimiters: [
-                    { left: '$$', right: '$$', display: true },
-                    { left: '$', right: '$', display: false },
-                    { left: '\\[', right: '\\]', display: true },
-                    { left: '\\(', right: '\\)', display: false }
-                ],
-                throwOnError: false,
-                trust: true
-            });
-        }
-    }
-
-    function backToTop() {
-        var card = document.querySelector('.research-card');
-        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    function loadDoc(d) {
-        var section = document.getElementById(d.id);
-        if (section) {
-            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            return;
-        }
-        var placeholder = document.createElement('div');
-        placeholder.id = d.id;
-        placeholder.className = 'research-doc';
-        placeholder.innerHTML = '<div class="research-loading">Loading...</div>';
-        contentEl.appendChild(placeholder);
-
-        fetch(d.path)
-            .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
-            .then(function (text) {
-                text = stripFrontmatter(text);
-                var html = marked.parse(text, { gfm: true });
-                var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>Back to list</a></div>';
-                placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
-                var backLink = placeholder.querySelector('[data-back]');
-                if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
-                renderMath(placeholder);
-            })
-            .catch(function () {
-                placeholder.innerHTML = '<div class="research-error">Unable to load document.</div>';
-            });
-    }
-
-    // Load all documents on page load
-    function loadAll() {
-        docs.forEach(function (d) {
-            var section = document.getElementById(d.id);
-            if (section) return;
-            var placeholder = document.createElement('div');
-            placeholder.id = d.id;
-            placeholder.className = 'research-doc';
-            placeholder.innerHTML = '<div class="research-loading">Loading ' + d.label + '...</div>';
-            contentEl.appendChild(placeholder);
-
-            fetch(d.path)
-                .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error(r.status)); })
-                .then(function (text) {
-                    text = stripFrontmatter(text);
-                    var html = marked.parse(text, { gfm: true });
-                    var navHtml = '<div class="research-doc-nav"><a href="#" onclick="return false;" data-back>Back to list</a></div>';
-                    placeholder.innerHTML = navHtml + '<div class="research-doc-content">' + html + '</div>';
-                    var backLink = placeholder.querySelector('[data-back]');
-                    if (backLink) backLink.addEventListener('click', function (e) { e.preventDefault(); backToTop(); });
-                    renderMath(placeholder);
-                })
-                .catch(function () {
-                    placeholder.innerHTML = '<div class="research-error">Unable to load ' + d.label + '.</div>';
-                });
-        });
-    }
-
-    loadAll();
+        ph.scrollIntoView({behavior:'smooth',block:'start'});
+      })
+      .catch(function(){ph.innerHTML='<div class="r-loading">Document unavailable.</div>';});
+  }
 })();
-    </script>
+</script>
 </body>
 </html>
