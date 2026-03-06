@@ -12,54 +12,12 @@ canvas#ms {
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 10;
-  pointer-events: none;
-}
-.content {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 140px;
-}
-.inner {
-  max-width: 600px;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-}
-.mark {
-  font-size: 13px;
-  letter-spacing: 10px;
-  color: #aaa;
-  margin-bottom: 28px;
-}
-.title {
-  font-size: 28px;
-  font-weight: 300;
-  color: #1a1a1a;
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-.sub {
-  font-size: 14px;
-  color: #999;
-  line-height: 1.7;
-  font-family: ui-monospace, 'SF Mono', monospace;
-  letter-spacing: 2px;
+  z-index: 1;
 }
 </style>
 </head>
 <body>
 <canvas id="ms"></canvas>
-<div class="content">
-  <div class="inner">
-    <div class="mark">S E I T H A R</div>
-    <div class="title">Minds are hackable.<br>We are the security layer.</div>
-    <div class="sub">seithar.com</div>
-  </div>
-</div>
 <script src="js/manuscript.js"></script>
 <script>
 const c = document.getElementById('ms');
@@ -73,9 +31,9 @@ function sizeCanvas() {
 }
 sizeCanvas();
 const mb = new ManuscriptBorder(c, {
-  borderWidth: Math.min(300, window.innerWidth * 0.25),
-  mutationRate: 0.01,
-  rebalanceInterval: 120,
+  borderWidth: Math.min(280, window.innerWidth * 0.22),
+  rebalanceInterval: 80,
+  mutationRate: 0.012,
 });
 mb.start();
 window.addEventListener('resize', () => {

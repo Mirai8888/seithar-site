@@ -1,25 +1,26 @@
-// manuscript.js — Generative Hypermedievalism Engine v4
+// manuscript.js — Generative Hypermedievalism Engine v5
 // Seithar Group — Futurist Illuminated Manuscript
-// Algorithmic. Blocky. Dense. Living Enochian. Continuous mutation.
+// Real binary trees. Living English text. Logical. Generative.
 
 class ManuscriptBorder {
   constructor(canvas, options = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.opts = Object.assign({
-      borderWidth: 180,
+      borderWidth: 160,
       seed: Math.random() * 99999 | 0,
       sides: ['left', 'right', 'top', 'bottom'],
       palette: {
-        line: 'rgba(60, 58, 54, VAR)',
-        node: 'rgba(70, 67, 62, VAR)',
-        text: 'rgba(55, 52, 48, VAR)',
+        line: 'rgba(55, 53, 50, VAR)',
+        node: 'rgba(65, 62, 58, VAR)',
+        text: 'rgba(40, 38, 35, VAR)',
         accent: 'rgba(140, 40, 40, VAR)',
-        grid: 'rgba(160, 155, 148, VAR)',
-        block: 'rgba(90, 87, 82, VAR)',
+        grid: 'rgba(170, 165, 158, VAR)',
+        block: 'rgba(80, 77, 72, VAR)',
+        livetext: 'rgba(35, 33, 30, VAR)',
       },
-      mutationRate: 0.008,
-      rebalanceInterval: 140,
+      rebalanceInterval: 90,
+      mutationRate: 0.01,
     }, options);
 
     this._seed = this.opts.seed;
@@ -28,11 +29,14 @@ class ManuscriptBorder {
     this.running = false;
     this.frameCount = 0;
 
-    this.structures = [];    // algorithmic block structures
-    this.textBlocks = [];    // living Enochian
+    // Border structures
+    this.bstTrees = [];       // Real BSTs
     this.gridLines = [];
-    this.nodes = [];
+    this.blockStructures = [];
     this.connections = [];
+
+    // Interior living text
+    this.textLines = [];
   }
 
   _rng() {
@@ -57,266 +61,398 @@ class ManuscriptBorder {
   }
 
   // ═══════════════════════════════════════
-  // ENOCHIAN GLYPHS — drawn larger, bolder
+  // REAL BINARY SEARCH TREE
   // ═══════════════════════════════════════
-  static ENOCHIAN = [
-    [[[0,0],[0,1],[0.6,1]],[[0.3,0],[0.3,0.6]]],
-    [[[0,0],[0.5,0.5],[0,1]],[[0.5,0.5],[1,0.5]]],
-    [[[0.5,0],[0,0.5],[0.5,1],[1,0.5],[0.5,0]]],
-    [[[0,1],[0.5,0],[1,1]],[[0.2,0.6],[0.8,0.6]]],
-    [[[0.5,0],[0.5,1]],[[0,0.5],[1,0.5]],[[0.2,0.2],[0.8,0.8]]],
-    [[[0,0.7],[0.5,0],[1,0.7]],[[0.5,0],[0.5,1]]],
-    [[[0,0],[1,1]],[[1,0],[0,1]],[[0.5,0],[0.5,0.25]]],
-    [[[0,0],[0,1]],[[0,0],[0.7,0]],[[0,0.5],[0.5,0.5]]],
-    [[[0,1],[0.25,0],[0.5,0.6],[0.75,0],[1,1]]],
-    [[[0,1],[0.5,0],[1,1]]],
-    [[[0,0],[0,1]],[[0,0],[0.7,0.5]],[[0,1],[0.7,0.5]]],
-    [[[0,0.5],[0.5,0],[1,0.5],[0.5,1],[0,0.5]],[[0.5,0.3],[0.5,0.7]]],
-    [[[0,0],[0,1],[1,1],[1,0]]],
-    [[[0,0],[0.5,1],[1,0]],[[0.25,0.5],[0.75,0.5]]],
-    [[[0,0],[0,0.5],[0.6,0.5],[0.6,1]]],
-    [[[0,1],[0.3,0],[0.7,0],[1,1]],[[0.15,0.5],[0.85,0.5]]],
-    [[[0,0],[1,1]],[[0,1],[1,0]],[[0.5,0.3],[0.5,0]]],
-    [[[0,0.5],[0.5,0],[1,0.5]],[[0.5,0.5],[0.5,1]],[[0.2,1],[0.8,1]]],
-    [[[0,1],[0.3,0],[0.7,0.6],[1,0]]],
-    [[[0,0],[0.3,1],[0.5,0.3],[0.7,1],[1,0]]],
-    [[[0,0],[1,0],[1,1],[0,1],[0,0]],[[0,0],[1,1]]],
-  ];
+
+  _bstNode(val) {
+    return { val, left: null, right: null, x: 0, y: 0, targetX: 0, targetY: 0, opacity: 0, isNew: true, isAccent: false };
+  }
+
+  _bstInsert(root, val) {
+    if (!root) return this._bstNode(val);
+    if (val < root.val) root.left = this._bstInsert(root.left, val);
+    else if (val > root.val) root.right = this._bstInsert(root.right, val);
+    return root;
+  }
+
+  _bstDelete(root, val) {
+    if (!root) return null;
+    if (val < root.val) { root.left = this._bstDelete(root.left, val); return root; }
+    if (val > root.val) { root.right = this._bstDelete(root.right, val); return root; }
+    // Found node to delete
+    if (!root.left) return root.right;
+    if (!root.right) return root.left;
+    // Two children: find inorder successor
+    let succ = root.right;
+    while (succ.left) succ = succ.left;
+    root.val = succ.val;
+    root.right = this._bstDelete(root.right, succ.val);
+    return root;
+  }
+
+  _bstCollect(root, arr) {
+    if (!root) return;
+    this._bstCollect(root.left, arr);
+    arr.push(root.val);
+    this._bstCollect(root.right, arr);
+  }
+
+  _bstHeight(root) {
+    if (!root) return 0;
+    return 1 + Math.max(this._bstHeight(root.left), this._bstHeight(root.right));
+  }
+
+  // Layout tree positions for rendering
+  _bstLayout(root, cx, cy, hSpacing, vSpacing, depth) {
+    if (!root) return;
+    root.targetX = cx;
+    root.targetY = cy;
+    if (root.isNew) { root.x = cx; root.y = cy - 10; root.isNew = false; }
+    const childSpacing = hSpacing / (1.8 + depth * 0.2);
+    if (root.left) this._bstLayout(root.left, cx - childSpacing, cy + vSpacing, childSpacing, vSpacing, depth + 1);
+    if (root.right) this._bstLayout(root.right, cx + childSpacing, cy + vSpacing, childSpacing, vSpacing, depth + 1);
+  }
+
+  _bstMorph(root) {
+    if (!root) return;
+    root.x += (root.targetX - root.x) * 0.06;
+    root.y += (root.targetY - root.y) * 0.06;
+    root.opacity = Math.min(0.75, root.opacity + 0.015);
+    root.isAccent = false;
+    this._bstMorph(root.left);
+    this._bstMorph(root.right);
+  }
+
+  _initBSTs() {
+    this.bstTrees = [];
+    const b = this.opts.borderWidth;
+    const sides = this.opts.sides;
+
+    const makeTree = (cx, cy, hSpace, vSpace) => {
+      let root = null;
+      const count = this._irange(5, 14);
+      const vals = [];
+      for (let i = 0; i < count; i++) {
+        const v = this._irange(1, 99);
+        if (!vals.includes(v)) { vals.push(v); root = this._bstInsert(root, v); }
+      }
+      this._bstLayout(root, cx, cy, hSpace, vSpace, 0);
+      return { root, cx, cy, hSpace, vSpace };
+    };
+
+    // Place BSTs in border regions
+    if (sides.includes('left')) {
+      const treesPerSide = Math.max(1, Math.floor(this.h / 200));
+      for (let i = 0; i < treesPerSide; i++) {
+        const cy = (this.h / (treesPerSide + 1)) * (i + 1);
+        this.bstTrees.push(makeTree(b * 0.45, cy - 40, b * 0.35, 22));
+      }
+    }
+    if (sides.includes('right')) {
+      const treesPerSide = Math.max(1, Math.floor(this.h / 200));
+      for (let i = 0; i < treesPerSide; i++) {
+        const cy = (this.h / (treesPerSide + 1)) * (i + 1);
+        this.bstTrees.push(makeTree(this.w - b * 0.45, cy - 40, b * 0.35, 22));
+      }
+    }
+    if (sides.includes('top')) {
+      const count = Math.max(1, Math.floor(this.w / 300));
+      for (let i = 0; i < count; i++) {
+        const cx = b + ((this.w - b * 2) / (count + 1)) * (i + 1);
+        this.bstTrees.push(makeTree(cx, 20, 40, 18));
+      }
+    }
+    if (sides.includes('bottom')) {
+      const count = Math.max(1, Math.floor(this.w / 300));
+      for (let i = 0; i < count; i++) {
+        const cx = b + ((this.w - b * 2) / (count + 1)) * (i + 1);
+        this.bstTrees.push(makeTree(cx, this.h - b + 20, 40, 18));
+      }
+    }
+  }
+
+  // Mutate BSTs — insert, delete, rebalance
+  _mutateBSTs() {
+    for (const tree of this.bstTrees) {
+      if (this._rng() < 0.4) {
+        // Insert
+        const v = this._irange(1, 99);
+        tree.root = this._bstInsert(tree.root, v);
+        // Mark new node
+        const markNew = (n) => { if (n && n.val === v) { n.isNew = true; n.isAccent = true; n.opacity = 0; } if (n) { markNew(n.left); markNew(n.right); } };
+        markNew(tree.root);
+      }
+      if (this._rng() < 0.3 && tree.root) {
+        // Delete a random value
+        const vals = [];
+        this._bstCollect(tree.root, vals);
+        if (vals.length > 3) {
+          const del = this._pick(vals);
+          tree.root = this._bstDelete(tree.root, del);
+        }
+      }
+      // Re-layout
+      if (tree.root) {
+        this._bstLayout(tree.root, tree.cx, tree.cy, tree.hSpace, tree.vSpace, 0);
+        this._bstMorph(tree.root);
+      }
+    }
+  }
 
   // ═══════════════════════════════════════
-  // DENSE GRID UNDERLAY
+  // GRID + BLOCK STRUCTURES (borders)
   // ═══════════════════════════════════════
 
   _initGrid() {
     this.gridLines = [];
     const b = this.opts.borderWidth;
-    // Dense horizontal + vertical ruling
-    for (let y = 0; y < this.h; y += this._range(8, 16)) {
-      if (y < b || y > this.h - b) {
-        this.gridLines.push({ x1: 0, y1: y, x2: this.w, y2: y, opacity: this._range(0.05, 0.14) });
-      }
+    for (let y = 0; y < this.h; y += this._range(10, 18)) {
+      if (y < b || y > this.h - b)
+        this.gridLines.push({ x1: 0, y1: y, x2: this.w, y2: y, opacity: this._range(0.04, 0.1) });
     }
-    for (let x = 0; x < this.w; x += this._range(8, 16)) {
-      if (x < b || x > this.w - b) {
-        this.gridLines.push({ x1: x, y1: 0, x2: x, y2: this.h, opacity: this._range(0.05, 0.14) });
-      }
+    for (let x = 0; x < this.w; x += this._range(10, 18)) {
+      if (x < b || x > this.w - b)
+        this.gridLines.push({ x1: x, y1: 0, x2: x, y2: this.h, opacity: this._range(0.04, 0.1) });
     }
   }
-
-  // ═══════════════════════════════════════
-  // BLOCK STRUCTURES — Recursive subdivision, circuit-like
-  // ═══════════════════════════════════════
 
   _subdivide(x, y, w, h, depth, maxDepth) {
-    if (depth > maxDepth || w < 8 || h < 8) return;
-
-    const block = {
+    if (depth > maxDepth || w < 10 || h < 10) return;
+    this.blockStructures.push({
       x, y, w, h, depth,
-      opacity: 0,
-      maxOpacity: this._range(0.15, 0.55),
-      filled: this._rng() < 0.15,
-      isAccent: this._rng() < 0.08,
-      hasNode: this._rng() < 0.3,
-      nodeShape: this._pick(['circle', 'diamond', 'square']),
-      born: this.frameCount,
+      opacity: 0, maxOpacity: this._range(0.1, 0.4),
+      filled: this._rng() < 0.12,
+      isAccent: this._rng() < 0.06,
       targetX: x, targetY: y, targetW: w, targetH: h,
-    };
-    this.structures.push(block);
-
-    // Recursive subdivision — horizontal or vertical split
-    if (this._rng() < 0.85 && depth < maxDepth) {
-      if (this._rng() > 0.5 && w > 16) {
-        // Vertical split
-        const splitX = x + w * this._range(0.3, 0.7);
-        this._subdivide(x, y, splitX - x, h, depth + 1, maxDepth);
-        this._subdivide(splitX, y, x + w - splitX, h, depth + 1, maxDepth);
-      } else if (h > 16) {
-        // Horizontal split
-        const splitY = y + h * this._range(0.3, 0.7);
-        this._subdivide(x, y, w, splitY - y, depth + 1, maxDepth);
-        this._subdivide(x, splitY, w, y + h - splitY, depth + 1, maxDepth);
+    });
+    if (this._rng() < 0.82 && depth < maxDepth) {
+      if (this._rng() > 0.5 && w > 18) {
+        const sx = x + w * this._range(0.3, 0.7);
+        this._subdivide(x, y, sx - x, h, depth + 1, maxDepth);
+        this._subdivide(sx, y, x + w - sx, h, depth + 1, maxDepth);
+      } else if (h > 18) {
+        const sy = y + h * this._range(0.3, 0.7);
+        this._subdivide(x, y, w, sy - y, depth + 1, maxDepth);
+        this._subdivide(x, sy, w, y + h - sy, depth + 1, maxDepth);
       }
     }
   }
 
-  _initStructures() {
-    this.structures = [];
+  _initBlocks() {
+    this.blockStructures = [];
     const b = this.opts.borderWidth;
-    const sides = this.opts.sides;
-    const maxD = this._irange(4, 7);
-
-    if (sides.includes('left'))
-      this._subdivide(4, 4, b - 8, this.h - 8, 0, maxD);
-    if (sides.includes('right'))
-      this._subdivide(this.w - b + 4, 4, b - 8, this.h - 8, 0, maxD);
-    if (sides.includes('top'))
-      this._subdivide(b, 4, this.w - b * 2, b - 8, 0, maxD);
-    if (sides.includes('bottom'))
-      this._subdivide(b, this.h - b + 4, this.w - b * 2, b - 8, 0, maxD);
+    const maxD = this._irange(3, 6);
+    if (this.opts.sides.includes('left'))
+      this._subdivide(3, 3, b - 6, this.h - 6, 0, maxD);
+    if (this.opts.sides.includes('right'))
+      this._subdivide(this.w - b + 3, 3, b - 6, this.h - 6, 0, maxD);
+    if (this.opts.sides.includes('top'))
+      this._subdivide(b, 3, this.w - b * 2, b - 6, 0, maxD);
+    if (this.opts.sides.includes('bottom'))
+      this._subdivide(b, this.h - b + 3, this.w - b * 2, b - 6, 0, maxD);
   }
 
-  _mutateStructures() {
-    for (const block of this.structures) {
-      if (this._rng() < this.opts.mutationRate) {
-        // Shift dimensions slightly
-        block.targetX = block.x + this._range(-3, 3);
-        block.targetY = block.y + this._range(-3, 3);
-        block.targetW = Math.max(6, block.w + this._range(-4, 4));
-        block.targetH = Math.max(6, block.h + this._range(-4, 4));
-        if (this._rng() < 0.1) block.isAccent = !block.isAccent;
-        if (this._rng() < 0.15) block.filled = !block.filled;
-        if (this._rng() < 0.1) block.nodeShape = this._pick(['circle', 'diamond', 'square']);
+  _mutateBlocks() {
+    for (const bl of this.blockStructures) {
+      bl.opacity = Math.min(bl.maxOpacity, bl.opacity + 0.004);
+      if (this._rng() < this.opts.mutationRate * 0.3) {
+        bl.targetX += this._range(-2, 2);
+        bl.targetY += this._range(-2, 2);
+        bl.targetW = Math.max(6, bl.targetW + this._range(-3, 3));
+        bl.targetH = Math.max(6, bl.targetH + this._range(-3, 3));
+        if (this._rng() < 0.08) bl.isAccent = !bl.isAccent;
       }
-      // Morph toward targets
-      block.x += (block.targetX - block.x) * 0.02;
-      block.y += (block.targetY - block.y) * 0.02;
-      block.w += (block.targetW - block.w) * 0.02;
-      block.h += (block.targetH - block.h) * 0.02;
-      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.006);
+      bl.x += (bl.targetX - bl.x) * 0.015;
+      bl.y += (bl.targetY - bl.y) * 0.015;
+      bl.w += (bl.targetW - bl.w) * 0.015;
+      bl.h += (bl.targetH - bl.h) * 0.015;
     }
   }
 
   // ═══════════════════════════════════════
-  // CONNECTOR LINES — between blocks
+  // LIVING ENGLISH TEXT — Interior, legible, recombinating
   // ═══════════════════════════════════════
 
-  _initConnections() {
-    this.connections = [];
-    const structs = this.structures.filter(s => s.hasNode);
-    for (let i = 0; i < structs.length; i++) {
-      for (let j = i + 1; j < structs.length; j++) {
-        const a = structs[i], b = structs[j];
-        const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
-        const bx = b.x + b.w / 2, by = b.y + b.h / 2;
-        const dist = Math.sqrt((ax - bx) ** 2 + (ay - by) ** 2);
-        if (dist < 120 && this._rng() < 0.25) {
-          this.connections.push({
-            ai: this.structures.indexOf(a),
-            bi: this.structures.indexOf(b),
-            opacity: this._range(0.08, 0.25),
-            orthogonal: this._rng() > 0.4, // right-angle routing like circuits
-          });
-        }
-      }
-    }
+  static VOCABULARY = {
+    subjects: [
+      'the agent', 'the target', 'the network', 'the operator', 'node 14',
+      'the influence path', 'the drift curve', 'the attack surface',
+      'identity coherence', 'behavioral entropy', 'the signal',
+      'the vulnerability surface', 'cognitive load', 'the bridge node',
+      'the deployment', 'free energy', 'the topology', 'the substrate',
+      'the observation', 'social proof', 'the profile', 'commitment pressure',
+      'the adversary', 'the immune system', 'the armor', 'recursive depth',
+      'the information environment', 'threat model', 'the persona',
+    ],
+    verbs: [
+      'converges on', 'drifts toward', 'resists', 'maps', 'propagates through',
+      'detects', 'neutralizes', 'amplifies', 'degrades', 'stabilizes',
+      'exploits', 'traverses', 'rebalances', 'monitors', 'identifies',
+      'profiles', 'targets', 'shields', 'dissolves', 'reconstructs',
+      'fragments', 'binds to', 'overwrites', 'mirrors', 'infects',
+      'inoculates against', 'measures', 'distorts', 'holds against',
+    ],
+    objects: [
+      'the influence topology', 'all downstream nodes', 'the identity boundary',
+      'behavioral coherence', 'the attack vector', 'the network periphery',
+      'high-centrality targets', 'the cognitive surface', 'deployed agents',
+      'the observation graph', 'the defense layer', 'each vulnerability',
+      'the commitment chain', 'operational tempo', 'the drift threshold',
+      'social trust', 'the belief structure', 'temporal patterns',
+      'the manipulation sequence', 'the security perimeter', 'all edges',
+    ],
+    modifiers: [
+      'at scale', 'in real time', 'recursively', 'with high confidence',
+      'across 130 nodes', 'below threshold', 'before detection',
+      'within 3 hops', 'over 1.7M observations', 'under adversarial load',
+      'through the bridge', 'without disruption', 'at the periphery',
+      'from the interior', 'with increasing entropy', 'autonomously',
+    ],
+    fragments: [
+      'mind is surface', 'security is architecture', 'the map precedes the territory',
+      'influence flows downhill', 'coherence under pressure', 'identity is a parameter',
+      'every agent is a target', 'every target is an agent', 'the sword is the shield',
+      'topology determines vulnerability', 'drift is the signal', 'attention is the vector',
+      'trust is the attack surface', 'belief is mutable', 'behavior reveals structure',
+      'the network remembers', 'entropy increases', 'alignment degrades under load',
+      'observation precedes influence', 'the immune response is computational',
+    ],
+  };
+
+  _generateSentence() {
+    const V = ManuscriptBorder.VOCABULARY;
+    if (this._rng() < 0.3) return this._pick(V.fragments);
+    let s = this._pick(V.subjects) + ' ' + this._pick(V.verbs) + ' ' + this._pick(V.objects);
+    if (this._rng() < 0.4) s += ' ' + this._pick(V.modifiers);
+    return s;
   }
 
-  // ═══════════════════════════════════════
-  // LIVING ENOCHIAN TEXT — Dense, filling, typing, morphing
-  // ═══════════════════════════════════════
-
-  _spawnTextBlock() {
+  _initLiveText() {
+    this.textLines = [];
     const b = this.opts.borderWidth;
-    const side = this._pick(this.opts.sides);
-    let x, y, dir, lineDir;
+    const contentX = b + 20;
+    const contentW = this.w - b * 2 - 40;
+    const contentY = b + 20;
+    const contentH = this.h - b * 2 - 40;
 
-    if (side === 'left') {
-      x = this._range(4, b - 10);
-      y = this._range(8, this.h - 8);
-      dir = Math.PI / 2;
-      lineDir = 0;
-    } else if (side === 'right') {
-      x = this.w - this._range(4, b - 10);
-      y = this._range(8, this.h - 8);
-      dir = Math.PI / 2;
-      lineDir = Math.PI;
-    } else if (side === 'top') {
-      x = this._range(8, this.w - 8);
-      y = this._range(4, b - 10);
-      dir = 0;
-      lineDir = Math.PI / 2;
-    } else {
-      x = this._range(8, this.w - 8);
-      y = this.h - this._range(4, b - 10);
-      dir = 0;
-      lineDir = -Math.PI / 2;
-    }
+    const lineHeight = 22;
+    const lineCount = Math.floor(contentH / lineHeight);
 
-    const lineCount = this._irange(3, 15);
-    const lines = [];
-    for (let l = 0; l < lineCount; l++) {
-      const charCount = this._irange(4, 18);
+    for (let i = 0; i < lineCount; i++) {
+      const sentence = this._generateSentence();
       const chars = [];
-      for (let c = 0; c < charCount; c++) {
+      for (let c = 0; c < sentence.length; c++) {
         chars.push({
-          glyph: this._irange(0, ManuscriptBorder.ENOCHIAN.length),
-          targetGlyph: this._irange(0, ManuscriptBorder.ENOCHIAN.length),
+          char: sentence[c],
+          targetChar: sentence[c],
+          opacity: 0,
+          maxOpacity: this._range(0.3, 0.8),
           morphT: 1,
-          morphSpeed: this._range(0.008, 0.03),
-          visible: false,
-          visibleT: 0,
+          morphSpeed: this._range(0.01, 0.04),
         });
       }
-      lines.push(chars);
+      this.textLines.push({
+        x: contentX,
+        y: contentY + i * lineHeight,
+        chars,
+        born: this.frameCount,
+        typingPos: 0,
+        typeSpeed: this._range(0.5, 2.5),
+        typeAccum: 0,
+        alive: true,
+        opacity: 0,
+        maxOpacity: this._range(0.4, 0.85),
+        nextMutate: this._irange(80, 300),
+        lifespan: this._irange(400, 1500),
+      });
     }
-
-    this.textBlocks.push({
-      x, y, dir, lineDir, side, lines,
-      charSize: this._range(8, 13),
-      charSpacing: this._range(9, 14),
-      lineSpacing: this._range(11, 16),
-      opacity: 0,
-      maxOpacity: this._range(0.35, 0.7),
-      born: this.frameCount,
-      typingLine: 0, typingChar: 0,
-      typeSpeed: this._range(0.8, 3.0),
-      typeAccum: 0,
-      alive: true,
-      morphCycle: this._irange(100, 300),
-      lastMorph: 0,
-      lifespan: this._irange(600, 2000),
-    });
   }
 
-  _stepTextBlocks() {
-    for (const block of this.textBlocks) {
-      if (!block.alive) continue;
-      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.008);
+  _stepLiveText() {
+    const b = this.opts.borderWidth;
+    const contentX = b + 20;
+    const contentY = b + 20;
+    const contentH = this.h - b * 2 - 40;
+    const lineHeight = 22;
 
-      // Typing — faster
-      block.typeAccum += block.typeSpeed;
-      while (block.typeAccum >= 1 && block.typingLine < block.lines.length) {
-        block.typeAccum -= 1;
-        const line = block.lines[block.typingLine];
-        if (block.typingChar < line.length) {
-          line[block.typingChar].visible = true;
-          block.typingChar++;
-        } else {
-          block.typingLine++;
-          block.typingChar = 0;
-        }
+    for (const line of this.textLines) {
+      if (!line.alive) continue;
+      line.opacity = Math.min(line.maxOpacity, line.opacity + 0.008);
+
+      // Typing
+      line.typeAccum += line.typeSpeed;
+      while (line.typeAccum >= 1 && line.typingPos < line.chars.length) {
+        line.typeAccum -= 1;
+        line.chars[line.typingPos].opacity = 0.01;
+        line.typingPos++;
       }
 
-      // Morph wave
-      if (this.frameCount - block.lastMorph > block.morphCycle) {
-        block.lastMorph = this.frameCount;
-        for (const line of block.lines) {
-          for (const ch of line) {
-            if (ch.visible && this._rng() < 0.4) {
-              ch.glyph = ch.targetGlyph;
-              ch.targetGlyph = this._irange(0, ManuscriptBorder.ENOCHIAN.length);
-              ch.morphT = 0;
-            }
+      // Char opacity fade in
+      for (const ch of line.chars) {
+        if (ch.opacity > 0 && ch.opacity < ch.maxOpacity)
+          ch.opacity = Math.min(ch.maxOpacity, ch.opacity + 0.02);
+        if (ch.morphT < 1) ch.morphT = Math.min(1, ch.morphT + ch.morphSpeed);
+      }
+
+      // Sentence mutation — swap words, recombine
+      line.nextMutate--;
+      if (line.nextMutate <= 0) {
+        line.nextMutate = this._irange(60, 250);
+        const newSentence = this._generateSentence();
+        // Morph characters to new sentence
+        const maxLen = Math.max(line.chars.length, newSentence.length);
+        const newChars = [];
+        for (let c = 0; c < maxLen; c++) {
+          if (c < line.chars.length && c < newSentence.length) {
+            // Morph existing char
+            line.chars[c].targetChar = newSentence[c];
+            line.chars[c].morphT = 0;
+            newChars.push(line.chars[c]);
+          } else if (c < newSentence.length) {
+            // New char appearing
+            newChars.push({
+              char: ' ',
+              targetChar: newSentence[c],
+              opacity: 0.01,
+              maxOpacity: this._range(0.3, 0.8),
+              morphT: 0,
+              morphSpeed: this._range(0.01, 0.04),
+            });
           }
+          // else: char disappearing (just truncate)
         }
+        line.chars = newChars;
+        line.typingPos = maxLen; // already visible
       }
 
-      for (const line of block.lines) {
-        for (const ch of line) {
-          if (ch.visible) {
-            ch.visibleT = Math.min(1, ch.visibleT + 0.06);
-            if (ch.morphT < 1) ch.morphT = Math.min(1, ch.morphT + ch.morphSpeed);
+      // Lifespan — when line dies, respawn with new sentence
+      const age = this.frameCount - line.born;
+      if (age > line.lifespan) {
+        line.opacity -= 0.006;
+        if (line.opacity <= 0.01) {
+          // Respawn
+          const sentence = this._generateSentence();
+          line.chars = [];
+          for (let c = 0; c < sentence.length; c++) {
+            line.chars.push({
+              char: sentence[c],
+              targetChar: sentence[c],
+              opacity: 0,
+              maxOpacity: this._range(0.3, 0.8),
+              morphT: 1,
+              morphSpeed: this._range(0.01, 0.04),
+            });
           }
+          line.born = this.frameCount;
+          line.typingPos = 0;
+          line.typeAccum = 0;
+          line.opacity = 0;
+          line.maxOpacity = this._range(0.4, 0.85);
+          line.lifespan = this._irange(400, 1500);
+          line.nextMutate = this._irange(80, 300);
         }
-      }
-
-      const age = this.frameCount - block.born;
-      if (age > block.lifespan) {
-        block.opacity -= 0.005;
-        if (block.opacity <= 0) block.alive = false;
       }
     }
-    this.textBlocks = this.textBlocks.filter(b => b.alive);
   }
 
   // ═══════════════════════════════════════
@@ -336,148 +472,112 @@ class ManuscriptBorder {
     }
   }
 
-  _renderStructures() {
+  _renderBlocks() {
     const ctx = this.ctx;
     const pal = this.opts.palette;
-
-    for (const block of this.structures) {
-      if (block.opacity < 0.005) continue;
-      const a = block.opacity;
-
-      const col = block.isAccent ? pal.accent : pal.block;
-
-      if (block.filled) {
-        ctx.fillStyle = this._col(col, a * 0.12);
-        ctx.fillRect(block.x, block.y, block.w, block.h);
+    for (const bl of this.blockStructures) {
+      if (bl.opacity < 0.005) continue;
+      const a = bl.opacity;
+      const col = bl.isAccent ? pal.accent : pal.block;
+      if (bl.filled) {
+        ctx.fillStyle = this._col(col, a * 0.1);
+        ctx.fillRect(bl.x, bl.y, bl.w, bl.h);
       }
-
-      // Border
-      ctx.strokeStyle = this._col(col, a * 0.5);
-      ctx.lineWidth = block.depth < 2 ? 1.2 : 0.6;
-      ctx.strokeRect(block.x, block.y, block.w, block.h);
-
-      // Node at center
-      if (block.hasNode) {
-        const cx = block.x + block.w / 2;
-        const cy = block.y + block.h / 2;
-        const s = Math.min(block.w, block.h) * 0.15;
-
-        ctx.fillStyle = this._col(block.isAccent ? pal.accent : pal.node, a * 0.6);
-        ctx.beginPath();
-        switch (block.nodeShape) {
-          case 'circle':
-            ctx.arc(cx, cy, s, 0, Math.PI * 2);
-            break;
-          case 'diamond':
-            ctx.moveTo(cx, cy - s);
-            ctx.lineTo(cx + s, cy);
-            ctx.lineTo(cx, cy + s);
-            ctx.lineTo(cx - s, cy);
-            ctx.closePath();
-            break;
-          case 'square':
-            ctx.rect(cx - s, cy - s, s * 2, s * 2);
-            break;
-        }
-        ctx.fill();
-      }
-    }
-
-    // Connections — orthogonal routing
-    for (const conn of this.connections) {
-      const a = this.structures[conn.ai];
-      const b = this.structures[conn.bi];
-      if (!a || !b) continue;
-      const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
-      const bx = b.x + b.w / 2, by = b.y + b.h / 2;
-      const alpha = Math.min(a.opacity, b.opacity) * conn.opacity;
-
-      ctx.strokeStyle = this._col(this.opts.palette.line, alpha);
-      ctx.lineWidth = 0.6;
-      ctx.beginPath();
-      ctx.moveTo(ax, ay);
-      if (conn.orthogonal) {
-        // Right-angle routing
-        const midX = (ax + bx) / 2;
-        ctx.lineTo(midX, ay);
-        ctx.lineTo(midX, by);
-        ctx.lineTo(bx, by);
-      } else {
-        ctx.lineTo(bx, by);
-      }
-      ctx.stroke();
+      ctx.strokeStyle = this._col(col, a * 0.4);
+      ctx.lineWidth = bl.depth < 2 ? 1 : 0.5;
+      ctx.strokeRect(bl.x, bl.y, bl.w, bl.h);
     }
   }
 
-  _renderTextBlocks() {
+  _renderBSTNode(node, parentX, parentY, isRoot) {
+    if (!node || node.opacity < 0.005) return;
     const ctx = this.ctx;
     const pal = this.opts.palette;
+    const a = node.opacity;
 
-    for (const block of this.textBlocks) {
-      if (block.opacity < 0.005) continue;
+    // Edge from parent
+    if (!isRoot && parentX !== undefined) {
+      ctx.strokeStyle = this._col(pal.line, a * 0.5);
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(parentX, parentY);
+      ctx.lineTo(node.x, node.y);
+      ctx.stroke();
+    }
 
-      for (let li = 0; li < block.lines.length; li++) {
-        const line = block.lines[li];
-        for (let ci = 0; ci < line.length; ci++) {
-          const ch = line[ci];
-          if (!ch.visible) continue;
+    // Node circle
+    const r = 8;
+    ctx.strokeStyle = this._col(node.isAccent ? pal.accent : pal.node, a * 0.7);
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+    ctx.stroke();
 
-          const along = ci * block.charSpacing;
-          const across = li * block.lineSpacing;
-          const gx = block.x + Math.cos(block.dir) * along + Math.cos(block.lineDir) * across;
-          const gy = block.y + Math.sin(block.dir) * along + Math.sin(block.lineDir) * across;
+    // Value label
+    ctx.fillStyle = this._col(node.isAccent ? pal.accent : pal.text, a * 0.8);
+    ctx.font = '9px ui-monospace, SF Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(node.val), node.x, node.y);
 
-          if (!this._inBorder(gx, gy)) continue;
+    // Recurse
+    this._renderBSTNode(node.left, node.x, node.y, false);
+    this._renderBSTNode(node.right, node.x, node.y, false);
+  }
 
-          const alpha = block.opacity * ch.visibleT;
+  _renderBSTs() {
+    for (const tree of this.bstTrees) {
+      if (tree.root) this._renderBSTNode(tree.root, 0, 0, true);
+    }
+  }
 
-          if (ch.morphT < 1) {
-            this._drawGlyph(gx, gy, ch.glyph, block.dir, block.charSize, alpha * (1 - ch.morphT));
-            this._drawGlyph(gx, gy, ch.targetGlyph, block.dir, block.charSize, alpha * ch.morphT);
+  _renderLiveText() {
+    const ctx = this.ctx;
+    const pal = this.opts.palette;
+    ctx.font = '13px ui-monospace, SF Mono, monospace';
+    ctx.textBaseline = 'top';
+
+    for (const line of this.textLines) {
+      if (!line.alive || line.opacity < 0.005) continue;
+      let cursorX = line.x;
+
+      for (let ci = 0; ci < line.chars.length; ci++) {
+        const ch = line.chars[ci];
+        if (ch.opacity <= 0) continue;
+
+        const alpha = line.opacity * ch.opacity;
+        let displayChar;
+
+        if (ch.morphT < 1) {
+          // Morphing — show intermediate scramble
+          if (ch.morphT < 0.4) {
+            // Scramble phase: random characters
+            const scrambleChars = '▒░▓█╳╱╲─│┼┤├┬┴◆◇○●□■';
+            displayChar = scrambleChars[Math.floor(this._rng() * scrambleChars.length)];
+            ctx.fillStyle = this._col(pal.livetext, alpha * 0.6);
           } else {
-            this._drawGlyph(gx, gy, ch.morphT >= 1 ? ch.targetGlyph : ch.glyph, block.dir, block.charSize, alpha);
+            // Resolve to target
+            displayChar = ch.targetChar;
+            ctx.fillStyle = this._col(pal.livetext, alpha * ch.morphT);
           }
+        } else {
+          displayChar = ch.targetChar;
+          ctx.fillStyle = this._col(pal.livetext, alpha);
         }
+
+        ctx.fillText(displayChar, cursorX, line.y);
+        cursorX += 8; // monospace
       }
 
       // Typing cursor
-      if (block.typingLine < block.lines.length) {
+      if (line.typingPos < line.chars.length) {
         const blink = Math.sin(this.frameCount * 0.15) > 0;
         if (blink) {
-          const along = block.typingChar * block.charSpacing;
-          const across = block.typingLine * block.lineSpacing;
-          const cx = block.x + Math.cos(block.dir) * along + Math.cos(block.lineDir) * across;
-          const cy = block.y + Math.sin(block.dir) * along + Math.sin(block.lineDir) * across;
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(block.dir);
-          ctx.fillStyle = this._col(pal.text, block.opacity * 0.8);
-          ctx.fillRect(0, 0, 1.5, block.charSize * 0.8);
-          ctx.restore();
+          ctx.fillStyle = this._col(pal.livetext, line.opacity * 0.7);
+          ctx.fillRect(line.x + line.typingPos * 8, line.y, 1.5, 14);
         }
       }
     }
-  }
-
-  _drawGlyph(x, y, idx, angle, size, alpha) {
-    const glyph = ManuscriptBorder.ENOCHIAN[idx % ManuscriptBorder.ENOCHIAN.length];
-    if (!glyph || alpha < 0.01) return;
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(angle);
-    ctx.strokeStyle = this._col(this.opts.palette.text, alpha);
-    ctx.lineWidth = 1.0;
-    ctx.lineCap = 'square'; // blocky
-    for (const stroke of glyph) {
-      if (stroke.length < 2) continue;
-      ctx.beginPath();
-      ctx.moveTo(stroke[0][0] * size, stroke[0][1] * size);
-      for (let i = 1; i < stroke.length; i++)
-        ctx.lineTo(stroke[i][0] * size, stroke[i][1] * size);
-      ctx.stroke();
-    }
-    ctx.restore();
   }
 
   // ═══════════════════════════════════════
@@ -491,36 +591,35 @@ class ManuscriptBorder {
     this.h = this.canvas.height;
 
     this._initGrid();
-    this._initStructures();
-    this._initConnections();
-
-    // Dense initial text
-    for (let i = 0; i < 25; i++) this._spawnTextBlock();
+    this._initBlocks();
+    this._initBSTs();
+    this._initLiveText();
 
     const loop = () => {
       if (!this.running) return;
       this.frameCount++;
 
-      // Mutate structures
+      // Mutate BSTs
       if (this.frameCount % this.opts.rebalanceInterval === 0) {
-        this._mutateStructures();
-        if (this._rng() < 0.1) this._initConnections();
+        this._mutateBSTs();
       }
-      this._mutateStructures();
-
-      // Step text
-      this._stepTextBlocks();
-
-      // Spawn new text blocks — keep it dense
-      if (this.frameCount % 50 === 0 && this.textBlocks.length < 60) {
-        this._spawnTextBlock();
+      // Morph BST positions
+      for (const tree of this.bstTrees) {
+        if (tree.root) this._bstMorph(tree.root);
       }
+
+      // Mutate blocks
+      this._mutateBlocks();
+
+      // Step live text
+      this._stepLiveText();
 
       // Render
       this.ctx.clearRect(0, 0, this.w, this.h);
       this._renderGrid();
-      this._renderStructures();
-      this._renderTextBlocks();
+      this._renderBlocks();
+      this._renderBSTs();
+      this._renderLiveText();
 
       requestAnimationFrame(loop);
     };
@@ -532,34 +631,12 @@ class ManuscriptBorder {
   stop() { this.running = false; return this; }
 
   resize(w, h) {
-    this.canvas.width = w;
-    this.canvas.height = h;
+    this.canvas.width = w; this.canvas.height = h;
     this.w = w; this.h = h;
     this._initGrid();
-    this._initStructures();
-    this._initConnections();
-    this.textBlocks = [];
-    for (let i = 0; i < 25; i++) this._spawnTextBlock();
-  }
-
-  generate() {
-    this.w = this.canvas.width;
-    this.h = this.canvas.height;
-    this._initGrid();
-    this._initStructures();
-    this._initConnections();
-    for (let i = 0; i < 30; i++) this._spawnTextBlock();
-    for (let f = 0; f < 500; f++) {
-      this.frameCount++;
-      this._mutateStructures();
-      this._stepTextBlocks();
-      if (f % 30 === 0 && this.textBlocks.length < 50) this._spawnTextBlock();
-    }
-    this.ctx.clearRect(0, 0, this.w, this.h);
-    this._renderGrid();
-    this._renderStructures();
-    this._renderTextBlocks();
-    return this;
+    this._initBlocks();
+    this._initBSTs();
+    this._initLiveText();
   }
 }
 
