@@ -73,12 +73,9 @@ function sizeCanvas() {
 }
 sizeCanvas();
 const mb = new ManuscriptBorder(c, {
-  borderWidth: Math.min(220, window.innerWidth * 0.18),
-  density: 0.95,
-  growthRate: 2.0,
-  maxVines: 350,
-  cycleTime: 50000,
-  enochianDensity: 0.6,
+  borderWidth: Math.min(300, window.innerWidth * 0.25),
+  mutationRate: 0.01,
+  rebalanceInterval: 120,
 });
 mb.start();
 window.addEventListener('resize', () => {

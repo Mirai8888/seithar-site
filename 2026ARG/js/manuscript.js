@@ -1,33 +1,25 @@
-// manuscript.js — Generative Hypermedievalism Engine v3
+// manuscript.js — Generative Hypermedievalism Engine v4
 // Seithar Group — Futurist Illuminated Manuscript
-// Algorithmic structures. Living Enochian. Continuous mutation.
-// Reference: CLRS cover (Calder mobile), computational geometry, recursive subdivision
+// Algorithmic. Blocky. Dense. Living Enochian. Continuous mutation.
 
 class ManuscriptBorder {
   constructor(canvas, options = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.opts = Object.assign({
-      borderWidth: 140,
+      borderWidth: 180,
       seed: Math.random() * 99999 | 0,
       sides: ['left', 'right', 'top', 'bottom'],
       palette: {
-        line: 'rgba(80, 78, 74, VAR)',
-        node: 'rgba(90, 87, 82, VAR)',
-        nodeHollow: 'rgba(120, 116, 110, VAR)',
-        text: 'rgba(70, 67, 62, VAR)',
-        textFaint: 'rgba(110, 106, 100, VAR)',
-        accent: 'rgba(160, 50, 50, VAR)',    // sparse red accents like Calder
-        grid: 'rgba(180, 175, 168, VAR)',
+        line: 'rgba(60, 58, 54, VAR)',
+        node: 'rgba(70, 67, 62, VAR)',
+        text: 'rgba(55, 52, 48, VAR)',
+        accent: 'rgba(140, 40, 40, VAR)',
+        grid: 'rgba(160, 155, 148, VAR)',
+        block: 'rgba(90, 87, 82, VAR)',
       },
-      // Structural params
-      treeCount: 6,
-      maxTreeDepth: 8,
-      voronoiCells: 25,
-      mutationRate: 0.006,
-      textDensity: 0.7,
-      rebalanceInterval: 180,   // frames between tree rebalancing
-      morphDuration: 60,        // frames for a morph transition
+      mutationRate: 0.008,
+      rebalanceInterval: 140,
     }, options);
 
     this._seed = this.opts.seed;
@@ -36,19 +28,13 @@ class ManuscriptBorder {
     this.running = false;
     this.frameCount = 0;
 
-    // Living structures
-    this.trees = [];
-    this.textBlocks = [];
+    this.structures = [];    // algorithmic block structures
+    this.textBlocks = [];    // living Enochian
     this.gridLines = [];
-    this.voronoiPts = [];
-    this.floatingNodes = [];
+    this.nodes = [];
     this.connections = [];
-
-    // Morph state
-    this.morphing = [];
   }
 
-  // PRNG
   _rng() {
     let t = this._seed += 0x6D2B79F5;
     t = Math.imul(t ^ t >>> 15, t | 1);
@@ -71,7 +57,7 @@ class ManuscriptBorder {
   }
 
   // ═══════════════════════════════════════
-  // ENOCHIAN GLYPHS
+  // ENOCHIAN GLYPHS — drawn larger, bolder
   // ═══════════════════════════════════════
   static ENOCHIAN = [
     [[[0,0],[0,1],[0.6,1]],[[0.3,0],[0.3,0.6]]],
@@ -98,255 +84,125 @@ class ManuscriptBorder {
   ];
 
   // ═══════════════════════════════════════
-  // ALGORITHMIC TREES — Binary/recursive structures
-  // ═══════════════════════════════════════
-
-  _buildTree(rootX, rootY, angle, length, depth, maxDepth, spread) {
-    if (depth > maxDepth || length < 3) return null;
-
-    const endX = rootX + Math.cos(angle) * length;
-    const endY = rootY + Math.sin(angle) * length;
-
-    const node = {
-      x: rootX, y: rootY,
-      endX, endY,
-      targetX: rootX, targetY: rootY,
-      targetEndX: endX, targetEndY: endY,
-      depth,
-      length,
-      angle,
-      opacity: 0,
-      maxOpacity: Math.max(0.15, 0.7 - depth * 0.07),
-      nodeSize: Math.max(1.5, 4 - depth * 0.4),
-      lineWidth: Math.max(0.4, 2.2 - depth * 0.25),
-      isAccent: this._rng() < 0.06,  // rare red accent nodes
-      children: [],
-    };
-
-    // Binary branching with slight asymmetry
-    const shrink = this._range(0.6, 0.8);
-    const leftAngle = angle - spread * this._range(0.7, 1.3);
-    const rightAngle = angle + spread * this._range(0.7, 1.3);
-
-    const leftChild = this._buildTree(endX, endY, leftAngle, length * shrink, depth + 1, maxDepth, spread * this._range(0.85, 1.1));
-    const rightChild = this._buildTree(endX, endY, rightAngle, length * shrink, depth + 1, maxDepth, spread * this._range(0.85, 1.1));
-
-    if (leftChild) node.children.push(leftChild);
-    if (rightChild) node.children.push(rightChild);
-
-    // Occasional ternary branch
-    if (this._rng() < 0.15 && depth < maxDepth - 2) {
-      const midAngle = angle + this._range(-0.2, 0.2);
-      const midChild = this._buildTree(endX, endY, midAngle, length * shrink * 0.7, depth + 1, maxDepth, spread);
-      if (midChild) node.children.push(midChild);
-    }
-
-    return node;
-  }
-
-  _initTrees() {
-    this.trees = [];
-    const b = this.opts.borderWidth;
-    const sides = this.opts.sides;
-
-    const spawn = (x, y, angle) => {
-      const len = this._range(25, 65);
-      const depth = this._irange(4, this.opts.maxTreeDepth);
-      const spread = this._range(0.3, 0.7);
-      const tree = this._buildTree(x, y, angle, len, 0, depth, spread);
-      if (tree) this.trees.push(tree);
-    };
-
-    // Distribute trees along borders
-    const spacing = 60 + this._range(-15, 15);
-    if (sides.includes('left')) {
-      for (let y = 20; y < this.h - 20; y += spacing + this._range(-20, 20)) {
-        spawn(this._range(5, 15), y, this._range(-0.3, 0.3));
-      }
-    }
-    if (sides.includes('right')) {
-      for (let y = 20; y < this.h - 20; y += spacing + this._range(-20, 20)) {
-        spawn(this.w - this._range(5, 15), y, Math.PI + this._range(-0.3, 0.3));
-      }
-    }
-    if (sides.includes('top')) {
-      for (let x = 20; x < this.w - 20; x += spacing + this._range(-20, 20)) {
-        spawn(x, this._range(5, 15), Math.PI / 2 + this._range(-0.3, 0.3));
-      }
-    }
-    if (sides.includes('bottom')) {
-      for (let x = 20; x < this.w - 20; x += spacing + this._range(-20, 20)) {
-        spawn(x, this.h - this._range(5, 15), -Math.PI / 2 + this._range(-0.3, 0.3));
-      }
-    }
-  }
-
-  // Rebalance: mutate tree structure
-  _rebalanceTree(node) {
-    if (!node) return;
-
-    // Mutate angles slightly
-    node.angle += this._range(-0.12, 0.12);
-    const newEndX = node.x + Math.cos(node.angle) * node.length;
-    const newEndY = node.y + Math.sin(node.angle) * node.length;
-
-    // Set morph targets
-    node.targetEndX = newEndX;
-    node.targetEndY = newEndY;
-
-    // Occasionally prune or grow
-    if (this._rng() < 0.08 && node.children.length > 0) {
-      // Prune a random child
-      node.children.splice(this._irange(0, node.children.length), 1);
-    }
-    if (this._rng() < 0.1 && node.children.length < 3 && node.depth < this.opts.maxTreeDepth - 1) {
-      // Grow new branch
-      const angle = node.angle + this._range(-0.8, 0.8);
-      const child = this._buildTree(node.endX, node.endY, angle, node.length * 0.65, node.depth + 1, this.opts.maxTreeDepth, this._range(0.3, 0.6));
-      if (child) node.children.push(child);
-    }
-
-    // Toggle accent
-    if (this._rng() < 0.03) node.isAccent = !node.isAccent;
-
-    // Recurse
-    for (const child of node.children) {
-      child.x = node.endX;
-      child.y = node.endY;
-      child.targetX = node.targetEndX;
-      child.targetY = node.targetEndY;
-      this._rebalanceTree(child);
-    }
-  }
-
-  // Interpolate tree positions toward targets
-  _morphTree(node, t) {
-    if (!node) return;
-    const ease = t;
-    node.endX += (node.targetEndX - node.endX) * ease;
-    node.endY += (node.targetEndY - node.endY) * ease;
-    node.x += (node.targetX - node.x) * ease;
-    node.y += (node.targetY - node.y) * ease;
-    node.opacity = Math.min(node.maxOpacity, node.opacity + 0.008);
-
-    for (const child of node.children) {
-      child.x = node.endX;
-      child.y = node.endY;
-      child.targetX = node.endX;
-      child.targetY = node.endY;
-      this._morphTree(child, t);
-    }
-  }
-
-  // ═══════════════════════════════════════
-  // GRID UNDERLAY — Faint construction lines
+  // DENSE GRID UNDERLAY
   // ═══════════════════════════════════════
 
   _initGrid() {
     this.gridLines = [];
     const b = this.opts.borderWidth;
-
-    // Horizontal ruling lines in border regions
-    for (let y = 8; y < this.h; y += this._range(12, 22)) {
+    // Dense horizontal + vertical ruling
+    for (let y = 0; y < this.h; y += this._range(8, 16)) {
       if (y < b || y > this.h - b) {
-        this.gridLines.push({
-          x1: 0, y1: y, x2: this.w, y2: y,
-          opacity: this._range(0.04, 0.1),
-          dashed: this._rng() > 0.6,
-        });
+        this.gridLines.push({ x1: 0, y1: y, x2: this.w, y2: y, opacity: this._range(0.05, 0.14) });
       }
     }
-    // Vertical
-    for (let x = 8; x < this.w; x += this._range(12, 22)) {
+    for (let x = 0; x < this.w; x += this._range(8, 16)) {
       if (x < b || x > this.w - b) {
-        this.gridLines.push({
-          x1: x, y1: 0, x2: x, y2: this.h,
-          opacity: this._range(0.04, 0.1),
-          dashed: this._rng() > 0.6,
-        });
+        this.gridLines.push({ x1: x, y1: 0, x2: x, y2: this.h, opacity: this._range(0.05, 0.14) });
       }
     }
   }
 
   // ═══════════════════════════════════════
-  // FLOATING GEOMETRIC NODES — Calder-like
+  // BLOCK STRUCTURES — Recursive subdivision, circuit-like
   // ═══════════════════════════════════════
 
-  _initFloatingNodes() {
-    this.floatingNodes = [];
-    const b = this.opts.borderWidth;
-    const count = this._irange(15, 35);
+  _subdivide(x, y, w, h, depth, maxDepth) {
+    if (depth > maxDepth || w < 8 || h < 8) return;
 
-    for (let i = 0; i < count; i++) {
-      const side = this._pick(this.opts.sides);
-      let x, y;
-      if (side === 'left') { x = this._range(8, b - 8); y = this._range(8, this.h - 8); }
-      else if (side === 'right') { x = this.w - this._range(8, b - 8); y = this._range(8, this.h - 8); }
-      else if (side === 'top') { x = this._range(8, this.w - 8); y = this._range(8, b - 8); }
-      else { x = this._range(8, this.w - 8); y = this.h - this._range(8, b - 8); }
+    const block = {
+      x, y, w, h, depth,
+      opacity: 0,
+      maxOpacity: this._range(0.15, 0.55),
+      filled: this._rng() < 0.15,
+      isAccent: this._rng() < 0.08,
+      hasNode: this._rng() < 0.3,
+      nodeShape: this._pick(['circle', 'diamond', 'square']),
+      born: this.frameCount,
+      targetX: x, targetY: y, targetW: w, targetH: h,
+    };
+    this.structures.push(block);
 
-      this.floatingNodes.push({
-        x, y,
-        targetX: x, targetY: y,
-        size: this._range(2, 7),
-        shape: this._pick(['circle', 'diamond', 'square', 'triangle']),
-        filled: this._rng() > 0.5,
-        isAccent: this._rng() < 0.12,
-        opacity: 0,
-        maxOpacity: this._range(0.2, 0.6),
-        driftAngle: this._range(0, Math.PI * 2),
-        driftSpeed: this._range(0.002, 0.008),
-        driftRadius: this._range(2, 10),
-        baseX: x, baseY: y,
-      });
+    // Recursive subdivision — horizontal or vertical split
+    if (this._rng() < 0.85 && depth < maxDepth) {
+      if (this._rng() > 0.5 && w > 16) {
+        // Vertical split
+        const splitX = x + w * this._range(0.3, 0.7);
+        this._subdivide(x, y, splitX - x, h, depth + 1, maxDepth);
+        this._subdivide(splitX, y, x + w - splitX, h, depth + 1, maxDepth);
+      } else if (h > 16) {
+        // Horizontal split
+        const splitY = y + h * this._range(0.3, 0.7);
+        this._subdivide(x, y, w, splitY - y, depth + 1, maxDepth);
+        this._subdivide(x, splitY, w, y + h - splitY, depth + 1, maxDepth);
+      }
     }
-
-    // Create connections between nearby nodes
-    this._updateConnections();
   }
 
-  _updateConnections() {
+  _initStructures() {
+    this.structures = [];
+    const b = this.opts.borderWidth;
+    const sides = this.opts.sides;
+    const maxD = this._irange(4, 7);
+
+    if (sides.includes('left'))
+      this._subdivide(4, 4, b - 8, this.h - 8, 0, maxD);
+    if (sides.includes('right'))
+      this._subdivide(this.w - b + 4, 4, b - 8, this.h - 8, 0, maxD);
+    if (sides.includes('top'))
+      this._subdivide(b, 4, this.w - b * 2, b - 8, 0, maxD);
+    if (sides.includes('bottom'))
+      this._subdivide(b, this.h - b + 4, this.w - b * 2, b - 8, 0, maxD);
+  }
+
+  _mutateStructures() {
+    for (const block of this.structures) {
+      if (this._rng() < this.opts.mutationRate) {
+        // Shift dimensions slightly
+        block.targetX = block.x + this._range(-3, 3);
+        block.targetY = block.y + this._range(-3, 3);
+        block.targetW = Math.max(6, block.w + this._range(-4, 4));
+        block.targetH = Math.max(6, block.h + this._range(-4, 4));
+        if (this._rng() < 0.1) block.isAccent = !block.isAccent;
+        if (this._rng() < 0.15) block.filled = !block.filled;
+        if (this._rng() < 0.1) block.nodeShape = this._pick(['circle', 'diamond', 'square']);
+      }
+      // Morph toward targets
+      block.x += (block.targetX - block.x) * 0.02;
+      block.y += (block.targetY - block.y) * 0.02;
+      block.w += (block.targetW - block.w) * 0.02;
+      block.h += (block.targetH - block.h) * 0.02;
+      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.006);
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // CONNECTOR LINES — between blocks
+  // ═══════════════════════════════════════
+
+  _initConnections() {
     this.connections = [];
-    const nodes = this.floatingNodes;
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 80 && this._rng() < 0.4) {
+    const structs = this.structures.filter(s => s.hasNode);
+    for (let i = 0; i < structs.length; i++) {
+      for (let j = i + 1; j < structs.length; j++) {
+        const a = structs[i], b = structs[j];
+        const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
+        const bx = b.x + b.w / 2, by = b.y + b.h / 2;
+        const dist = Math.sqrt((ax - bx) ** 2 + (ay - by) ** 2);
+        if (dist < 120 && this._rng() < 0.25) {
           this.connections.push({
-            a: i, b: j,
-            opacity: Math.max(0.05, 0.2 - dist * 0.002),
-            dashed: this._rng() > 0.5,
+            ai: this.structures.indexOf(a),
+            bi: this.structures.indexOf(b),
+            opacity: this._range(0.08, 0.25),
+            orthogonal: this._rng() > 0.4, // right-angle routing like circuits
           });
         }
       }
     }
   }
 
-  _stepFloatingNodes() {
-    for (const node of this.floatingNodes) {
-      node.opacity = Math.min(node.maxOpacity, node.opacity + 0.005);
-      // Gentle drift
-      node.driftAngle += node.driftSpeed;
-      node.x = node.baseX + Math.cos(node.driftAngle) * node.driftRadius;
-      node.y = node.baseY + Math.sin(node.driftAngle * 0.7) * node.driftRadius;
-    }
-
-    // Periodically re-establish connections
-    if (this.frameCount % 300 === 0) this._updateConnections();
-
-    // Occasionally mutate a node
-    if (this._rng() < this.opts.mutationRate) {
-      const node = this._pick(this.floatingNodes);
-      node.shape = this._pick(['circle', 'diamond', 'square', 'triangle']);
-      node.filled = !node.filled;
-      if (this._rng() < 0.15) node.isAccent = !node.isAccent;
-    }
-  }
-
   // ═══════════════════════════════════════
-  // LIVING ENOCHIAN TEXT — Types, morphs, restructures
+  // LIVING ENOCHIAN TEXT — Dense, filling, typing, morphing
   // ═══════════════════════════════════════
 
   _spawnTextBlock() {
@@ -355,38 +211,38 @@ class ManuscriptBorder {
     let x, y, dir, lineDir;
 
     if (side === 'left') {
-      x = this._range(6, b * 0.75);
-      y = this._range(15, this.h - 15);
+      x = this._range(4, b - 10);
+      y = this._range(8, this.h - 8);
       dir = Math.PI / 2;
       lineDir = 0;
     } else if (side === 'right') {
-      x = this.w - this._range(6, b * 0.75);
-      y = this._range(15, this.h - 15);
+      x = this.w - this._range(4, b - 10);
+      y = this._range(8, this.h - 8);
       dir = Math.PI / 2;
       lineDir = Math.PI;
     } else if (side === 'top') {
-      x = this._range(15, this.w - 15);
-      y = this._range(6, b * 0.75);
+      x = this._range(8, this.w - 8);
+      y = this._range(4, b - 10);
       dir = 0;
       lineDir = Math.PI / 2;
     } else {
-      x = this._range(15, this.w - 15);
-      y = this.h - this._range(6, b * 0.75);
+      x = this._range(8, this.w - 8);
+      y = this.h - this._range(4, b - 10);
       dir = 0;
       lineDir = -Math.PI / 2;
     }
 
-    const lineCount = this._irange(2, 10);
+    const lineCount = this._irange(3, 15);
     const lines = [];
     for (let l = 0; l < lineCount; l++) {
-      const charCount = this._irange(3, 14);
+      const charCount = this._irange(4, 18);
       const chars = [];
       for (let c = 0; c < charCount; c++) {
         chars.push({
           glyph: this._irange(0, ManuscriptBorder.ENOCHIAN.length),
           targetGlyph: this._irange(0, ManuscriptBorder.ENOCHIAN.length),
           morphT: 1,
-          morphSpeed: this._range(0.005, 0.02),
+          morphSpeed: this._range(0.008, 0.03),
           visible: false,
           visibleT: 0,
         });
@@ -396,28 +252,28 @@ class ManuscriptBorder {
 
     this.textBlocks.push({
       x, y, dir, lineDir, side, lines,
-      charSize: this._range(6, 10),
-      charSpacing: this._range(7, 11),
-      lineSpacing: this._range(9, 14),
+      charSize: this._range(8, 13),
+      charSpacing: this._range(9, 14),
+      lineSpacing: this._range(11, 16),
       opacity: 0,
-      maxOpacity: this._range(0.25, 0.55),
+      maxOpacity: this._range(0.35, 0.7),
       born: this.frameCount,
       typingLine: 0, typingChar: 0,
-      typeSpeed: this._range(0.4, 2.0),
+      typeSpeed: this._range(0.8, 3.0),
       typeAccum: 0,
       alive: true,
-      morphCycle: this._irange(150, 400),
+      morphCycle: this._irange(100, 300),
       lastMorph: 0,
-      lifespan: this._irange(800, 2500),
+      lifespan: this._irange(600, 2000),
     });
   }
 
   _stepTextBlocks() {
     for (const block of this.textBlocks) {
       if (!block.alive) continue;
-      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.005);
+      block.opacity = Math.min(block.maxOpacity, block.opacity + 0.008);
 
-      // Typing
+      // Typing — faster
       block.typeAccum += block.typeSpeed;
       while (block.typeAccum >= 1 && block.typingLine < block.lines.length) {
         block.typeAccum -= 1;
@@ -436,7 +292,7 @@ class ManuscriptBorder {
         block.lastMorph = this.frameCount;
         for (const line of block.lines) {
           for (const ch of line) {
-            if (ch.visible && this._rng() < 0.35) {
+            if (ch.visible && this._rng() < 0.4) {
               ch.glyph = ch.targetGlyph;
               ch.targetGlyph = this._irange(0, ManuscriptBorder.ENOCHIAN.length);
               ch.morphT = 0;
@@ -448,16 +304,15 @@ class ManuscriptBorder {
       for (const line of block.lines) {
         for (const ch of line) {
           if (ch.visible) {
-            ch.visibleT = Math.min(1, ch.visibleT + 0.04);
+            ch.visibleT = Math.min(1, ch.visibleT + 0.06);
             if (ch.morphT < 1) ch.morphT = Math.min(1, ch.morphT + ch.morphSpeed);
           }
         }
       }
 
-      // Lifespan
       const age = this.frameCount - block.born;
       if (age > block.lifespan) {
-        block.opacity -= 0.004;
+        block.opacity -= 0.005;
         if (block.opacity <= 0) block.alive = false;
       }
     }
@@ -471,123 +326,85 @@ class ManuscriptBorder {
   _renderGrid() {
     const ctx = this.ctx;
     const pal = this.opts.palette;
+    ctx.lineWidth = 0.3;
     for (const line of this.gridLines) {
       ctx.strokeStyle = this._col(pal.grid, line.opacity);
-      ctx.lineWidth = 0.3;
-      if (line.dashed) ctx.setLineDash([2, 6]);
-      else ctx.setLineDash([]);
       ctx.beginPath();
       ctx.moveTo(line.x1, line.y1);
       ctx.lineTo(line.x2, line.y2);
       ctx.stroke();
     }
-    ctx.setLineDash([]);
   }
 
-  _renderTreeNode(node) {
-    if (!node || node.opacity < 0.005) return;
+  _renderStructures() {
     const ctx = this.ctx;
     const pal = this.opts.palette;
-    const a = node.opacity;
 
-    // Clamp to border
-    if (!this._inBorder(node.endX, node.endY) && !this._inBorder(node.x, node.y)) return;
+    for (const block of this.structures) {
+      if (block.opacity < 0.005) continue;
+      const a = block.opacity;
 
-    // Line
-    ctx.strokeStyle = node.isAccent ?
-      this._col(pal.accent, a * 0.7) :
-      this._col(pal.line, a * 0.6);
-    ctx.lineWidth = node.lineWidth;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(node.x, node.y);
-    ctx.lineTo(node.endX, node.endY);
-    ctx.stroke();
+      const col = block.isAccent ? pal.accent : pal.block;
 
-    // Node at endpoint
-    const s = node.nodeSize;
-    ctx.fillStyle = node.isAccent ?
-      this._col(pal.accent, a * 0.8) :
-      this._col(pal.node, a * 0.5);
+      if (block.filled) {
+        ctx.fillStyle = this._col(col, a * 0.12);
+        ctx.fillRect(block.x, block.y, block.w, block.h);
+      }
 
-    if (node.children.length === 0) {
-      // Leaf nodes: filled circles
-      ctx.beginPath();
-      ctx.arc(node.endX, node.endY, s, 0, Math.PI * 2);
-      ctx.fill();
-    } else {
-      // Branch nodes: hollow circles
-      ctx.strokeStyle = node.isAccent ?
-        this._col(pal.accent, a * 0.6) :
-        this._col(pal.nodeHollow, a * 0.5);
-      ctx.lineWidth = 0.8;
-      ctx.beginPath();
-      ctx.arc(node.endX, node.endY, s * 0.8, 0, Math.PI * 2);
-      ctx.stroke();
+      // Border
+      ctx.strokeStyle = this._col(col, a * 0.5);
+      ctx.lineWidth = block.depth < 2 ? 1.2 : 0.6;
+      ctx.strokeRect(block.x, block.y, block.w, block.h);
+
+      // Node at center
+      if (block.hasNode) {
+        const cx = block.x + block.w / 2;
+        const cy = block.y + block.h / 2;
+        const s = Math.min(block.w, block.h) * 0.15;
+
+        ctx.fillStyle = this._col(block.isAccent ? pal.accent : pal.node, a * 0.6);
+        ctx.beginPath();
+        switch (block.nodeShape) {
+          case 'circle':
+            ctx.arc(cx, cy, s, 0, Math.PI * 2);
+            break;
+          case 'diamond':
+            ctx.moveTo(cx, cy - s);
+            ctx.lineTo(cx + s, cy);
+            ctx.lineTo(cx, cy + s);
+            ctx.lineTo(cx - s, cy);
+            ctx.closePath();
+            break;
+          case 'square':
+            ctx.rect(cx - s, cy - s, s * 2, s * 2);
+            break;
+        }
+        ctx.fill();
+      }
     }
 
-    // Recurse
-    for (const child of node.children) this._renderTreeNode(child);
-  }
-
-  _renderFloatingNodes() {
-    const ctx = this.ctx;
-    const pal = this.opts.palette;
-
-    // Connections first
+    // Connections — orthogonal routing
     for (const conn of this.connections) {
-      const a = this.floatingNodes[conn.a];
-      const b = this.floatingNodes[conn.b];
+      const a = this.structures[conn.ai];
+      const b = this.structures[conn.bi];
+      if (!a || !b) continue;
+      const ax = a.x + a.w / 2, ay = a.y + a.h / 2;
+      const bx = b.x + b.w / 2, by = b.y + b.h / 2;
       const alpha = Math.min(a.opacity, b.opacity) * conn.opacity;
-      ctx.strokeStyle = this._col(pal.line, alpha);
-      ctx.lineWidth = 0.5;
-      if (conn.dashed) ctx.setLineDash([1, 4]);
-      else ctx.setLineDash([]);
+
+      ctx.strokeStyle = this._col(this.opts.palette.line, alpha);
+      ctx.lineWidth = 0.6;
       ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      ctx.stroke();
-    }
-    ctx.setLineDash([]);
-
-    // Nodes
-    for (const node of this.floatingNodes) {
-      if (node.opacity < 0.01) continue;
-      const a = node.opacity;
-      const s = node.size;
-
-      if (node.isAccent) {
-        ctx.fillStyle = this._col(pal.accent, a * 0.7);
-        ctx.strokeStyle = this._col(pal.accent, a * 0.5);
+      ctx.moveTo(ax, ay);
+      if (conn.orthogonal) {
+        // Right-angle routing
+        const midX = (ax + bx) / 2;
+        ctx.lineTo(midX, ay);
+        ctx.lineTo(midX, by);
+        ctx.lineTo(bx, by);
       } else {
-        ctx.fillStyle = this._col(pal.node, a * (node.filled ? 0.5 : 0.1));
-        ctx.strokeStyle = this._col(pal.node, a * 0.5);
+        ctx.lineTo(bx, by);
       }
-      ctx.lineWidth = 0.7;
-
-      ctx.beginPath();
-      switch (node.shape) {
-        case 'circle':
-          ctx.arc(node.x, node.y, s, 0, Math.PI * 2);
-          break;
-        case 'diamond':
-          ctx.moveTo(node.x, node.y - s);
-          ctx.lineTo(node.x + s, node.y);
-          ctx.lineTo(node.x, node.y + s);
-          ctx.lineTo(node.x - s, node.y);
-          ctx.closePath();
-          break;
-        case 'square':
-          ctx.rect(node.x - s, node.y - s, s * 2, s * 2);
-          break;
-        case 'triangle':
-          ctx.moveTo(node.x, node.y - s);
-          ctx.lineTo(node.x + s, node.y + s * 0.7);
-          ctx.lineTo(node.x - s, node.y + s * 0.7);
-          ctx.closePath();
-          break;
-      }
-      if (node.filled) ctx.fill();
       ctx.stroke();
     }
   }
@@ -615,18 +432,17 @@ class ManuscriptBorder {
           const alpha = block.opacity * ch.visibleT;
 
           if (ch.morphT < 1) {
-            this._drawGlyph(gx, gy, ch.glyph, block.dir, block.charSize, alpha * (1 - ch.morphT), pal.text);
-            this._drawGlyph(gx, gy, ch.targetGlyph, block.dir, block.charSize, alpha * ch.morphT, pal.text);
+            this._drawGlyph(gx, gy, ch.glyph, block.dir, block.charSize, alpha * (1 - ch.morphT));
+            this._drawGlyph(gx, gy, ch.targetGlyph, block.dir, block.charSize, alpha * ch.morphT);
           } else {
-            const g = ch.morphT >= 1 ? ch.targetGlyph : ch.glyph;
-            this._drawGlyph(gx, gy, g, block.dir, block.charSize, alpha, pal.text);
+            this._drawGlyph(gx, gy, ch.morphT >= 1 ? ch.targetGlyph : ch.glyph, block.dir, block.charSize, alpha);
           }
         }
       }
 
-      // Cursor
+      // Typing cursor
       if (block.typingLine < block.lines.length) {
-        const blink = Math.sin(this.frameCount * 0.12) > 0;
+        const blink = Math.sin(this.frameCount * 0.15) > 0;
         if (blink) {
           const along = block.typingChar * block.charSpacing;
           const across = block.typingLine * block.lineSpacing;
@@ -635,24 +451,24 @@ class ManuscriptBorder {
           ctx.save();
           ctx.translate(cx, cy);
           ctx.rotate(block.dir);
-          ctx.fillStyle = this._col(pal.text, block.opacity * 0.7);
-          ctx.fillRect(0, 0, 1.2, block.charSize * 0.75);
+          ctx.fillStyle = this._col(pal.text, block.opacity * 0.8);
+          ctx.fillRect(0, 0, 1.5, block.charSize * 0.8);
           ctx.restore();
         }
       }
     }
   }
 
-  _drawGlyph(x, y, idx, angle, size, alpha, palKey) {
+  _drawGlyph(x, y, idx, angle, size, alpha) {
     const glyph = ManuscriptBorder.ENOCHIAN[idx % ManuscriptBorder.ENOCHIAN.length];
-    if (!glyph) return;
+    if (!glyph || alpha < 0.01) return;
     const ctx = this.ctx;
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(angle);
-    ctx.strokeStyle = this._col(palKey, alpha);
-    ctx.lineWidth = 0.6;
-    ctx.lineCap = 'round';
+    ctx.strokeStyle = this._col(this.opts.palette.text, alpha);
+    ctx.lineWidth = 1.0;
+    ctx.lineCap = 'square'; // blocky
     for (const stroke of glyph) {
       if (stroke.length < 2) continue;
       ctx.beginPath();
@@ -675,41 +491,35 @@ class ManuscriptBorder {
     this.h = this.canvas.height;
 
     this._initGrid();
-    this._initTrees();
-    this._initFloatingNodes();
+    this._initStructures();
+    this._initConnections();
 
-    // Initial text blocks
-    for (let i = 0; i < 12; i++) this._spawnTextBlock();
+    // Dense initial text
+    for (let i = 0; i < 25; i++) this._spawnTextBlock();
 
     const loop = () => {
       if (!this.running) return;
       this.frameCount++;
 
-      // Tree mutation cycle
+      // Mutate structures
       if (this.frameCount % this.opts.rebalanceInterval === 0) {
-        for (const tree of this.trees) this._rebalanceTree(tree);
+        this._mutateStructures();
+        if (this._rng() < 0.1) this._initConnections();
       }
-
-      // Morph trees toward targets
-      for (const tree of this.trees) this._morphTree(tree, 0.03);
-
-      // Step floating nodes
-      this._stepFloatingNodes();
+      this._mutateStructures();
 
       // Step text
       this._stepTextBlocks();
 
-      // Spawn new text blocks
-      if (this.frameCount % 90 === 0 && this.textBlocks.length < 40) {
+      // Spawn new text blocks — keep it dense
+      if (this.frameCount % 50 === 0 && this.textBlocks.length < 60) {
         this._spawnTextBlock();
       }
 
       // Render
       this.ctx.clearRect(0, 0, this.w, this.h);
-
       this._renderGrid();
-      for (const tree of this.trees) this._renderTreeNode(tree);
-      this._renderFloatingNodes();
+      this._renderStructures();
       this._renderTextBlocks();
 
       requestAnimationFrame(loop);
@@ -725,39 +535,29 @@ class ManuscriptBorder {
     this.canvas.width = w;
     this.canvas.height = h;
     this.w = w; this.h = h;
-    // Reinitialize structures
     this._initGrid();
-    this._initTrees();
-    this._initFloatingNodes();
+    this._initStructures();
+    this._initConnections();
     this.textBlocks = [];
-    for (let i = 0; i < 12; i++) this._spawnTextBlock();
+    for (let i = 0; i < 25; i++) this._spawnTextBlock();
   }
 
-  // Static render
   generate() {
     this.w = this.canvas.width;
     this.h = this.canvas.height;
     this._initGrid();
-    this._initTrees();
-    this._initFloatingNodes();
-    for (let i = 0; i < 15; i++) this._spawnTextBlock();
-
-    // Simulate
-    for (let f = 0; f < 600; f++) {
+    this._initStructures();
+    this._initConnections();
+    for (let i = 0; i < 30; i++) this._spawnTextBlock();
+    for (let f = 0; f < 500; f++) {
       this.frameCount++;
-      if (f % this.opts.rebalanceInterval === 0) {
-        for (const tree of this.trees) this._rebalanceTree(tree);
-      }
-      for (const tree of this.trees) this._morphTree(tree, 0.05);
-      this._stepFloatingNodes();
+      this._mutateStructures();
       this._stepTextBlocks();
-      if (f % 60 === 0 && this.textBlocks.length < 35) this._spawnTextBlock();
+      if (f % 30 === 0 && this.textBlocks.length < 50) this._spawnTextBlock();
     }
-
     this.ctx.clearRect(0, 0, this.w, this.h);
     this._renderGrid();
-    for (const tree of this.trees) this._renderTreeNode(tree);
-    this._renderFloatingNodes();
+    this._renderStructures();
     this._renderTextBlocks();
     return this;
   }
