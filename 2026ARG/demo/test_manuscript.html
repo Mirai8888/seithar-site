@@ -8,38 +8,36 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: #f5f3ef;
+  background: #f0ebe0;
   overflow: hidden;
   width: 100vw;
   height: 100vh;
 }
 
-/* Layer 1: Border — monochrome frame */
-.gilded-border {
+/* Border frame — dark intaglio */
+.frame-outer {
   position: fixed;
   inset: 0;
-  border: 14px solid #3a3a3a;
+  border: 10px solid #1a1816;
   z-index: 30;
   pointer-events: none;
 }
-
-.gilded-inner {
+.frame-inner {
   position: fixed;
-  top: 16px; left: 16px; right: 16px; bottom: 16px;
-  border: 2px solid rgba(60, 60, 60, 0.5);
+  top: 13px; left: 13px; right: 13px; bottom: 13px;
+  border: 1.5px solid rgba(30, 28, 24, 0.5);
   z-index: 30;
   pointer-events: none;
 }
-
-.gilded-inner2 {
+.frame-inner2 {
   position: fixed;
-  top: 21px; left: 21px; right: 21px; bottom: 21px;
-  border: 0.5px solid rgba(60, 60, 60, 0.25);
+  top: 17px; left: 17px; right: 17px; bottom: 17px;
+  border: 0.5px solid rgba(30, 28, 24, 0.2);
   z-index: 30;
   pointer-events: none;
 }
 
-/* Layer 2: Generative canvas — fills the space between border and card */
+/* Generative canvas */
 canvas#ms {
   position: fixed;
   top: 0; left: 0;
@@ -49,53 +47,48 @@ canvas#ms {
   pointer-events: none;
 }
 
-/* Layer 3: Content card — monochrome */
+/* Content card — crisp white, centered, vertical */
 .content-card {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(32vw, 360px);
-  min-height: min(70vh, 560px);
+  width: min(30vw, 340px);
+  min-height: min(65vh, 520px);
   background: #fff;
   z-index: 20;
-  padding: 44px 48px;
+  padding: 48px 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #3a3a3a;
+  border: 1.5px solid #1a1816;
   box-shadow:
-    0 0 0 3px #fff,
-    0 0 0 4.5px rgba(60, 60, 60, 0.4),
-    0 0 0 7px #fff,
-    0 0 0 8px rgba(60, 60, 60, 0.15);
+    0 0 0 3px #f0ebe0,
+    0 0 0 4px rgba(30, 28, 24, 0.35),
+    0 0 0 7px #f0ebe0,
+    0 0 0 7.5px rgba(30, 28, 24, 0.12);
 }
 
-.card-inner {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-}
+.card-inner { text-align: center; }
 
 .mark {
   font-size: 11px;
   letter-spacing: 8px;
-  color: #999;
-  margin-bottom: 36px;
-  text-align: center;
+  color: #888;
+  margin-bottom: 40px;
 }
 
 .title {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 300;
-  color: #1a1a1a;
-  line-height: 1.5;
-  text-align: center;
-  margin-bottom: 12px;
+  color: #111;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 .sub {
-  font-size: 13px;
+  font-size: 12px;
   color: #999;
-  text-align: center;
   font-family: ui-monospace, 'SF Mono', monospace;
   letter-spacing: 2px;
 }
@@ -103,15 +96,12 @@ canvas#ms {
 </head>
 <body>
 
-<!-- Layer 1: Gilded border -->
-<div class="gilded-border"></div>
-<div class="gilded-inner"></div>
-<div class="gilded-inner2"></div>
+<div class="frame-outer"></div>
+<div class="frame-inner"></div>
+<div class="frame-inner2"></div>
 
-<!-- Layer 2: Generative canvas -->
 <canvas id="ms"></canvas>
 
-<!-- Layer 3: Content card -->
 <div class="content-card">
   <div class="card-inner">
     <div class="mark">S E I T H A R</div>
@@ -135,27 +125,24 @@ function sizeCanvas() {
 }
 sizeCanvas();
 
-// Pass card rect so generative avoids the content area
 const cardRect = card.getBoundingClientRect();
 const mb = new ManuscriptBorder(c, {
-  // Card exclusion zone — generative fills AROUND it
   exclusion: {
     x: cardRect.left,
     y: cardRect.top,
     w: cardRect.width,
     h: cardRect.height,
-    padding: 16,
+    padding: 12,
   },
-  treeSpacing: 14,
-  minNodeDist: 7,
-  nodeRadius: 2,
+  growthRate: 8,
+  segmentSpeed: 0.1,
 });
 mb.start();
 
 window.addEventListener('resize', () => {
   sizeCanvas();
   const r = card.getBoundingClientRect();
-  mb.opts.exclusion = { x: r.left, y: r.top, w: r.width, h: r.height, padding: 16 };
+  mb.opts.exclusion = { x: r.left, y: r.top, w: r.width, h: r.height, padding: 12 };
   mb.resize(c.width, c.height);
 });
 </script>

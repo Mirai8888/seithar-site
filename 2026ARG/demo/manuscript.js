@@ -1,6 +1,6 @@
-// manuscript.js — Generative Hypermedievalism Engine v9
-// Seithar Group — Algorithmic Forest
-// Trees BUILD in real time. No fade-in. No swaying. Growth is the animation.
+// manuscript.js — Generative Hypermedievalism Engine v10
+// Horror Vacui L-system marginalia. Intaglio etching. Ink on parchment.
+// Real L-system grammars. Dendritic growth. Every pixel filled.
 
 class ManuscriptBorder {
   constructor(canvas, options = {}) {
@@ -8,20 +8,9 @@ class ManuscriptBorder {
     this.ctx = canvas.getContext('2d');
     this.opts = Object.assign({
       seed: Math.random() * 99999 | 0,
-      palette: {
-        branch: 'rgba(50, 50, 50, VAR)',
-        branchLight: 'rgba(90, 90, 90, VAR)',
-        node: 'rgba(40, 40, 40, VAR)',
-        nodeFill: 'rgba(120, 120, 120, VAR)',
-        leafFill: 'rgba(60, 60, 60, VAR)',
-        accent: 'rgba(140, 50, 50, VAR)',
-      },
-      nodeRadius: 1.6,
-      minNodeDist: 4,
       exclusion: null,
-      // Growth
-      growthRate: 3,        // new segments per frame
-      segmentSpeed: 0.06,   // how fast a segment draws (0→1)
+      growthRate: 6,
+      segmentSpeed: 0.08,
     }, options);
 
     this._seed = this.opts.seed;
@@ -29,12 +18,14 @@ class ManuscriptBorder {
     this.h = canvas.height;
     this.running = false;
     this.frameCount = 0;
-    this.allNodes = [];
 
-    // Growth queue: segments waiting to be built
-    this.segments = [];       // all committed segments
-    this.growQueue = [];      // pending: { parent, x, y, angle, length, depth, maxDepth, treeType }
-    this.activeSegs = [];     // currently drawing (progress 0→1)
+    // Spatial grid for density checking
+    this.gridSize = 3;
+    this.grid = null;
+
+    this.segments = [];
+    this.activeSegs = [];
+    this.growQueue = [];
   }
 
   _rng() {
@@ -45,68 +36,171 @@ class ManuscriptBorder {
   }
   _range(a, b) { return a + this._rng() * (b - a); }
   _irange(a, b) { return (a + this._rng() * (b - a)) | 0; }
-  _col(base, a) { return base.replace('VAR', Math.max(0, Math.min(1, a)).toFixed(3)); }
 
-  _canPlace(x, y) {
-    const d = this.opts.minNodeDist;
-    const d2 = d * d;
-    for (const n of this.allNodes) {
-      const dx = n.x - x, dy = n.y - y;
-      if (dx * dx + dy * dy < d2) return false;
-    }
-    return true;
+  // Spatial hash for fast density queries
+  _initGrid() {
+    const gs = this.gridSize;
+    this.gridW = Math.ceil(this.w / gs);
+    this.gridH = Math.ceil(this.h / gs);
+    this.grid = new Uint8Array(this.gridW * this.gridH);
   }
 
-  _inExclusion(x, y) {
+  _markCell(x, y) {
+    const gs = this.gridSize;
+    const gx = (x / gs) | 0;
+    const gy = (y / gs) | 0;
+    if (gx >= 0 && gx < this.gridW && gy >= 0 && gy < this.gridH) {
+      const idx = gy * this.gridW + gx;
+      if (this.grid[idx] < 255) this.grid[idx]++;
+    }
+  }
+
+  _getDensity(x, y) {
+    const gs = this.gridSize;
+    const gx = (x / gs) | 0;
+    const gy = (y / gs) | 0;
+    if (gx < 0 || gx >= this.gridW || gy < 0 || gy >= this.gridH) return 99;
+    return this.grid[gy * this.gridW + gx];
+  }
+
+  _canPlace(x, y) {
+    if (x < 1 || x > this.w - 1 || y < 1 || y > this.h - 1) return false;
     const ex = this.opts.exclusion;
-    if (!ex) return false;
-    const p = ex.padding || 0;
-    return x > ex.x - p && x < ex.x + ex.w + p &&
-           y > ex.y - p && y < ex.y + ex.h + p;
+    if (ex) {
+      const p = ex.padding || 0;
+      if (x > ex.x - p && x < ex.x + ex.w + p && y > ex.y - p && y < ex.y + ex.h + p) return false;
+    }
+    return this._getDensity(x, y) < 2;
   }
 
   // ═══════════════════════════════════════
-  // SEED GROWTH POINTS
+  // L-SYSTEM GRAMMARS
+  // ═══════════════════════════════════════
+
+  // Each grammar: { axiom, rules, angle, iterations, lengthScale }
+  static GRAMMARS = [
+    // 0: Classic plant
+    { axiom: 'X', rules: { X: 'F+[[X]-X]-F[-FX]+X', F: 'FF' }, angle: 25, iterations: 5, lengthScale: 0.5 },
+    // 1: Bush
+    { axiom: 'F', rules: { F: 'FF+[+F-F-F]-[-F+F+F]' }, angle: 22, iterations: 4, lengthScale: 0.5 },
+    // 2: Fern
+    { axiom: 'X', rules: { X: 'F-[[X]+X]+F[+FX]-X', F: 'FF' }, angle: 22, iterations: 5, lengthScale: 0.45 },
+    // 3: Weed
+    { axiom: 'F', rules: { F: 'F[+F]F[-F]F' }, angle: 25.7, iterations: 4, lengthScale: 0.35 },
+    // 4: Stochastic tree
+    { axiom: 'F', rules: { F: 'F[+F][-F]' }, angle: 30, iterations: 6, lengthScale: 0.55 },
+    // 5: Dendritic / coral
+    { axiom: 'X', rules: { X: 'F[+X][-X]FX', F: 'FF' }, angle: 28, iterations: 5, lengthScale: 0.42 },
+    // 6: Skeletal
+    { axiom: 'X', rules: { X: 'F[-X][+X]', F: 'FF' }, angle: 35, iterations: 6, lengthScale: 0.48 },
+    // 7: Dense fractal
+    { axiom: 'X', rules: { X: 'F+[X+F]-[X-F]', F: 'FF' }, angle: 20, iterations: 5, lengthScale: 0.5 },
+  ];
+
+  // Expand L-system string
+  _expandLSystem(grammar, stochastic) {
+    let str = grammar.axiom;
+    for (let i = 0; i < grammar.iterations; i++) {
+      let next = '';
+      for (const ch of str) {
+        if (grammar.rules[ch]) {
+          // Stochastic variation
+          if (stochastic && this._rng() < 0.15) {
+            // Occasionally skip or modify
+            next += this._rng() < 0.5 ? grammar.rules[ch] : ch;
+          } else {
+            next += grammar.rules[ch];
+          }
+        } else {
+          next += ch;
+        }
+      }
+      str = next;
+      if (str.length > 5000) break; // safety
+    }
+    return str;
+  }
+
+  // Convert L-system string into growth queue entries
+  _lsystemToSegments(str, startX, startY, startAngle, baseLength, grammar) {
+    const angleRad = grammar.angle * Math.PI / 180;
+    const entries = [];
+    const stack = [];
+    let x = startX, y = startY, a = startAngle, len = baseLength;
+    let depth = 0;
+
+    for (const ch of str) {
+      switch (ch) {
+        case 'F': {
+          const endX = x + Math.cos(a) * len;
+          const endY = y + Math.sin(a) * len;
+          entries.push({ x, y, endX, endY, depth, len });
+          x = endX;
+          y = endY;
+          break;
+        }
+        case '+':
+          a += angleRad + this._range(-0.05, 0.05);
+          break;
+        case '-':
+          a -= angleRad + this._range(-0.05, 0.05);
+          break;
+        case '[':
+          stack.push({ x, y, a, len, depth });
+          depth++;
+          len *= grammar.lengthScale + this._range(-0.05, 0.05);
+          break;
+        case ']':
+          if (stack.length) {
+            const s = stack.pop();
+            x = s.x; y = s.y; a = s.a; len = s.len; depth = s.depth;
+          }
+          break;
+        // X is just a placeholder, no drawing
+      }
+    }
+
+    return entries;
+  }
+
+  // ═══════════════════════════════════════
+  // SEED GROWTH
   // ═══════════════════════════════════════
 
   _seedTrees() {
     this.growQueue = [];
-    const sp = 8;
+    const grammars = ManuscriptBorder.GRAMMARS;
 
-    const seed = (x, y, angle, lenMin, lenMax, depthMin, depthMax) => {
-      const treeType = this._irange(0, 5);
-      this.growQueue.push({
-        x, y, angle,
-        length: this._range(lenMin, lenMax),
-        depth: 0,
-        maxDepth: this._irange(depthMin, depthMax),
-        treeType,
-      });
+    const seed = (x, y, angle, baseLen) => {
+      const g = grammars[this._irange(0, grammars.length)];
+      const str = this._expandLSystem(g, true);
+      const segs = this._lsystemToSegments(str, x, y, angle, baseLen, g);
+      // Filter and enqueue
+      for (const s of segs) {
+        this.growQueue.push(s);
+      }
     };
 
-    // Edge seeds — 4 layers
-    for (let layer = 0; layer < 4; layer++) {
-      const offset = layer * 6;
-      for (let y = 3; y < this.h - 3; y += sp + this._range(-2, 2))
-        seed(this._range(1, 3 + offset), y, this._range(-0.7, 0.7), 12, 70, 5, 12);
-      for (let y = 3; y < this.h - 3; y += sp + this._range(-2, 2))
-        seed(this.w - this._range(1, 3 + offset), y, Math.PI + this._range(-0.7, 0.7), 12, 70, 5, 12);
-      for (let x = 3; x < this.w - 3; x += sp + this._range(-2, 2))
-        seed(x, this._range(1, 3 + offset), Math.PI/2 + this._range(-0.7, 0.7), 10, 60, 5, 11);
-      for (let x = 3; x < this.w - 3; x += sp + this._range(-2, 2))
-        seed(x, this.h - this._range(1, 3 + offset), -Math.PI/2 + this._range(-0.7, 0.7), 10, 60, 5, 11);
+    // Dense edge seeding
+    const sp = 6;
+    for (let y = 2; y < this.h - 2; y += sp + this._range(-2, 2)) {
+      seed(this._range(0, 3), y, this._range(-0.5, 0.5), this._range(3, 8));
+      seed(this.w - this._range(0, 3), y, Math.PI + this._range(-0.5, 0.5), this._range(3, 8));
+    }
+    for (let x = 2; x < this.w - 2; x += sp + this._range(-2, 2)) {
+      seed(x, this._range(0, 3), Math.PI/2 + this._range(-0.5, 0.5), this._range(3, 7));
+      seed(x, this.h - this._range(0, 3), -Math.PI/2 + this._range(-0.5, 0.5), this._range(3, 7));
     }
 
-    // Interior seeds
-    const count = Math.floor((this.w * this.h) / 1500);
+    // Interior seeds — scattered
+    const count = Math.floor((this.w * this.h) / 3000);
     for (let i = 0; i < count; i++) {
-      const x = this._range(this.w * 0.02, this.w * 0.98);
-      const y = this._range(this.h * 0.02, this.h * 0.98);
-      if (!this._inExclusion(x, y))
-        seed(x, y, this._range(0, Math.PI * 2), 5, 35, 3, 8);
+      const x = this._range(this.w * 0.05, this.w * 0.95);
+      const y = this._range(this.h * 0.05, this.h * 0.95);
+      seed(x, y, this._range(0, Math.PI * 2), this._range(2, 5));
     }
 
-    // Shuffle so growth comes from everywhere at once
+    // Shuffle for even visual distribution
     for (let i = this.growQueue.length - 1; i > 0; i--) {
       const j = (this._rng() * (i + 1)) | 0;
       [this.growQueue[i], this.growQueue[j]] = [this.growQueue[j], this.growQueue[i]];
@@ -114,7 +208,7 @@ class ManuscriptBorder {
   }
 
   // ═══════════════════════════════════════
-  // PROCESS GROWTH — called each frame
+  // GROWTH PROCESSING
   // ═══════════════════════════════════════
 
   _processGrowth() {
@@ -122,151 +216,71 @@ class ManuscriptBorder {
 
     while (budget > 0 && this.growQueue.length > 0) {
       const job = this.growQueue.shift();
-      const { x, y, angle, length, depth, maxDepth, treeType } = job;
+      const { x, y, endX, endY, depth, len } = job;
 
-      if (depth > maxDepth || length < 2.5) continue;
-
-      const endX = x + Math.cos(angle) * length;
-      const endY = y + Math.sin(angle) * length;
-
-      if (endX < 1 || endX > this.w - 1 || endY < 1 || endY > this.h - 1) continue;
-      if (this._inExclusion(endX, endY)) continue;
       if (!this._canPlace(endX, endY)) continue;
 
-      this.allNodes.push({ x: endX, y: endY });
-
-      // Create active segment (will animate drawing)
-      const seg = {
-        x, y, endX, endY, depth, treeType,
-        progress: 0,
-        isAccent: this._rng() < 0.015,
-        isLeaf: true, // assume leaf until children queued
-      };
-      this.activeSegs.push(seg);
-
-      // Queue children
-      const nextDepth = depth + 1;
-      const queueChild = (a, len) => {
-        this.growQueue.push({ x: endX, y: endY, angle: a, length: len, depth: nextDepth, maxDepth, treeType });
-        seg.isLeaf = false;
-      };
-
-      switch (treeType) {
-        case 0: { // Standard binary
-          const shrink = this._range(0.6, 0.8);
-          const spread = this._range(0.3, 0.7);
-          queueChild(angle - spread, length * shrink);
-          queueChild(angle + spread, length * shrink);
-          break;
-        }
-        case 1: { // Bushy
-          const count = this._irange(2, 5);
-          const totalSpread = this._range(0.8, 1.6);
-          for (let i = 0; i < count; i++) {
-            const a = angle - totalSpread/2 + (totalSpread / (count-1||1)) * i + this._range(-0.1, 0.1);
-            queueChild(a, length * this._range(0.5, 0.75));
-          }
-          break;
-        }
-        case 2: { // Weeping
-          const shrink = this._range(0.7, 0.9);
-          const grav = 0.15;
-          queueChild(angle - this._range(0.15, 0.4) + grav, length * shrink);
-          queueChild(angle + this._range(0.15, 0.4) + grav, length * shrink);
-          if (this._rng() < 0.3)
-            queueChild(angle + grav * 2, length * shrink * 0.7);
-          break;
-        }
-        case 3: { // Spire
-          queueChild(angle + this._range(-0.08, 0.08), length * this._range(0.8, 0.95));
-          if (this._rng() < 0.5) {
-            const side = this._rng() > 0.5 ? 1 : -1;
-            queueChild(angle + side * this._range(0.6, 1.2), length * this._range(0.25, 0.45));
-          }
-          break;
-        }
-        case 4: { // Fractal
-          queueChild(angle - 0.52, length * 0.65);
-          queueChild(angle + 0.52, length * 0.65);
-          break;
-        }
+      // Mark spatial grid along the segment
+      const steps = Math.max(1, Math.ceil(len / this.gridSize));
+      for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        this._markCell(x + (endX - x) * t, y + (endY - y) * t);
       }
+
+      this.activeSegs.push({
+        x, y, endX, endY, depth,
+        progress: 0,
+        lineWidth: Math.max(0.15, 1.2 - depth * 0.08),
+      });
 
       budget--;
     }
 
-    // When queue empties and all segments done, reseed for continuous growth
+    // Continuous: when queue empties, reseed
     if (this.growQueue.length === 0 && this.activeSegs.every(s => s.progress >= 1)) {
-      // Reset and regrow with new seed
-      this._seed = (this._seed + 777) | 0;
-      this.allNodes = [];
+      this._seed = (this._seed + 13) | 0;
       this.segments = [];
       this.activeSegs = [];
+      this._initGrid();
       this._seedTrees();
     }
   }
 
-  // Advance active segments
   _stepSegments() {
     const speed = this.opts.segmentSpeed;
+    const done = [];
+    const still = [];
     for (const seg of this.activeSegs) {
       if (seg.progress < 1) {
         seg.progress = Math.min(1, seg.progress + speed);
-      }
-    }
-    // Move completed to permanent (keep rendering)
-    const still = [];
-    for (const seg of this.activeSegs) {
-      if (seg.progress >= 1) {
-        this.segments.push(seg);
+        if (seg.progress >= 1) done.push(seg); else still.push(seg);
       } else {
-        still.push(seg);
+        done.push(seg);
       }
     }
+    this.segments.push(...done);
     this.activeSegs = still;
   }
 
   // ═══════════════════════════════════════
-  // RENDERING
+  // RENDERING — Intaglio etching aesthetic
   // ═══════════════════════════════════════
 
   _drawSeg(seg) {
     const ctx = this.ctx;
-    const pal = this.opts.palette;
-    const r = this.opts.nodeRadius;
     const p = seg.progress;
-
-    // Interpolate endpoint
     const curX = seg.x + (seg.endX - seg.x) * p;
     const curY = seg.y + (seg.endY - seg.y) * p;
 
-    // Edge
-    const alpha = seg.depth < 3 ? 0.7 : 0.5;
-    ctx.strokeStyle = this._col(seg.depth < 3 ? pal.branch : pal.branchLight, alpha);
-    ctx.lineWidth = Math.max(0.2, 1.4 - seg.depth * 0.1);
+    // Primary stroke — ink black
+    const alpha = seg.depth < 2 ? 0.85 : seg.depth < 5 ? 0.65 : 0.45;
+    ctx.strokeStyle = `rgba(20, 18, 15, ${alpha})`;
+    ctx.lineWidth = seg.lineWidth;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(seg.x, seg.y);
     ctx.lineTo(curX, curY);
     ctx.stroke();
-
-    // Node (only when fully drawn)
-    if (p >= 1) {
-      if (seg.isLeaf) {
-        ctx.fillStyle = this._col(seg.isAccent ? pal.accent : pal.leafFill, 0.7);
-        ctx.beginPath();
-        ctx.arc(seg.endX, seg.endY, r * 0.5, 0, Math.PI * 2);
-        ctx.fill();
-      } else if (seg.depth < 4) {
-        ctx.fillStyle = this._col(pal.nodeFill, 0.2);
-        ctx.strokeStyle = this._col(seg.isAccent ? pal.accent : pal.node, 0.5);
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.arc(seg.endX, seg.endY, r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-      }
-    }
   }
 
   // ═══════════════════════════════════════
@@ -279,6 +293,7 @@ class ManuscriptBorder {
     this.w = this.canvas.width;
     this.h = this.canvas.height;
 
+    this._initGrid();
     this._seedTrees();
 
     const loop = () => {
@@ -290,9 +305,7 @@ class ManuscriptBorder {
 
       this.ctx.clearRect(0, 0, this.w, this.h);
 
-      // Draw all completed segments
       for (const seg of this.segments) this._drawSeg(seg);
-      // Draw active (growing) segments
       for (const seg of this.activeSegs) this._drawSeg(seg);
 
       requestAnimationFrame(loop);
@@ -306,9 +319,9 @@ class ManuscriptBorder {
   resize(w, h) {
     this.canvas.width = w; this.canvas.height = h;
     this.w = w; this.h = h;
-    this.allNodes = [];
     this.segments = [];
     this.activeSegs = [];
+    this._initGrid();
     this._seedTrees();
   }
 }
