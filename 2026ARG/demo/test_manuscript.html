@@ -17,7 +17,7 @@ body {
 .page {
   position: fixed;
   inset: 0;
-  background: #f2eadb; /* warm parchment */
+  background: #1c1810; /* deep dark parchment/brown-black */
   overflow: hidden;
 }
 
@@ -54,7 +54,7 @@ canvas#gen {
   transform: translate(-50%, -50%);
   width: 320px;
   min-height: 440px;
-  background: rgba(242, 234, 219, 0.97);
+  background: rgba(240, 232, 216, 0.97);
   z-index: 30;
   padding: 48px 40px;
   display: flex;
@@ -63,11 +63,11 @@ canvas#gen {
   border: 3px solid #8b7d5e;
   box-shadow:
     inset 0 0 0 1px rgba(180, 160, 110, 0.3),
-    0 0 0 4px #f2eadb,
+    0 0 0 4px #2a2520,
     0 0 0 6px #8b7d5e,
-    0 0 0 9px #f2eadb,
-    0 0 0 10px rgba(139, 125, 94, 0.3),
-    0 4px 30px rgba(0,0,0,0.15);
+    0 0 0 9px #2a2520,
+    0 0 0 10px rgba(139, 125, 94, 0.4),
+    0 4px 40px rgba(0,0,0,0.5);
 }
 
 .card-inner { text-align: center; }
@@ -157,33 +157,25 @@ function placeTiles() {
 
   // Strategy: fill the page with overlapping cropped tiles
   // Vary sizes dramatically — some large feature pieces, many small fragments
-  const attempts = 120;
+  // LAYER 1: Large base coverage tiles (nearly full screen)
+  // LAYER 2: Medium overlapping fragments
+  // LAYER 3: Small detail fills for remaining gaps
+  const layers = [
+    { count: 30, minW: 0.3, maxW: 0.6, minH: 0.3, maxH: 0.55, opMin: 0.7, opMax: 1.0 },
+    { count: 60, minW: 0.12, maxW: 0.3, minH: 0.12, maxH: 0.3, opMin: 0.6, opMax: 0.95 },
+    { count: 80, minW: 0.05, maxW: 0.15, minH: 0.05, maxH: 0.18, opMin: 0.5, opMax: 0.9 },
+  ];
 
-  for (let i = 0; i < attempts; i++) {
-    const src = TILES[i % TILES.length];
+  for (const layer of layers) {
+  for (let i = 0; i < layer.count; i++) {
+    const src = TILES[irange(0, TILES.length)];
 
-    // Size variety: 30% large, 40% medium, 30% small
-    let tw, th;
-    const r = rng();
-    if (r < 0.2) {
-      // Large — anchor pieces
-      tw = range(W * 0.25, W * 0.4);
-      th = range(H * 0.25, H * 0.45);
-    } else if (r < 0.5) {
-      // Medium
-      tw = range(W * 0.12, W * 0.22);
-      th = range(H * 0.12, H * 0.25);
-    } else {
-      // Small fragments
-      tw = range(W * 0.06, W * 0.14);
-      th = range(H * 0.06, H * 0.14);
-    }
+    const tw = range(W * layer.minW, W * layer.maxW);
+    const th = range(H * layer.minH, H * layer.maxH);
 
-    // Random position
-    const tx = range(-tw * 0.1, W - tw * 0.9);
-    const ty = range(-th * 0.1, H - th * 0.9);
+    const tx = range(-tw * 0.2, W - tw * 0.8);
+    const ty = range(-th * 0.2, H - th * 0.8);
 
-    // Skip if overlaps content card
     if (overlapsExclusion(tx, ty, tw, th, ex)) continue;
 
     const img = document.createElement('img');
@@ -198,16 +190,16 @@ function placeTiles() {
     const oy = range(0, 60);
     img.style.objectPosition = `${ox}% ${oy}%`;
 
-    // Blend modes and opacity for layering
+    // Higher opacity, richer blending
     const blend = rng();
-    if (blend < 0.3) {
+    if (blend < 0.2) {
       img.style.mixBlendMode = 'multiply';
-      img.style.opacity = range(0.6, 0.9);
-    } else if (blend < 0.5) {
-      img.style.mixBlendMode = 'luminosity';
-      img.style.opacity = range(0.5, 0.8);
+      img.style.opacity = range(layer.opMin, layer.opMax);
+    } else if (blend < 0.35) {
+      img.style.mixBlendMode = 'screen';
+      img.style.opacity = range(layer.opMin * 0.7, layer.opMax * 0.8);
     } else {
-      img.style.opacity = range(0.7, 1.0);
+      img.style.opacity = range(layer.opMin, layer.opMax);
     }
 
     // Slight rotation for organic feel
@@ -224,6 +216,7 @@ function placeTiles() {
     tilesEl.appendChild(img);
     placed.push({ x: tx, y: ty, w: tw, h: th });
   }
+  } // end layers loop
 }
 
 placeTiles();
@@ -267,11 +260,11 @@ function initVines() {
 
   // Vine seeds from edges and corners
   const starts = [];
-  for (let y = 20; y < H; y += range(30, 60)) {
+  for (let y = 10; y < H; y += range(12, 30)) {
     starts.push({ x: range(0, 5), y, angle: range(-0.5, 0.5) });
     starts.push({ x: W - range(0, 5), y, angle: Math.PI + range(-0.5, 0.5) });
   }
-  for (let x = 20; x < W; x += range(30, 60)) {
+  for (let x = 10; x < W; x += range(12, 30)) {
     starts.push({ x, y: range(0, 5), angle: Math.PI/2 + range(-0.5, 0.5) });
     starts.push({ x, y: H - range(0, 5), angle: -Math.PI/2 + range(-0.5, 0.5) });
   }
@@ -342,7 +335,7 @@ initVines();
 
 let vineIdx = 0;
 let bezIdx = 0;
-const VINES_PER_FRAME = 3;
+const VINES_PER_FRAME = 6;
 const BEZ_PER_FRAME = 1;
 
 function animate() {
