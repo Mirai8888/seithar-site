@@ -24,7 +24,7 @@ a{text-decoration:none;color:inherit;}
 
 .hd{border-bottom:1px solid var(--rule-s);background:var(--bg);position:sticky;top:0;z-index:100;}
 .hd-top{display:flex;align-items:stretch;height:60px;border-bottom:1px solid var(--rule);}
-.hd-wm{display:flex;align-items:center;gap:14px;padding:0 20px;border-right:1px solid var(--rule);flex-shrink:0;}
+.hd-wm{display:flex;align-items:center;gap:14px;padding:0 20px;border-right:1px solid var(--rule);flex-shrink:0;text-decoration:none;color:inherit;}
 .wm-n{font-family:"UnifrakturMaguntia",cursive;font-size:1.6rem;font-weight:400;letter-spacing:0.12em;}
 .wm-d{width:1px;height:14px;background:var(--rule-s);}
 .wm-s{font-family:"DM Mono",monospace;font-size:0.46rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);}
@@ -112,13 +112,13 @@ a{text-decoration:none;color:inherit;}
 
 <header class="hd">
   <div class="hd-top">
-    <div class="hd-wm">
+    <a href="/" class="hd-wm">
       <span class="wm-n">Seithar</span>
       <div class="wm-d"></div>
       <span class="wm-s">Cognitive Warfare</span>
-    </div>
+    </a>
     <nav class="hd-nav">
-      <a href="/" class="on">About</a>
+      <a href="/about.html">About</a>
       <a href="/personnel.html">Personnel</a>
       <a href="/research.html">Research</a>
       <a href="/services.html">Services</a>

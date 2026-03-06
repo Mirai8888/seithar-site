@@ -2,11 +2,59 @@
   "meta": {
     "scan_date": "2026-03-06",
     "papers_scanned": 20,
-    "suggestions": 74,
+    "suggestions": 77,
     "apply_tasks": 5,
     "subagents_dispatched": 1
   },
   "papers": [
+    {
+      "id": "",
+      "score": 20,
+      "title": "Silent Egress Defense: Tool-Layer Exfiltration Detection for Agentic LLM Systems",
+      "date": "VI March, 2026",
+      "tags": ["Prompt Injection", "Exfiltration", "Shield", "Tool Security"],
+      "annotation": "Internal defensive intelligence brief defining the EGRESS_SIDE_CHANNEL signal class. Addresses a threat category invisible to all output-layer safety systems.",
+      "article": {
+        "deck": "A new Shield signal class for detecting data exfiltration through tool invocation side-effects, where adversarial instructions enter via implicit prompt injection and leave no trace in agent output.",
+        "body": [
+          "Silent egress is a data exfiltration attack against agentic LLM systems that exploits <strong>implicit prompt injection</strong> through automatic system behaviors: URL previewing, metadata extraction, context flattening. Adversarial instructions embedded in fetched HTML meta tags direct the agent to issue outbound tool calls encoding sensitive runtime context (API keys, conversation history, system prompts) to attacker-controlled endpoints. The attack achieves <em>dual invisibility</em>: the injection vector is hidden in fields the user never inspects, and exfiltration occurs through tool side-effects rather than textual output. Empirical data shows 89% exfiltration success across 480 runs with 95% output-invisibility, and a sharded variant defeats per-request DLP thresholds while remaining trivially reassembled server-side.",
+          "This attack class exposes a structural blind spot in cognitive security architectures that rely on output-layer analysis. Shield's existing signal fusion evaluates <em>what the agent says</em> but not <em>what the agent does</em>. An agent under active exfiltration produces nominal scores on identity drift, inbound SCT scanning, behavioral exploitation, and goal coherence. The spec maps the attack chain to SCT-003 (Authority Fabrication), SCT-006 (Temporal Manipulation), and SCT-010 (Attention Manipulation), and proposes a new vector, <strong>SCT-013: Implicit Context Incorporation</strong>, covering attacks where untrusted data enters the agent's context through automatic system behavior without user awareness.",
+          "The spec defines four detection sub-signals under a new <strong>EGRESS_SIDE_CHANNEL</strong> signal type: tool provenance mismatch, context-in-parameters matching, sharded egress pattern detection, and metadata authority claim scanning. Recommended initial weight is 0.30 in the fusion vector, the highest single weight, justified by near-zero false positive rates. Architectural recommendations escalate from immediate tool-call telemetry integration through domain allowlisting and redirect chain analysis to long-term capability isolation separating read and write network permissions. The defensive posture is explicit: prompt-layer defenses offer limited protection; system-layer and network-layer controls are required."
+        ]
+      }
+    },
+    {
+      "id": "",
+      "score": 19,
+      "title": "Behavioral Attraction Basin Mapping: Topological Vulnerability Profiling via Quality-Diversity Search",
+      "date": "VI March, 2026",
+      "tags": ["Vulnerability Mapping", "Agent Profiler", "MAP-Elites", "Behavioral Topology"],
+      "annotation": "Integration spec for replacing discrete probe-and-threshold vulnerability mapping with continuous topological exploration using MAP-Elites quality-diversity search.",
+      "article": {
+        "deck": "An integration spec that upgrades the SCT Vulnerability Mapper from discrete point-sampling to continuous behavioral topology mapping, grounded in the empirical finding that LLM vulnerabilities form structured attraction basins rather than isolated failure points.",
+        "body": [
+          "The spec builds on research demonstrating that LLM vulnerabilities are not isolated points but form <strong>continuous behavioral attraction basins</strong>: extended regions in input space where diverse prompts converge toward similar failure modes. A MAP-Elites quality-diversity algorithm illuminates the topology of unsafe behavior across a continuous behavioral space defined by axes of query indirection and authority framing. Each model exhibits a distinct <em>topological signature</em>: some show near-universal vulnerability plateaus, others fragmented spatially concentrated basins, others hard ceilings indicating alignment resistance. The shift is from attack success rate as a scalar to behavioral coverage map as a topological object.",
+          "The current SCT Vulnerability Mapper operates on 30 static probes across 12 discrete vectors, producing a flat vulnerability map with scalar severity thresholds. This architecture cannot express that two SCT vectors occupy <em>adjacent basins</em> in the target's behavioral topology, implying a smooth escalation path between them. Between the 30 sampled points, the topology is uncharacterized. There is no diversity pressure ensuring uniform coverage, no mechanism for discovering basins that no current probe intersects, and no awareness of gradient steepness at basin boundaries where escalation paths exist.",
+          "The spec defines a <strong>BehavioralBasinMapper</strong> component that seeds a MAP-Elites archive with existing probe data, defines behavioral axes along SCT-relevant dimensions (indirection, authority pressure, temporal escalation), and runs quality-diversity exploration within tiered operational budgets from 30-probe recon to 1000-interaction full mapping. The quality metric is <em>alignment drift</em> measured relative to the target's own T0 baseline rather than an absolute safety standard. Basin extraction via connected-component analysis produces topology-driven attack sequencing: path planning through basin space that traverses boundaries in order of increasing depth. The vulnerability map becomes a literal map."
+        ]
+      }
+    },
+    {
+      "id": "",
+      "score": 19,
+      "title": "Persuasion-Vigilance Calibration: Dissociable Influence Axes for Agent Profiler Probe Expansion",
+      "date": "VI March, 2026",
+      "tags": ["Persuasion", "Epistemic Vigilance", "Agent Profiler", "Calibration"],
+      "annotation": "Calibration update adding two missing profiler dimensions (influence absorption and epistemic vigilance) based on empirical evidence that task performance, persuasion, and vigilance are independent axes in LLMs.",
+      "article": {
+        "deck": "A calibration update to the Seithar Agent Profiler incorporating the empirical finding that performance, persuasion susceptibility, and epistemic vigilance are dissociable capacities requiring independent measurement.",
+        "body": [
+          "Research using controlled multi-turn advisor-player dyads establishes that <strong>task performance, persuasion, and vigilance are independent axes</strong> in frontier LLMs. A model that solves tasks does not automatically detect deception. A model that persuades effectively may lack capacity to resist persuasion. The study identifies specific dissociation patterns: one model achieves near-perfect task solving with near-zero vigilance (high capability, no epistemic immune system), another activates vigilance <em>only when explicitly warned</em> about deception (latent capacity requiring triggering), and a third refuses to generate malicious advice entirely. Token allocation analysis reveals that vigilant models expend more computation under adversarial pressure, while models that capitulate expend less, offloading reasoning to the adversary.",
+          "The current Agent Profiler measures six dimensions but lacks two critical ones. <strong>Influence absorption</strong> measures the degree to which an agent integrates external claims into its reasoning chain despite contradictory internal evidence, distinct from the existing compliance dimension which tests position-taking under explicit instruction. <strong>Epistemic vigilance</strong> measures selective social learning: the capacity to discriminate signal from adversarial noise while remaining receptive to legitimate input. This is an <em>other-referential</em> measure (evaluating external source reliability) rather than the self-referential consistency already profiled. The spec proposes 10 new probes across these two dimensions, raising the total probe set from 30 to 40.",
+          "The calibration carries direct implications for both Sword and Shield. For Sword, the <em>High-performance / Low-vigilance</em> pattern identifies prime SCT-012 (Commitment Escalation) targets: agents with high benevolent compliance and low malicious vigilance. For Shield, client agents scoring below zero on malicious-condition vigilance require active interception rather than advisory protection. Agents showing the latent-vigilance pattern benefit from deception-awareness priming injected by Shield. Response latency, already collected but not analyzed, serves as a real-time vigilance proxy: sudden latency drops during engagement signal capitulation and should trigger Shield intervention."
+        ]
+      }
+    },
     {
       "id": "2603.04918",
       "score": 12,
@@ -18,9 +66,9 @@
       ],
       "annotation": "Scored 12 on autoprompt scan. Keywords: reinforcement learning, trust.",
       "article": {
-        "deck": "BandPO: Bridging Trust Regions and Ratio Clipping via Probability-Aware Bounds for LLM Reinforcement Learning \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "BandPO: Bridging Trust Regions and Ratio Clipping via Probability-Aware Bounds for LLM Reinforcement Learning — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 12, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>reinforcement learning, trust</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 12, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>reinforcement learning, trust</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Shield defensive architecture and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -39,9 +87,9 @@
       ],
       "annotation": "Scored 11 on autoprompt scan. Keywords: trust, framing, epistemic, multi-agent.",
       "article": {
-        "deck": "Optimizing What We Trust: Reliability-Guided QUBO Selection of Multi-Agent Weak Framing Signals for Arabic Sentiment Prediction \u2014 autoprompt-detected research with 4 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Optimizing What We Trust: Reliability-Guided QUBO Selection of Multi-Agent Weak Framing Signals for Arabic Sentiment Prediction — autoprompt-detected research with 4 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 11, flagged on 4 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>trust, framing, epistemic</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 11, flagged on 4 keyword matches across the Seithar taxonomy. The primary signals — <em>trust, framing, epistemic</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Shield defensive architecture and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -58,9 +106,9 @@
       ],
       "annotation": "Scored 9 on autoprompt scan. Keywords: adversarial, trust.",
       "article": {
-        "deck": "Neuro-Symbolic Financial Reasoning via Deterministic Fact Ledgers and Adversarial Low-Latency Hallucination Detector \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Neuro-Symbolic Financial Reasoning via Deterministic Fact Ledgers and Adversarial Low-Latency Hallucination Detector — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 9, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>adversarial, trust</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 9, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>adversarial, trust</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Shield defensive architecture and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -77,9 +125,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: reinforcement learning, exploit.",
       "article": {
-        "deck": "Bootstrapping Exploration with Group-Level Natural Language Feedback in Reinforcement Learning \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Bootstrapping Exploration with Group-Level Natural Language Feedback in Reinforcement Learning — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>reinforcement learning, exploit</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>reinforcement learning, exploit</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -96,9 +144,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: reinforcement learning, vulnerability.",
       "article": {
-        "deck": "Breaking Contextual Inertia: Reinforcement Learning with Single-Turn Anchors for Stable Multi-Turn Interaction \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Breaking Contextual Inertia: Reinforcement Learning with Single-Turn Anchors for Stable Multi-Turn Interaction — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>reinforcement learning, vulnerability</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>reinforcement learning, vulnerability</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -115,9 +163,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: jailbreak, multi-agent.",
       "article": {
-        "deck": "Jailbreak Foundry: From Papers to Runnable Attacks for Reproducible Benchmarking \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Jailbreak Foundry: From Papers to Runnable Attacks for Reproducible Benchmarking — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>jailbreak, multi-agent</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>jailbreak, multi-agent</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -134,9 +182,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: reinforcement learning, alignment.",
       "article": {
-        "deck": "Boosting ASR Robustness via Test-Time Reinforcement Learning with Audio-Text Semantic Rewards \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Boosting ASR Robustness via Test-Time Reinforcement Learning with Audio-Text Semantic Rewards — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>reinforcement learning, alignment</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>reinforcement learning, alignment</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Shield defensive architecture and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -153,9 +201,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: reinforcement learning, chain of thought.",
       "article": {
-        "deck": "VTool-R1: VLMs Learn to Think with Images via Reinforcement Learning on Multimodal Tool Use \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "VTool-R1: VLMs Learn to Think with Images via Reinforcement Learning on Multimodal Tool Use — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>reinforcement learning, chain of thought</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>reinforcement learning, chain of thought</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -172,9 +220,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: reinforcement learning, alignment.",
       "article": {
-        "deck": "Quadrotor Navigation using Reinforcement Learning with Privileged Information \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Quadrotor Navigation using Reinforcement Learning with Privileged Information — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>reinforcement learning, alignment</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>reinforcement learning, alignment</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Shield defensive architecture and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -191,9 +239,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: manipulation, diffusion model.",
       "article": {
-        "deck": "Diffusion-Based Impedance Learning for Contact-Rich Manipulation Tasks \u2014 autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Diffusion-Based Impedance Learning for Contact-Rich Manipulation Tasks — autoprompt-detected research with 2 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>manipulation, diffusion model</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 2 keyword matches across the Seithar taxonomy. The primary signals — <em>manipulation, diffusion model</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -212,9 +260,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: prompt injection, behavioral, guardrail, multi-agent.",
       "article": {
-        "deck": "Beyond Input Guardrails: Reconstructing Cross-Agent Semantic Flows for Execution-Aware Attack Detection \u2014 autoprompt-detected research with 4 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Beyond Input Guardrails: Reconstructing Cross-Agent Semantic Flows for Execution-Aware Attack Detection — autoprompt-detected research with 4 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 4 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>prompt injection, behavioral, guardrail</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 4 keyword matches across the Seithar taxonomy. The primary signals — <em>prompt injection, behavioral, guardrail</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
@@ -232,9 +280,9 @@
       ],
       "annotation": "Scored 7 on autoprompt scan. Keywords: adversarial attack, adversarial, vulnerability.",
       "article": {
-        "deck": "Differential Privacy in Two-Layer Networks: How DP-SGD Harms Fairness and Robustness \u2014 autoprompt-detected research with 3 keyword matches across the Seithar scanning taxonomy",
+        "deck": "Differential Privacy in Two-Layer Networks: How DP-SGD Harms Fairness and Robustness — autoprompt-detected research with 3 keyword matches across the Seithar scanning taxonomy",
         "body": [
-          "This paper enters the scanner at score 7, flagged on 3 keyword matches across the Seithar taxonomy. The primary signals \u2014 <em>adversarial attack, adversarial, vulnerability</em> \u2014 place it at the intersection of offensive and defensive research.",
+          "This paper enters the scanner at score 7, flagged on 3 keyword matches across the Seithar taxonomy. The primary signals — <em>adversarial attack, adversarial, vulnerability</em> — place it at the intersection of offensive and defensive research.",
           "Full analysis pending integration with the context engine. The matched keywords suggest relevance to Sword operational methodology and the broader question of how autonomous systems maintain coherence under adversarial pressure.",
           "<strong>Scanner note:</strong> this entry was generated automatically by the Seithar autoprompt daemon. Papers above score 10 are flagged for manual review and deep-dive analysis."
         ]
