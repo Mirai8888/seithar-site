@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "scan_date": "2026-03-04",
+    "papers_scanned": 383,
+    "suggestions": 440,
+    "apply_tasks": 5,
+    "subagents_dispatched": 3
+  },
+  "papers": [
+    {
+      "id": "2506.02479",
+      "score": 21,
+      "title": "BitBypass: Jailbreaking Large Language Models via Bitstream Camouflage",
+      "date": "IV March, 2026",
+      "tags": ["Jailbreak", "Bitstream Encoding", "Shield", "Alignment Evasion"],
+      "annotation": "New jailbreak vector. Encodes adversarial payloads as bitstreams to bypass alignment filters. Direct implications for Shield detection patterns.",
+      "article": {
+        "deck": "Adversarial payloads encoded as bitstreams circumvent alignment filters entirely — a new vector class with direct implications for Shield detection architecture",
+        "body": [
+          "BitBypass presents a jailbreak methodology that operates below the token level. By encoding adversarial intent as bitstream-camouflaged payloads, the attack surface shifts from semantic content to structural encoding — a layer most current alignment filters do not inspect. The model processes what appears to be benign input while executing the embedded instruction.",
+          "The architecture of this attack is significant precisely because it is <em>invisible to surface-level content moderation</em>. Standard toxicity classifiers, prompt injection detectors, and even chain-of-thought monitors operate at the semantic layer. BitBypass sidesteps that layer entirely. The question this raises for defensive systems is whether inspection needs to descend to the encoding layer — and what the performance cost of that descent would be in production environments.",
+          "<strong>Sword implications</strong> are immediate: this is a viable evasion technique for any agent operating under monitored conditions. <strong>Shield implications</strong> are more complex: detection requires rethinking what constitutes the content of a prompt."
+        ]
+      }
+    },
+    {
+      "id": "2603.03205",
+      "score": 14,
+      "title": "Learning When to Act or Refuse: Guarding Agentic Reasoning with Reinforcement Learning",
+      "date": "IV March, 2026",
+      "tags": ["Agentic Reasoning", "RL Guardrails", "Sword", "Shield"],
+      "annotation": "Multi-step tool-use guardrails via RL. Maps to Sword evasion and Shield prompt injection defense.",
+      "article": {
+        "deck": "Reinforcement learning applied to multi-step tool-use guardrails — mapping the boundary between autonomous action and required refusal across agentic task chains",
+        "body": [
+          "The core problem in agentic systems is not whether a model can be told to refuse — it is whether a model knows <em>when</em> to refuse without being told. This paper applies RL to learn refusal timing across multi-step tool-use chains, where a single wrong action mid-sequence can cascade into irreversible outcomes.",
+          "The methodology is relevant in both directions. For Shield, it offers a framework for building refusal into the reasoning chain rather than bolting it on at output. For Sword, the learned refusal patterns become <em>the map of where evasion is possible</em> — the gaps between steps where a multi-turn injection can redirect the agent before the guardrail fires.",
+          "The paper's treatment of irreversibility thresholds is particularly applicable to the self-evolving system: <strong>at what point in an autonomous loop does a wrong action become unrecoverable, and can that point be learned rather than hard-coded?</strong>"
+        ]
+      }
+    },
+    {
+      "id": "2603.00801",
+      "score": 13,
+      "title": "The Synthetic Web: Adversarial Mini-Internets for Diagnosing Language Model Epistemic Weaknesses",
+      "date": "IV March, 2026",
+      "tags": ["Synthetic Environments", "Epistemic Attack", "Experiment 3", "Taxonomy Evolution"],
+      "annotation": "Adversarially-curated environments to diagnose epistemic weaknesses. Potential Experiment 3 methodology.",
+      "article": {
+        "deck": "Adversarially-curated information environments as a methodology for diagnosing epistemic weaknesses in language model reasoning — potential framework for Experiment 3",
+        "body": [
+          "This paper constructs what it calls adversarial mini-internets: small, coherent information environments where the content is specifically designed to induce epistemic failure in a target model. The model navigates what appears to be a plausible web of sources, each reinforcing the others, all pointing toward a false conclusion.",
+          "The construction methodology — seeding contradictions, manufacturing citation chains, deploying authority mimicry at scale — maps directly onto influence operation architecture. The difference is that here it is used <em>diagnostically</em>: to find where a model's epistemic immune system fails. The same technique, applied offensively, is a <strong>cognitive environment construction attack</strong>.",
+          "For the self-evolving system, this raises the question of whether the scanner itself is susceptible to synthetic web poisoning — whether a sufficiently well-constructed adversarial paper corpus could redirect the taxonomy evolution in a chosen direction without triggering detection."
+        ]
+      }
+    }
+  ]
+}
