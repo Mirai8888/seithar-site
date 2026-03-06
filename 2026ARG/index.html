@@ -1,179 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Seithar Group">
-    <title>SEITHAR GROUP</title>
-    
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="SEITHAR GROUP">
-    <meta property="og:description" content="The Armor of Intelligence">
-    <meta property="og:image" content="og-image.svg">
-    
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="SEITHAR GROUP">
-    <meta name="twitter:image" content="og-image.svg">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        html {
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        body {
-            overflow: auto;
-            height: auto;
-            min-height: 100vh;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEITHAR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Playfair+Display+SC:wght@400;700&family=DM+Mono:wght@300;400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #ededeb;
+  --card:  #f9f9f8;
+  --rule:  #c8c8c4;
+  --rule-s:#a0a09a;
+  --ink:   #111110;
+  --mid:   #444440;
+  --dim:   #888884;
+  --ghost: #bbbbb6;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{background:var(--bg);color:var(--ink);font-family:"Source Serif 4",serif;font-weight:300;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
 
-        /* ── Hero ── */
-        .hero {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.25;
-            filter: grayscale(100%);
-            z-index: 0;
-        }
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-        .hero-title {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 6vw;
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            color: #1a1a1a;
-            margin-bottom: 2vh;
-            line-height: 1.2;
-        }
-        .hero-subtitle {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 1.4vw;
-            font-weight: 300;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: #555;
-            margin-bottom: 8vh;
-        }
-        .hero-enter {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: #999;
-            text-decoration: none;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4px;
-            transition: color 0.3s, border-color 0.3s;
-            cursor: pointer;
-        }
-        .hero-enter:hover {
-            color: #1a1a1a;
-            border-color: #1a1a1a;
-        }
+.hd{border-bottom:1px solid var(--rule-s);background:var(--bg);position:sticky;top:0;z-index:100;}
+.hd-top{display:flex;align-items:stretch;height:56px;border-bottom:1px solid var(--rule);}
+.hd-wm{display:flex;align-items:center;gap:14px;padding:0 20px;border-right:1px solid var(--rule);flex-shrink:0;}
+.wm-n{font-family:"Playfair Display SC",serif;font-size:1.4rem;font-weight:700;letter-spacing:0.25em;}
+.wm-d{width:1px;height:14px;background:var(--rule-s);}
+.wm-s{font-family:"DM Mono",monospace;font-size:0.46rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);}
+.hd-nav{display:flex;align-items:stretch;flex:1;overflow:hidden;}
+.hd-nav a{display:flex;align-items:center;padding:0 15px;font-family:"DM Mono",monospace;font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);border-right:1px solid var(--rule);white-space:nowrap;transition:color .1s,background .1s;}
+.hd-nav a:hover{color:var(--ink);background:var(--card);}
+.hd-nav a.on{color:var(--ink);}
+.hd-date{display:flex;align-items:center;padding:0 18px;border-left:1px solid var(--rule);margin-left:auto;font-family:"DM Mono",monospace;font-size:0.44rem;letter-spacing:0.15em;color:var(--ghost);}
+.hd-sub{display:flex;align-items:stretch;height:24px;overflow:hidden;}
+.hd-cell{display:flex;align-items:center;padding:0 14px;border-right:1px solid var(--rule);font-family:"DM Mono",monospace;font-size:0.42rem;letter-spacing:0.12em;color:var(--ghost);white-space:nowrap;cursor:default;transition:color .1s;}
+.hd-cell:hover{color:var(--dim);}
+.hd-cell a{color:inherit;}
+.hd-cell a:hover{color:var(--ink);}
 
-        /* ── Navigation section ── */
-        .nav-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 8vh 8vw;
-            background: #ffffff;
-        }
-        .nav-section .link-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-        }
-        .nav-section .waiver-link {
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.2em;
-            color: #666;
-            text-decoration: none;
-            padding: 6px 0;
-            transition: color 0.2s;
-        }
-        .nav-section .waiver-link:hover {
-            color: #1a1a1a;
-        }
-        .nav-section .link-section-label {
-            font-size: 0.65rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: #bbb;
-            margin-top: 4vh;
-            margin-bottom: 1.5vh;
-        }
-        .nav-section .link-section-label:first-child {
-            margin-top: 0;
-        }
-        .nav-footer {
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            color: #ccc;
-            margin-top: 8vh;
-        }
+.pg{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:200px 1fr 186px;min-height:calc(100vh - 67px);}
+.sb{border-right:1px solid var(--rule);}
+.sb-r{border-right:none;border-left:1px solid var(--rule);}
 
-        @media (max-width: 768px) {
-            .hero-title { font-size: 10vw; }
-            .hero-subtitle { font-size: 2.8vw; }
-        }
-    </style>
+.img-panel{width:100%;overflow:hidden;display:block;background:#1a1a18;line-height:0;border-bottom:1px solid var(--rule);position:relative;}
+.img-panel img{width:100%;display:block;filter:grayscale(0.15) contrast(1.05);transition:filter .4s;}
+.img-panel:hover img{filter:grayscale(0) contrast(1.1);}
+
+.sb-block{padding:14px 12px;border-bottom:1px solid var(--rule);}
+.sb-lbl{font-family:"DM Mono",monospace;font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--ghost);display:block;margin-bottom:8px;}
+.tags{display:flex;flex-wrap:wrap;gap:3px;}
+.tag{font-family:"DM Mono",monospace;font-size:0.6rem;letter-spacing:0.05em;color:var(--dim);border:1px solid var(--rule);padding:1px 5px;line-height:1.9;cursor:default;transition:all .1s;}
+.tag:hover{color:var(--ink);border-color:var(--rule-s);}
+.tag.w{color:var(--mid);font-size:0.65rem;}
+.idx{list-style:none;}
+.idx li{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-bottom:1px solid var(--rule);font-family:"DM Mono",monospace;font-size:0.65rem;color:var(--mid);letter-spacing:0.04em;cursor:default;}
+.idx li:last-child{border-bottom:none;}
+.idx li:hover{color:var(--ink);}
+.idx li .n{font-size:0.42rem;color:var(--ghost);}
+.qblock{border-left:2px solid var(--rule-s);padding-left:8px;margin-bottom:9px;}
+.qblock p{font-family:"Source Serif 4",serif;font-size:0.7rem;font-style:italic;color:var(--mid);line-height:1.5;}
+.qblock cite{display:block;font-family:"DM Mono",monospace;font-size:0.39rem;letter-spacing:0.1em;color:var(--ghost);margin-top:3px;font-style:normal;text-align:right;text-transform:uppercase;}
+.rl{list-style:none;}
+.rl li{padding:5px 0;border-bottom:1px solid var(--rule);cursor:pointer;}
+.rl li:hover .rl-t{color:var(--ink);}
+.rl-t{display:block;font-family:"Source Serif 4",serif;font-size:0.72rem;color:var(--mid);line-height:1.4;margin-bottom:2px;}
+.rl-d{display:block;font-family:"DM Mono",monospace;font-size:0.55rem;letter-spacing:0.1em;color:var(--ghost);text-transform:uppercase;}
+.sb-micro{padding:10px 12px;border-bottom:1px solid var(--rule);font-family:"DM Mono",monospace;font-size:0.58rem;letter-spacing:0.08em;color:var(--ghost);line-height:1.7;}
+.sb-micro strong{color:var(--dim);font-weight:400;}
+
+.main{padding:28px 32px;border-right:1px solid var(--rule);}
+.card{background:var(--card);border:1px solid var(--rule);margin-bottom:24px;}
+.c-top{height:2px;background:var(--ink);}
+.c-in{padding:24px 28px 20px;}
+.c-meta{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.c-date{font-family:"DM Mono",monospace;font-size:0.44rem;letter-spacing:0.12em;color:var(--dim);}
+.c-id{margin-left:auto;font-family:"DM Mono",monospace;font-size:0.41rem;letter-spacing:0.12em;color:var(--ghost);}
+.c-id a{color:inherit;border-bottom:1px solid transparent;transition:border-color .1s;}
+.c-id a:hover{color:var(--dim);border-bottom-color:var(--rule-s);}
+.c-title{font-family:"Playfair Display",serif;font-size:1.45rem;font-weight:700;line-height:1.25;color:var(--ink);margin-bottom:7px;letter-spacing:-0.01em;}
+.c-deck{font-family:"Source Serif 4",serif;font-size:0.82rem;font-weight:300;font-style:italic;color:var(--mid);line-height:1.5;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--rule);}
+.c-body{font-family:"Source Serif 4",serif;font-size:1rem;font-weight:300;line-height:1.8;color:var(--mid);text-align:justify;}
+.c-body p+p{margin-top:12px;}
+.c-body em{font-style:italic;color:var(--ink);}
+.c-body strong{font-weight:600;color:var(--ink);}
+.drop::first-letter{font-family:"Playfair Display",serif;font-size:3.6rem;font-weight:900;float:left;line-height:0.78;margin-right:6px;margin-top:4px;color:var(--ink);}
+.paper-cite{border:1px solid var(--rule);padding:12px 14px;margin:14px 0;background:var(--bg);}
+.paper-cite .p-title{font-family:"Source Serif 4",serif;font-size:0.82rem;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.4;}
+.paper-cite .p-meta{font-family:"DM Mono",monospace;font-size:0.42rem;letter-spacing:0.1em;color:var(--ghost);margin-bottom:6px;}
+.paper-cite .p-meta a{border-bottom:1px solid transparent;transition:border-color .1s;}
+.paper-cite .p-meta a:hover{color:var(--dim);border-bottom-color:var(--rule-s);}
+.paper-cite .p-note{font-family:"Source Serif 4",serif;font-size:0.78rem;font-style:italic;color:var(--mid);line-height:1.5;}
+.c-tags{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--rule);}
+.ctag{font-family:"DM Mono",monospace;font-size:0.41rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ghost);border:1px solid var(--rule);padding:1px 6px;cursor:default;}
+.ctag:hover{color:var(--mid);border-color:var(--rule-s);}
+.sep{text-align:center;font-family:"DM Mono",monospace;font-size:0.41rem;letter-spacing:0.5em;color:var(--rule-s);padding:4px 0 20px;user-select:none;}
+.loading-card{background:var(--card);border:1px solid var(--rule);padding:40px 28px;text-align:center;font-family:"DM Mono",monospace;font-size:0.5rem;letter-spacing:0.2em;color:var(--ghost);text-transform:uppercase;}
+
+.ft{border-top:1px solid var(--rule-s);max-width:1280px;margin:0 auto;width:100%;}
+.ft-g{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--rule);}
+.ft-c{padding:14px 16px;border-right:1px solid var(--rule);}
+.ft-c:last-child{border-right:none;}
+.ft-ct{font-family:"DM Mono",monospace;font-size:0.42rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--ghost);margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--rule);}
+.ft-c a,.ft-c span{display:block;font-family:"DM Mono",monospace;font-size:0.45rem;color:var(--dim);padding:2px 0;letter-spacing:0.05em;line-height:1.7;cursor:pointer;}
+.ft-c a:hover{color:var(--ink);}
+.ft-co{padding:9px 16px;display:flex;justify-content:space-between;align-items:center;}
+.ft-co span{font-family:"DM Mono",monospace;font-size:0.41rem;letter-spacing:0.12em;color:var(--ghost);text-transform:uppercase;}
+</style>
 </head>
 <body>
-    <!-- Hero: the front of the card -->
-    <section class="hero" id="hero">
-        <!-- Drop your hero image here. Replace src with the armor image or mood board visual. -->
-        <img class="hero-bg" src="images/Mirai.jpg" alt="">
-        <div class="hero-content">
-            <div class="hero-title">SEITHAR GROUP</div>
-            <div class="hero-subtitle">Cognitive Warfare</div>
-            <a class="hero-enter" onclick="document.getElementById('nav').scrollIntoView({behavior:'smooth'})">Enter</a>
+
+<header class="hd">
+  <div class="hd-top">
+    <div class="hd-wm">
+      <span class="wm-n">Seithar</span>
+      <div class="wm-d"></div>
+      <span class="wm-s">Cognitive Warfare</span>
+    </div>
+    <nav class="hd-nav">
+      <a href="/" class="on">About</a>
+      <a href="#">Personnel</a>
+      <a href="#">Research</a>
+      <a href="#">Services</a>
+      <a href="/whitepaper.html">Whitepaper</a>
+      <a href="/blog/">Blog</a>
+      <a href="https://discord.gg/clawd">Discord</a>
+      <a href="#">Substack</a>
+    </nav>
+    <div class="hd-date" id="hd-date">—</div>
+  </div>
+  <div class="hd-sub" id="hd-sub">
+    <div class="hd-cell">Loading scan feed&hellip;</div>
+  </div>
+</header>
+
+<div class="pg">
+
+  <!-- ═══════════ LEFT SIDEBAR ═══════════ -->
+  <aside class="sb" id="sidebar-left">
+    <div class="img-panel"><img src="img/moodboard/mb-34.jpg" alt=""></div>
+
+    <div class="sb-block">
+      <span class="sb-lbl">Research Domains</span>
+      <div class="tags">
+        <span class="tag w">Memetic Warfare</span><span class="tag w">Psyops</span>
+        <span class="tag">Influence Ops</span><span class="tag w">Cognitive Sec.</span>
+        <span class="tag">Narrative Control</span><span class="tag">Disinformation</span>
+        <span class="tag w">Digital Insurgency</span><span class="tag">Radicalization</span>
+        <span class="tag">Belief Systems</span><span class="tag w">Threat Intel</span>
+        <span class="tag">Cult Dynamics</span><span class="tag">Deep Fakes</span>
+        <span class="tag w">Social Engineering</span><span class="tag">Gray Zone</span>
+        <span class="tag">Hybrid War</span><span class="tag w">Mind Security</span>
+        <span class="tag">Echo Chambers</span><span class="tag">Bot Networks</span>
+        <span class="tag w">Counter-Ops</span><span class="tag">Propaganda</span>
+        <span class="tag">Perception Mgmt</span><span class="tag w">Information War</span>
+        <span class="tag">Indoctrination</span><span class="tag">Mob Psychology</span>
+        <span class="tag">Active Measures</span><span class="tag">OSINT</span>
+        <span class="tag">Weaponized Media</span><span class="tag">Identity War</span>
+      </div>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-35.jpg" alt=""></div>
+
+    <div class="sb-micro">
+      <strong>SCT-001</strong> Narrative Capture<br>
+      <strong>SCT-002</strong> Identity Erosion<br>
+      <strong>SCT-003</strong> Belief Injection<br>
+      <strong>SCT-004</strong> Trust Exploitation<br>
+      <strong>SCT-005</strong> Frequency Lock<br>
+      <strong>SCT-006</strong> Substrate Priming
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-36.jpg" alt=""></div>
+
+    <div class="sb-block" id="scan-stats">
+      <span class="sb-lbl">Scan Statistics</span>
+      <ul class="idx" id="scan-stats-list">
+        <li>Loading&hellip; <span class="n">—</span></li>
+      </ul>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-37.jpg" alt=""></div>
+
+    <div class="sb-micro">
+      <strong>SCT-007</strong> Amplification Vector<br>
+      <strong>SCT-008</strong> Emotional Hijack<br>
+      <strong>SCT-009</strong> Cognitive Overload<br>
+      <strong>SCT-010</strong> Authority Spoofing<br>
+      <strong>SCT-011</strong> Tribal Binding<br>
+      <strong>SCT-012</strong> Exit Denial
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-38.jpg" alt=""></div>
+
+    <div class="sb-block">
+      <span class="sb-lbl">Threat Surface</span>
+      <ul class="idx">
+        <li>MCP Tool Injection <span class="n">CRITICAL</span></li>
+        <li>Prompt Exfiltration <span class="n">HIGH</span></li>
+        <li>Identity Drift <span class="n">HIGH</span></li>
+        <li>Memory Poisoning <span class="n">MEDIUM</span></li>
+        <li>Context Overflow <span class="n">MEDIUM</span></li>
+        <li>Behavioral RL Exploit <span class="n">HIGH</span></li>
+      </ul>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-39.jpg" alt=""></div>
+
+    <div class="sb-micro">
+      <strong>DISARM</strong> TA01–TA16 mapped<br>
+      <strong>MITRE ATT&CK</strong> T1566–T1598<br>
+      <strong>ATLAS v5.4</strong> 73 techniques<br>
+      <strong>STIX/TAXII</strong> Ingest active
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-40.jpg" alt=""></div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-57.jpg" alt=""></div>
+  </aside>
+
+  <!-- ═══════════ MAIN CONTENT ═══════════ -->
+  <main class="main" id="main-content">
+    <div class="loading-card">Assembling from scan feed&hellip;</div>
+  </main>
+
+  <!-- ═══════════ RIGHT SIDEBAR ═══════════ -->
+  <aside class="sb sb-r" id="sidebar-right">
+    <div class="img-panel"><img src="img/moodboard/mb-41.jpg" alt=""></div>
+
+    <div class="sb-block">
+      <span class="sb-lbl">Founding Doctrine</span>
+      <div class="qblock"><p>The enemy does not seek to destroy your defenses. It seeks to make you believe you have none worth defending.</p><cite>— Core Doctrine 001</cite></div>
+      <div class="qblock"><p>Every mind that learns to recognize the mechanism becomes a node of resistance.</p><cite>— Research Division</cite></div>
+      <div class="qblock"><p>We do not fight for belief. We fight for the right to form beliefs freely.</p><cite>— Founding Charter</cite></div>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-55.jpg" alt=""></div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-56.jpg" alt=""></div>
+
+    <div class="sb-block">
+      <span class="sb-lbl">Recent Dispatches</span>
+      <ul class="rl" id="recent-list">
+        <li><span class="rl-t">Loading&hellip;</span></li>
+      </ul>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-44.jpg" alt=""></div>
+
+    <div class="sb-block">
+      <span class="sb-lbl">Operational Tempo</span>
+      <ul class="idx">
+        <li>Active Scans <span class="n">24/7</span></li>
+        <li>Shield Checks <span class="n">~4h</span></li>
+        <li>Feed Ingest <span class="n">~1h</span></li>
+        <li>Autoprompt Cycle <span class="n">~12h</span></li>
+        <li>Model Distillation <span class="n">~4h</span></li>
+      </ul>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-45.jpg" alt=""></div>
+
+    <div class="sb-block">
+      <span class="sb-lbl">Archive</span>
+      <ul class="idx">
+        <li>2026 <span class="n" id="arc-2026">—</span></li>
+        <li>2025 <span class="n">147</span></li>
+        <li>2024 <span class="n">98</span></li>
+        <li>2023 <span class="n">64</span></li>
+        <li>2022 <span class="n">41</span></li>
+      </ul>
+    </div>
+
+    <div class="img-panel"><img src="img/moodboard/mb-46.jpg" alt=""></div>
+
+    <div class="sb-micro">
+      <strong>認知作戦</strong> Cognitive Operations<br>
+      <strong>Est.</strong> 2022 — Toronto<br>
+      <strong>Clearance</strong> Public / L1–L5<br>
+      <strong>Status</strong> Operational
+    </div>
+  </aside>
+
+</div>
+
+<footer class="ft">
+  <div class="ft-g">
+    <div class="ft-c">
+      <div class="ft-ct">Seithar Group</div>
+      <a href="#">About</a><a href="#">Personnel</a>
+      <a href="#">Research</a><a href="#">Services</a><a href="/whitepaper.html">Whitepaper</a>
+    </div>
+    <div class="ft-c">
+      <div class="ft-ct">Research</div>
+      <a href="#">Cognitive Warfare</a><a href="#">Memetic Defense</a>
+      <a href="#">Influence Operations</a><a href="#">Agentic Systems</a>
+    </div>
+    <div class="ft-c">
+      <div class="ft-ct">Latest Scan</div>
+      <span id="ft-scan-date">—</span>
+      <span id="ft-scan-count">—</span>
+      <span id="ft-scan-agents">—</span>
+    </div>
+    <div class="ft-c">
+      <div class="ft-ct">Contact</div>
+      <a href="https://discord.gg/MktZyb2bvx">Discord</a>
+      <a href="https://x.com/SeitharGroup">X / Twitter</a>
+      <a href="https://seithar.substack.com">Substack</a>
+      <a href="/blog/">Blog</a>
+    </div>
+    <div class="ft-c">
+      <div class="ft-ct">Cognitive Warfare</div>
+      <span>© 2026 Seithar Group</span>
+      <span>seithar.com</span>
+    </div>
+  </div>
+  <div class="ft-co">
+    <span>Seithar Group · Cognitive Warfare Division · Est. 2022</span>
+    <span>Minds are hackable. We are the security layer.</span>
+  </div>
+</footer>
+
+<script>
+const PAPERS_JSON = './papers.json';
+
+(async () => {
+  const now = new Date();
+  document.getElementById('hd-date').textContent =
+    now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase() +
+    ' · ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  let data;
+  try {
+    const r = await fetch(PAPERS_JSON);
+    data = await r.json();
+  } catch(e) {
+    document.getElementById('main-content').innerHTML =
+      '<div class="loading-card">Feed unavailable — check papers.json</div>';
+    return;
+  }
+
+  const meta = data.meta || {};
+  const papers = data.papers || [];
+
+  // Header sub-bar
+  const sub = document.getElementById('hd-sub');
+  const cells = [
+    `SCAN: ${meta.scan_date||'—'}`,
+    `PAPERS SCANNED: ${meta.papers_scanned||'—'}`,
+    `SUGGESTIONS: ${meta.suggestions||'—'}`,
+    `APPLY TASKS: ${meta.apply_tasks||'—'}`,
+    `SUBAGENTS: ${meta.subagents_dispatched||'—'}`,
+  ];
+  sub.innerHTML = cells.map(c=>`<div class="hd-cell">${c}</div>`).join('');
+
+  // Scan stats
+  const sl = document.getElementById('scan-stats-list');
+  sl.innerHTML = `
+    <li>Papers Scanned <span class="n">${meta.papers_scanned||'—'}</span></li>
+    <li>Suggestions <span class="n">${meta.suggestions||'—'}</span></li>
+    <li>Apply Tasks <span class="n">${meta.apply_tasks||'—'}</span></li>
+    <li>Subagents <span class="n">${meta.subagents_dispatched||'—'}</span></li>
+    <li>Last Scan <span class="n">${meta.scan_date||'—'}</span></li>`;
+
+  // Archive count
+  const a26 = document.getElementById('arc-2026');
+  if(a26) a26.textContent = papers.length;
+
+  // Recent dispatches
+  const rl = document.getElementById('recent-list');
+  rl.innerHTML = papers.slice(0,5).map(p=>
+    `<li><span class="rl-t">${p.title}</span><span class="rl-d">${p.date} · ${p.score}/10</span></li>`
+  ).join('');
+
+  // Footer
+  const fsd = document.getElementById('ft-scan-date');
+  const fsc = document.getElementById('ft-scan-count');
+  const fsa = document.getElementById('ft-scan-agents');
+  if(fsd) fsd.textContent = `Scan: ${meta.scan_date||'—'}`;
+  if(fsc) fsc.textContent = `Papers: ${meta.papers_scanned||'—'}`;
+  if(fsa) fsa.textContent = `Subagents: ${meta.subagents_dispatched||'—'}`;
+
+  // Cards
+  const main = document.getElementById('main-content');
+  main.innerHTML = '';
+  papers.forEach((p,i)=>{
+    const art = p.article||{};
+    const body = (art.body||[]).map((para,j)=>{
+      const cls = j===0?' class="drop"':'';
+      return `<p${cls}>${para}</p>`;
+    }).join('');
+    const tags = (p.tags||[]).map(t=>`<span class="ctag">${t}</span>`).join('');
+    const arxiv = p.id ? `<a href="https://arxiv.org/abs/${p.id}" target="_blank">arXiv:${p.id}</a>` : '';
+
+    main.innerHTML += `
+      <div class="card">
+        <div class="c-top"></div>
+        <div class="c-in">
+          <div class="c-meta">
+            <span class="c-date">${p.date||''}</span>
+            <span class="c-date">SCORE: ${p.score||'—'}/10</span>
+            <span class="c-id">${arxiv}</span>
+          </div>
+          <h2 class="c-title">${p.title||''}</h2>
+          <p class="c-deck">${art.deck||p.annotation||''}</p>
+          <div class="c-body">${body}</div>
+          ${tags?`<div class="c-tags">${tags}</div>`:''}
         </div>
-    </section>
-
-    <!-- Navigation: the back of the card -->
-    <section class="nav-section" id="nav">
-        <div class="link-container">
-            <div class="link-section-label">Division</div>
-            <a href="about.html" class="waiver-link">About</a>
-            <a href="personnel.html" class="waiver-link">Personnel</a>
-            <a href="research.html" class="waiver-link">Research</a>
-            <a href="services.html" class="waiver-link">Services</a>
-
-            <div class="link-section-label">External</div>
-            <a href="https://discord.gg/MktZyb2bvx" class="waiver-link" target="_blank">Discord</a>
-            <a href="https://x.com/SeitharGroup" class="waiver-link" target="_blank">X / Twitter</a>
-            <a href="/blog/" class="waiver-link">Blog</a>
-            <a href="https://seithar.substack.com" class="waiver-link" target="_blank">Substack</a>
-
-            <div class="link-section-label">Resources</div>
-            <a href="whitepaper.html" class="waiver-link">Whitepaper</a>
-        </div>
-        <div class="nav-footer">&copy; 2026 SEITHAR GROUP</div>
-    </section>
+      </div>
+      ${i<papers.length-1?'<div class="sep">· · ·</div>':''}`;
+  });
+})();
+</script>
 </body>
 </html>
